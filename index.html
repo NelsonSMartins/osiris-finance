@@ -148,6 +148,19 @@
     ::-webkit-scrollbar-track { background: var(--bg-secondary); }
     ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 8px; }
 
+    /* ===== SVG LOGO ===== */
+    .logo-osiris {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+    }
+    .logo-osiris svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* ===== CARDS ===== */
     .card-modern {
       background: var(--bg-card);
       border-radius: var(--radius);
@@ -161,6 +174,7 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     }
 
+    /* ===== BUTTONS ===== */
     .btn-primary {
       background: linear-gradient(135deg, var(--accent), var(--accent-dark));
       color: #ffffff;
@@ -198,6 +212,7 @@
     }
     .btn-secondary:hover { background: var(--bg-card-hover); }
 
+    /* ===== INPUTS ===== */
     .input-modern {
       background: var(--bg-input);
       border: 2px solid var(--border-color);
@@ -238,6 +253,7 @@
     }
     .select-modern option { background: var(--bg-card); color: var(--text-primary); }
 
+    /* ===== NAV ===== */
     .nav-modern {
       background: var(--bg-card);
       border-top: 1px solid var(--border-color);
@@ -278,6 +294,7 @@
     .nav-item:hover { color: var(--text-primary); }
     .nav-item .icon { font-size: 18px; margin-bottom: 2px; }
 
+    /* ===== STATS ===== */
     .stat-card {
       background: var(--bg-card);
       border-radius: var(--radius);
@@ -457,6 +474,14 @@
       letter-spacing: 0.06em;
     }
 
+    .checkbox-modern {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--accent);
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
     @media (max-width: 640px) {
       .stat-card { padding: 12px 16px; }
       .btn-primary { padding: 10px 18px; font-size: 13px; }
@@ -495,6 +520,19 @@
   var useMemo = React.useMemo;
   var useRef = React.useRef;
   var createElement = React.createElement;
+
+  // ============================================
+  // SVG LOGO
+  // ============================================
+  var LOGO_SVG = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" stroke-width="4"/><path d="M50 15 L65 40 L60 40 L50 25 L40 40 L35 40 L50 15Z" fill="currentColor"/><path d="M50 85 L35 60 L40 60 L50 75 L60 60 L65 60 L50 85Z" fill="currentColor"/><path d="M20 40 L45 40 L45 60 L20 60 L20 40Z" fill="currentColor" opacity="0.6"/><path d="M80 40 L55 40 L55 60 L80 60 L80 40Z" fill="currentColor" opacity="0.6"/><circle cx="50" cy="50" r="6" fill="currentColor"/><circle cx="50" cy="50" r="3" fill="var(--bg-primary)"/></svg>';
+
+  function LogoIcon(props) {
+    var className = props.className || '';
+    return createElement('span', {
+      className: 'logo-osiris ' + className,
+      dangerouslySetInnerHTML: { __html: LOGO_SVG }
+    });
+  }
 
   // ============================================
   // UTILITÁRIOS
@@ -584,11 +622,11 @@
   }
 
   function levelInfo(pct) {
-    if (pct >= 100) return { label: 'Conquistado', emoji: '🏆', color: '#f59e0b' };
-    if (pct >= 75) return { label: 'Reta Final', emoji: '💪', color: '#8b5cf6' };
-    if (pct >= 50) return { label: 'Quase Lá', emoji: '🔥', color: '#10b981' };
-    if (pct >= 25) return { label: 'Em Progresso', emoji: '🚀', color: '#3b82f6' };
-    return { label: 'Iniciante', emoji: '🌱', color: '#64748b' };
+    if (pct >= 100) return { label: 'Conquistado', icon: 'fa-trophy', color: '#f59e0b' };
+    if (pct >= 75) return { label: 'Reta Final', icon: 'fa-dumbbell', color: '#8b5cf6' };
+    if (pct >= 50) return { label: 'Quase Lá', icon: 'fa-fire', color: '#10b981' };
+    if (pct >= 25) return { label: 'Em Progresso', icon: 'fa-rocket', color: '#3b82f6' };
+    return { label: 'Iniciante', icon: 'fa-seedling', color: '#64748b' };
   }
 
   function predictGoal(objetivo, economiasDoObjetivo) {
@@ -610,7 +648,7 @@
     return { total: total, restante: restante, mediaMensal: mediaMensal, pct: pct, mesesRestantes: mesesRestantes, dataPrevista: dataPrevista };
   }
 
-  var EMOJI_OPTIONS = ['🎯', '🏠', '🚗', '✈️', '🎓', '💍', '📱', '🏖️', '💻', '🧳', '🏡', '🌍', '🎸', '📚', '🎮'];
+  var ICONE_OPCOES = ['fa-flag', 'fa-home', 'fa-car', 'fa-plane', 'fa-graduation-cap', 'fa-ring', 'fa-mobile-screen', 'fa-umbrella-beach', 'fa-laptop', 'fa-suitcase'];
 
   // ============================================
   // COMPONENTES
@@ -640,10 +678,33 @@
     var className = props.className || 'input-modern';
     var required = props.required || false;
 
+    var formatRealTime = function(raw) {
+      var num = raw.replace(/\D/g, '');
+      if (num === '') return '';
+      var intNum = parseInt(num, 10);
+      if (isNaN(intNum)) return '';
+      var floatNum = intNum / 100;
+      return floatNum.toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    };
+
     var handleChange = function(e) {
       var raw = e.target.value;
-      var cleaned = raw.replace(/[^0-9,]/g, '');
-      onChange(cleaned);
+      var clean = raw.replace(/\D/g, '');
+      var formatted = formatRealTime(clean);
+      onChange(formatted);
+    };
+
+    var handleFocus = function(e) {
+      var val = e.target.value;
+      if (val) {
+        var num = parseCurrency(val);
+        if (num > 0) {
+          onChange(String(num).replace('.', ','));
+        }
+      }
     };
 
     var handleBlur = function(e) {
@@ -662,6 +723,7 @@
       placeholder: placeholder,
       value: value,
       onChange: handleChange,
+      onFocus: handleFocus,
       onBlur: handleBlur,
       className: className,
       required: required
@@ -680,11 +742,7 @@
         createElement(
           'div',
           { className: 'flex items-center gap-3' },
-          createElement(
-            'div',
-            { className: 'w-8 h-8 rounded-xl bg-gradient-to-br from-[var(--accent)] to-[var(--accent-dark)] flex items-center justify-center text-white font-bold text-sm font-display' },
-            'O'
-          ),
+          createElement(LogoIcon, { className: 'text-[var(--accent)]' }),
           createElement('span', { className: 'text-lg font-bold tracking-tight font-display' }, 'OSIRIS')
         ),
         onDateChange ? createElement(
@@ -693,14 +751,14 @@
           createElement('button', {
             onClick: function() { onDateChange('prev'); },
             className: 'p-2 rounded-lg hover:bg-[var(--bg-card-hover)] transition-colors min-w-[40px] min-h-[40px] text-[var(--text-secondary)]'
-          }, '◀'),
+          }, createElement('i', { className: 'fas fa-chevron-left' })),
           createElement('span', { className: 'text-sm font-medium min-w-[80px] text-center text-[var(--text-primary)]' },
             currentDate ? currentDate.toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' }) : ''
           ),
           createElement('button', {
             onClick: function() { onDateChange('next'); },
             className: 'p-2 rounded-lg hover:bg-[var(--bg-card-hover)] transition-colors min-w-[40px] min-h-[40px] text-[var(--text-secondary)]'
-          }, '▶')
+          }, createElement('i', { className: 'fas fa-chevron-right' }))
         ) : null
       )
     );
@@ -762,7 +820,7 @@
         if (result.error) {
           setError(result.error.message);
         } else if (isSignUp) {
-          setSuccess('✅ Conta criada! Verifique seu e-mail.');
+          setSuccess('Conta criada! Verifique seu e-mail.');
           setEmail(''); setPassword('');
         } else {
           onLogin(result.data.user);
@@ -790,7 +848,7 @@
           createElement(
             'div',
             { className: 'w-16 h-16 rounded-2xl bg-gradient-to-br from-[var(--accent)] to-[var(--accent-dark)] flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4 font-display' },
-            'O'
+            createElement(LogoIcon, { className: 'text-white w-10 h-10' })
           ),
           createElement('h1', { className: 'text-2xl font-bold font-display' }, 'OSIRIS'),
           createElement('p', { className: 'text-[var(--text-secondary)] text-sm font-body' }, 'Controle Financeiro Inteligente')
@@ -826,8 +884,8 @@
             className: 'input-modern',
             minLength: 6
           }),
-          error ? createElement('p', { className: 'text-[#ef4444] text-sm text-center font-bold font-body' }, '⚠️ ' + error) : null,
-          success ? createElement('p', { className: 'text-[#10b981] text-sm text-center font-bold font-body' }, success) : null,
+          error ? createElement('p', { className: 'text-[#ef4444] text-sm text-center font-bold font-body' }, createElement('i', { className: 'fas fa-exclamation-circle' }), ' ' + error) : null,
+          success ? createElement('p', { className: 'text-[#10b981] text-sm text-center font-bold font-body' }, createElement('i', { className: 'fas fa-check-circle' }), ' ' + success) : null,
           createElement('button', {
             type: 'submit',
             disabled: loading,
@@ -933,7 +991,13 @@
           plugins: {
             legend: {
               position: 'bottom',
-              labels: { color: 'var(--text-secondary)', font: { size: 11, family: 'Atkinson Hyperlegible, Inter' }, padding: 12, usePointStyle: true, pointStyle: 'circle' }
+              labels: {
+                color: 'var(--text-primary)',
+                font: { size: 11, family: 'Atkinson Hyperlegible, Inter' },
+                padding: 12,
+                usePointStyle: true,
+                pointStyle: 'circle'
+              }
             }
           },
           cutout: '65%'
@@ -953,11 +1017,11 @@
     var storyText = null;
     if (summary.variacao !== null && !loading) {
       if (summary.variacao <= -1) {
-        storyText = { icon: '📉', text: 'Você gastou ' + Math.abs(summary.variacao).toFixed(0) + '% a menos que no mês anterior. Continue assim!', color: '#10b981' };
+        storyText = { icon: 'fa-arrow-down', text: 'Você gastou ' + Math.abs(summary.variacao).toFixed(0) + '% a menos que no mês anterior. Continue assim!', color: '#10b981' };
       } else if (summary.variacao >= 1) {
-        storyText = { icon: '📈', text: 'Seus gastos subiram ' + summary.variacao.toFixed(0) + '% em relação ao mês anterior. Vale revisar as categorias.', color: '#ef4444' };
+        storyText = { icon: 'fa-arrow-up', text: 'Seus gastos subiram ' + summary.variacao.toFixed(0) + '% em relação ao mês anterior. Vale revisar as categorias.', color: '#ef4444' };
       } else {
-        storyText = { icon: '➖', text: 'Seus gastos ficaram estáveis em relação ao mês anterior.', color: '#94a3b8' };
+        storyText = { icon: 'fa-minus', text: 'Seus gastos ficaram estáveis em relação ao mês anterior.', color: '#94a3b8' };
       }
     }
 
@@ -974,7 +1038,7 @@
           createElement(
             'div',
             { className: 'flex items-start gap-3' },
-            createElement('span', { className: 'text-2xl' }, storyText.icon),
+            createElement('i', { className: 'fas ' + storyText.icon + ' text-xl', style: { color: storyText.color } }),
             createElement('p', { className: 'text-sm leading-relaxed font-body', style: { color: 'var(--text-primary)' } }, storyText.text)
           )
         ) : null,
@@ -1003,7 +1067,7 @@
           createElement(
             'div',
             { className: 'flex items-center justify-between mb-4' },
-            createElement('h3', { className: 'text-sm font-bold font-display' }, '🎯 Suas Metas'),
+            createElement('h3', { className: 'text-sm font-bold font-display' }, createElement('i', { className: 'fas fa-bullseye mr-2' }), 'Suas Metas'),
             createElement('button', {
               onClick: function() { setPage('metas'); },
               className: 'text-[var(--accent)] text-xs font-bold hover:underline font-body'
@@ -1020,7 +1084,7 @@
                 createElement(
                   'div',
                   { className: 'flex items-center justify-between mb-1.5' },
-                  createElement('span', { className: 'text-sm font-bold font-body' }, (m.objetivo.icone || '🎯') + ' ' + m.objetivo.nome),
+                  createElement('span', { className: 'text-sm font-bold font-body' }, createElement('i', { className: 'fas ' + (m.objetivo.icone || 'fa-flag') + ' mr-1' }), ' ' + m.objetivo.nome),
                   createElement('span', { className: 'text-xs font-bold', style: { color: lvl.color } }, m.pred.pct.toFixed(0) + '%')
                 ),
                 createElement(ProgressBar, { pct: m.pred.pct })
@@ -1031,7 +1095,7 @@
         createElement(
           'div',
           { className: 'card-modern' },
-          createElement('h3', { className: 'text-sm font-bold font-display mb-4' }, 'Gastos por Categoria'),
+          createElement('h3', { className: 'text-sm font-bold font-display mb-4' }, createElement('i', { className: 'fas fa-chart-pie mr-2' }), 'Gastos por Categoria'),
           createElement(
             'div',
             { className: 'h-48' },
@@ -1046,7 +1110,7 @@
           createElement(
             'div',
             { className: 'flex items-center justify-between mb-4' },
-            createElement('h3', { className: 'text-sm font-bold font-display' }, 'Últimas Transações'),
+            createElement('h3', { className: 'text-sm font-bold font-display' }, createElement('i', { className: 'fas fa-clock mr-2' }), 'Últimas Transações'),
             createElement('button', {
               onClick: function() { setPage('transacoes'); },
               className: 'text-[var(--accent)] text-xs font-bold hover:underline font-body'
@@ -1135,11 +1199,11 @@
       createElement(
         'div',
         { className: 'sticky top-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border-color)] p-4 flex items-center justify-between' },
-        createElement('h1', { className: 'text-xl font-bold font-display' }, 'Categorias'),
+        createElement('h1', { className: 'text-xl font-bold font-display' }, createElement('i', { className: 'fas fa-tags mr-2' }), 'Categorias'),
         createElement('button', {
           onClick: function() { setShowForm(!showForm); },
           className: 'btn-primary min-w-[48px] min-h-[48px] rounded-full w-12 h-12 flex items-center justify-center text-2xl'
-        }, showForm ? '✕' : '＋')
+        }, showForm ? createElement('i', { className: 'fas fa-times' }) : createElement('i', { className: 'fas fa-plus' }))
       ),
       showForm ? createElement(
         'form',
@@ -1165,7 +1229,7 @@
         loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)] font-body' }, 'Carregando…') :
         categorias.length === 0 ? createElement(
           'div', { className: 'text-center py-8 text-[var(--text-muted)] font-body' },
-          createElement('p', { className: 'text-4xl mb-2' }, '📂'),
+          createElement('i', { className: 'fas fa-folder-open text-4xl mb-2 block' }),
           createElement('p', null, 'Nenhuma categoria cadastrada'),
           createElement('p', { className: 'text-sm' }, 'Clique no + para criar')
         ) :
@@ -1187,8 +1251,8 @@
                   ),
                   createElement(
                     'div', { className: 'flex items-center gap-1 flex-shrink-0 ml-2' },
-                    createElement('button', { onClick: function(e) { e.stopPropagation(); edit(cat); }, className: 'text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-1 opacity-0 group-hover:opacity-100' }, '✏️'),
-                    createElement('button', { onClick: function(e) { e.stopPropagation(); del(cat.id); }, className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1 opacity-0 group-hover:opacity-100' }, '🗑️')
+                    createElement('button', { onClick: function(e) { e.stopPropagation(); edit(cat); }, className: 'text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-1 opacity-0 group-hover:opacity-100' }, createElement('i', { className: 'fas fa-pen' })),
+                    createElement('button', { onClick: function(e) { e.stopPropagation(); del(cat.id); }, className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1 opacity-0 group-hover:opacity-100' }, createElement('i', { className: 'fas fa-trash' }))
                   )
                 )
               );
@@ -1210,8 +1274,8 @@
                   ),
                   createElement(
                     'div', { className: 'flex items-center gap-1 flex-shrink-0 ml-2' },
-                    createElement('button', { onClick: function(e) { e.stopPropagation(); edit(cat); }, className: 'text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-1 opacity-0 group-hover:opacity-100' }, '✏️'),
-                    createElement('button', { onClick: function(e) { e.stopPropagation(); del(cat.id); }, className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1 opacity-0 group-hover:opacity-100' }, '🗑️')
+                    createElement('button', { onClick: function(e) { e.stopPropagation(); edit(cat); }, className: 'text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-1 opacity-0 group-hover:opacity-100' }, createElement('i', { className: 'fas fa-pen' })),
+                    createElement('button', { onClick: function(e) { e.stopPropagation(); del(cat.id); }, className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1 opacity-0 group-hover:opacity-100' }, createElement('i', { className: 'fas fa-trash' }))
                   )
                 )
               );
@@ -1223,7 +1287,7 @@
   }
 
   // ============================================
-  // TRANSAÇÕES
+  // TRANSAÇÕES (COM PAGO E PARCELADO)
   // ============================================
   function Transacoes() {
     var _t1 = useState(false), showForm = _t1[0], setShowForm = _t1[1];
@@ -1237,6 +1301,9 @@
     var _t9 = useState(''), data = _t9[0], setData = _t9[1];
     var _t10 = useState(''), obs = _t10[0], setObs = _t10[1];
     var _t11 = useState(null), userId = _t11[0], setUserId = _t11[1];
+    var _t12 = useState(false), isParcelado = _t12[0], setIsParcelado = _t12[1];
+    var _t13 = useState(1), totalParcelas = _t13[0], setTotalParcelas = _t13[1];
+    var _t14 = useState(''), primeiraData = _t14[0], setPrimeiraData = _t14[1];
 
     useEffect(function() {
       supabase.auth.getUser().then(function(result) {
@@ -1259,17 +1326,61 @@
 
     useEffect(function() { if (userId) load(); }, [userId]);
 
+    var togglePago = function(id, status) {
+      supabase.from('transacoes').update({ pago: status }).eq('id', id).then(function() {
+        load();
+      });
+    };
+
+    var resetForm = function() {
+      setNome(''); setCategoriaNome(''); setValor(''); setData(''); setObs('');
+      setIsParcelado(false); setTotalParcelas(1); setPrimeiraData('');
+      setShowForm(false);
+    };
+
     var submit = function(e) {
       e.preventDefault();
       if (!userId || !categoriaNome) return;
-      var trans = {
-        nome: nome.trim(), categoria_nome: categoriaNome, valor: parseCurrency(valor), tipo: tipo,
-        data: data || new Date().toISOString().split('T')[0], obs: obs.trim() || null, user_id: userId
-      };
-      supabase.from('transacoes').insert([trans]).then(function() {
-        load(); setShowForm(false);
-        setNome(''); setCategoriaNome(''); setValor(''); setData(''); setObs('');
-      });
+
+      if (isParcelado && totalParcelas > 1 && primeiraData) {
+        var parcelas = [];
+        var dataBase = new Date(primeiraData + 'T00:00:00');
+        var valorParcela = parseCurrency(valor) / totalParcelas;
+        for (var i = 0; i < totalParcelas; i++) {
+          var dataParcela = new Date(dataBase);
+          dataParcela.setMonth(dataParcela.getMonth() + i);
+          parcelas.push({
+            nome: nome.trim() + ' (' + (i+1) + '/' + totalParcelas + ')',
+            categoria_nome: categoriaNome,
+            valor: valorParcela,
+            data_vencimento: dataParcela.toISOString().split('T')[0],
+            parcela_atual: i + 1,
+            total_parcelas: totalParcelas,
+            pago: false,
+            obs: obs.trim() || null,
+            user_id: userId
+          });
+        }
+        supabase.from('parcelas').insert(parcelas).then(function() {
+          load();
+          resetForm();
+        });
+      } else {
+        var trans = {
+          nome: nome.trim(),
+          categoria_nome: categoriaNome,
+          valor: parseCurrency(valor),
+          tipo: tipo,
+          data: data || new Date().toISOString().split('T')[0],
+          obs: obs.trim() || null,
+          pago: false,
+          user_id: userId
+        };
+        supabase.from('transacoes').insert([trans]).then(function() {
+          load();
+          resetForm();
+        });
+      }
     };
 
     var del = function(id) {
@@ -1286,11 +1397,11 @@
       createElement(
         'div',
         { className: 'sticky top-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border-color)] p-4 flex items-center justify-between' },
-        createElement('h1', { className: 'text-xl font-bold font-display' }, 'Transações'),
+        createElement('h1', { className: 'text-xl font-bold font-display' }, createElement('i', { className: 'fas fa-exchange-alt mr-2' }), 'Transações'),
         createElement('button', {
           onClick: function() { setShowForm(!showForm); },
           className: 'btn-primary min-w-[48px] min-h-[48px] rounded-full w-12 h-12 flex items-center justify-center text-2xl'
-        }, showForm ? '✕' : '＋')
+        }, showForm ? createElement('i', { className: 'fas fa-times' }) : createElement('i', { className: 'fas fa-plus' }))
       ),
       showForm ? createElement(
         'form',
@@ -1308,12 +1419,49 @@
         createElement(
           'select', { value: categoriaNome, onChange: function(e) { setCategoriaNome(e.target.value); }, className: 'select-modern', required: true },
           createElement('option', { value: '' }, 'Selecione uma categoria'),
-          filtradas.length === 0 ? createElement('option', { value: '', disabled: true }, '❗ Crie categorias primeiro') :
+          filtradas.length === 0 ? createElement('option', { value: '', disabled: true }, 'Crie categorias primeiro') :
           filtradas.map(function(c) { return createElement('option', { key: c.id, value: c.nome }, c.nome); })
         ),
         createElement(CurrencyInput, { value: valor, onChange: setValor, placeholder: '0,00', className: 'input-modern', required: true }),
         createElement('input', { type: 'date', value: data, onChange: function(e) { setData(e.target.value); }, className: 'input-modern' }),
         createElement('input', { type: 'text', placeholder: 'Observação (opcional)', value: obs, onChange: function(e) { setObs(e.target.value); }, className: 'input-modern' }),
+
+        // Parcelado
+        createElement(
+          'div', { className: 'flex items-center gap-3' },
+          createElement('input', {
+            type: 'checkbox',
+            id: 'parcelado',
+            checked: isParcelado,
+            onChange: function(e) { setIsParcelado(e.target.checked); },
+            className: 'checkbox-modern'
+          }),
+          createElement('label', { htmlFor: 'parcelado', className: 'text-sm font-medium font-body' }, 'Compra parcelada?')
+        ),
+        isParcelado ? createElement(
+          'div', { className: 'grid grid-cols-2 gap-3' },
+          createElement('div', null,
+            createElement('label', { className: 'text-xs text-[var(--text-muted)] block mb-1 font-body' }, 'Número de parcelas'),
+            createElement('input', {
+              type: 'number',
+              min: 2,
+              max: 36,
+              value: totalParcelas,
+              onChange: function(e) { setTotalParcelas(Number(e.target.value) || 1); },
+              className: 'input-modern'
+            })
+          ),
+          createElement('div', null,
+            createElement('label', { className: 'text-xs text-[var(--text-muted)] block mb-1 font-body' }, 'Primeiro vencimento'),
+            createElement('input', {
+              type: 'date',
+              value: primeiraData,
+              onChange: function(e) { setPrimeiraData(e.target.value); },
+              className: 'input-modern'
+            })
+          )
+        ) : null,
+
         createElement('button', { type: 'submit', className: 'btn-primary w-full' }, 'Salvar')
       ) : null,
       createElement(
@@ -1321,7 +1469,7 @@
         loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)] font-body' }, 'Carregando…') :
         transactions.length === 0 ? createElement(
           'div', { className: 'text-center py-8 text-[var(--text-muted)] font-body' },
-          createElement('p', { className: 'text-4xl mb-2' }, '📭'),
+          createElement('i', { className: 'fas fa-inbox text-4xl mb-2 block' }),
           createElement('p', null, 'Nenhuma transação registrada'),
           createElement('p', { className: 'text-sm' }, 'Clique no + para adicionar')
         ) :
@@ -1332,12 +1480,24 @@
               'div', { className: 'flex-1' },
               createElement('p', { className: 'font-bold text-sm font-body' }, t.nome),
               createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, t.categoria_nome + ' • ' + formatDate(t.data)),
-              t.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, '📝 ' + t.obs) : null
+              t.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, createElement('i', { className: 'fas fa-pencil-alt mr-1' }), t.obs) : null
             ),
             createElement(
               'div', { className: 'flex items-center gap-2' },
-              createElement('span', { className: 'font-bold ' + (t.tipo === 'despesa' ? 'text-[#ef4444]' : 'text-[var(--accent)]') }, (t.tipo === 'despesa' ? '-' : '+') + ' ' + formatCurrency(t.valor)),
-              createElement('button', { onClick: function(e) { e.stopPropagation(); del(t.id); }, className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1' }, '🗑️')
+              // Botão pago/não pago
+              createElement('button', {
+                onClick: function(e) { e.stopPropagation(); togglePago(t.id, !t.pago); },
+                className: 'p-2 rounded-lg transition-colors ' +
+                  (t.pago ? 'text-[#10b981] hover:text-[#059669]' : 'text-[var(--text-muted)] hover:text-[var(--accent)]'),
+                title: t.pago ? 'Marcar como não pago' : 'Marcar como pago'
+              }, t.pago ? createElement('i', { className: 'fas fa-check-circle text-lg' }) : createElement('i', { className: 'fas fa-circle text-lg' })),
+              createElement('span', { className: 'font-bold ' + (t.tipo === 'despesa' ? 'text-[#ef4444]' : 'text-[var(--accent)]') },
+                (t.tipo === 'despesa' ? '-' : '+') + ' ' + formatCurrency(t.valor)
+              ),
+              createElement('button', {
+                onClick: function(e) { e.stopPropagation(); del(t.id); },
+                className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1'
+              }, createElement('i', { className: 'fas fa-trash' }))
             )
           );
         })
@@ -1346,7 +1506,7 @@
   }
 
   // ============================================
-  // METAS
+  // METAS (OBJETIVOS + ECONOMIAS)
   // ============================================
   function Metas() {
     var _m1 = useState('objetivos'), subTab = _m1[0], setSubTab = _m1[1];
@@ -1359,7 +1519,7 @@
     var _o2 = useState(''), objNome = _o2[0], setObjNome = _o2[1];
     var _o3 = useState(''), objValor = _o3[0], setObjValor = _o3[1];
     var _o4 = useState(''), objPrazo = _o4[0], setObjPrazo = _o4[1];
-    var _o5 = useState('🎯'), objIcone = _o5[0], setObjIcone = _o5[1];
+    var _o5 = useState('fa-flag'), objIcone = _o5[0], setObjIcone = _o5[1];
     var _o6 = useState(null), objEditando = _o6[0], setObjEditando = _o6[1];
 
     var _e1 = useState(false), showEcoForm = _e1[0], setShowEcoForm = _e1[1];
@@ -1391,7 +1551,7 @@
 
     useEffect(function() { if (userId) load(); }, [userId]);
 
-    var resetObj = function() { setObjNome(''); setObjValor(''); setObjPrazo(''); setObjIcone('🎯'); setObjEditando(null); setShowObjForm(false); };
+    var resetObj = function() { setObjNome(''); setObjValor(''); setObjPrazo(''); setObjIcone('fa-flag'); setObjEditando(null); setShowObjForm(false); };
 
     var submitObjetivo = function(e) {
       e.preventDefault();
@@ -1412,7 +1572,7 @@
     };
 
     var editObjetivo = function(o) {
-      setObjNome(o.nome); setObjValor(formatCurrency(o.valor_alvo)); setObjPrazo(o.prazo || ''); setObjIcone(o.icone || '🎯'); setObjEditando(o.id); setShowObjForm(true);
+      setObjNome(o.nome); setObjValor(formatCurrency(o.valor_alvo)); setObjPrazo(o.prazo || ''); setObjIcone(o.icone || 'fa-flag'); setObjEditando(o.id); setShowObjForm(true);
     };
 
     var resetEco = function() { setEcoNome(''); setEcoValor(''); setEcoData(''); setEcoObjetivoId(''); setEcoObs(''); setEcoEditando(null); setShowEcoForm(false); };
@@ -1445,7 +1605,7 @@
 
     var nomeObjetivo = function(id) {
       var o = objetivos.filter(function(x) { return x.id === id; })[0];
-      return o ? (o.icone || '🎯') + ' ' + o.nome : null;
+      return o ? (o.icone || 'fa-flag') + ' ' + o.nome : null;
     };
 
     return createElement(
@@ -1456,19 +1616,19 @@
         { className: 'sticky top-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border-color)] p-4' },
         createElement(
           'div', { className: 'flex items-center justify-between mb-3' },
-          createElement('h1', { className: 'text-xl font-bold font-display' }, 'Metas'),
-          streak > 0 ? createElement('span', { className: 'streak-chip float-badge' }, '🔥 ' + streak + (streak === 1 ? ' mês' : ' meses')) : null
+          createElement('h1', { className: 'text-xl font-bold font-display' }, createElement('i', { className: 'fas fa-bullseye mr-2' }), 'Metas'),
+          streak > 0 ? createElement('span', { className: 'streak-chip float-badge' }, createElement('i', { className: 'fas fa-fire mr-1' }), ' ' + streak + (streak === 1 ? ' mês' : ' meses')) : null
         ),
         createElement(
           'div', { className: 'flex gap-2' },
           createElement('button', {
             className: 'subtab-btn ' + (subTab === 'objetivos' ? 'active' : ''),
             onClick: function() { setSubTab('objetivos'); }
-          }, '🎯 Objetivos'),
+          }, createElement('i', { className: 'fas fa-flag mr-1' }), ' Objetivos'),
           createElement('button', {
             className: 'subtab-btn ' + (subTab === 'economias' ? 'active' : ''),
             onClick: function() { setSubTab('economias'); }
-          }, '💰 Economias')
+          }, createElement('i', { className: 'fas fa-coins mr-1' }), ' Economias')
         )
       ),
       subTab === 'objetivos' ? createElement(
@@ -1478,17 +1638,17 @@
           createElement('button', {
             onClick: function() { showObjForm ? resetObj() : setShowObjForm(true); },
             className: 'btn-secondary w-full mb-4'
-          }, showObjForm ? '✕ Cancelar' : '＋ Novo Objetivo')
+          }, showObjForm ? createElement('i', { className: 'fas fa-times mr-2' }) : createElement('i', { className: 'fas fa-plus mr-2' }), showObjForm ? 'Cancelar' : 'Novo Objetivo')
         ),
         showObjForm ? createElement(
           'form', { onSubmit: submitObjetivo, className: 'mx-4 mb-4 p-4 space-y-4 card-modern' },
           createElement(
             'div', { className: 'flex flex-wrap gap-2' },
-            EMOJI_OPTIONS.map(function(em) {
+            ICONE_OPCOES.map(function(ic) {
               return createElement('button', {
-                key: em, type: 'button', onClick: function() { setObjIcone(em); },
-                className: 'emoji-pick ' + (objIcone === em ? 'selected' : '')
-              }, em);
+                key: ic, type: 'button', onClick: function() { setObjIcone(ic); },
+                className: 'emoji-pick ' + (objIcone === ic ? 'selected' : '')
+              }, createElement('i', { className: 'fas ' + ic }));
             })
           ),
           createElement('input', { type: 'text', placeholder: 'Nome do objetivo', value: objNome, onChange: function(e) { setObjNome(e.target.value); }, className: 'input-modern', required: true }),
@@ -1507,7 +1667,7 @@
           loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)] font-body' }, 'Carregando…') :
           objetivos.length === 0 ? createElement(
             'div', { className: 'text-center py-8 text-[var(--text-muted)] font-body' },
-            createElement('p', { className: 'text-4xl mb-2' }, '🎯'),
+            createElement('i', { className: 'fas fa-flag text-4xl mb-2 block' }),
             createElement('p', null, 'Nenhum objetivo cadastrado'),
             createElement('p', { className: 'text-sm' }, 'Crie um objetivo e vincule suas economias')
           ) :
@@ -1519,7 +1679,7 @@
 
             var previsaoTexto;
             if (pred.pct >= 100) {
-              previsaoTexto = '🎉 Objetivo alcançado! Parabéns pela conquista.';
+              previsaoTexto = 'Objetivo alcançado! Parabéns pela conquista.';
             } else if (pred.mesesRestantes === null) {
               previsaoTexto = 'Registre economias vinculadas a este objetivo para calcular a previsão.';
             } else {
@@ -1533,7 +1693,7 @@
               'div', { key: o.id, className: 'card-modern fade-in-up' },
               createElement(
                 'div', { className: 'flex items-start gap-3 mb-3' },
-                createElement('div', { className: 'goal-icon-circle' }, o.icone || '🎯'),
+                createElement('div', { className: 'goal-icon-circle' }, createElement('i', { className: 'fas ' + (o.icone || 'fa-flag') })),
                 createElement(
                   'div', { className: 'flex-1 min-w-0' },
                   createElement('p', { className: 'font-bold text-base font-body' }, o.nome),
@@ -1544,17 +1704,17 @@
                 ),
                 createElement(
                   'div', { className: 'flex items-center gap-1 flex-shrink-0' },
-                  createElement('button', { onClick: function() { editObjetivo(o); }, className: 'text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-1' }, '✏️'),
-                  createElement('button', { onClick: function() { delObjetivo(o.id); }, className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1' }, '🗑️')
+                  createElement('button', { onClick: function() { editObjetivo(o); }, className: 'text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-1' }, createElement('i', { className: 'fas fa-pen' })),
+                  createElement('button', { onClick: function() { delObjetivo(o.id); }, className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1' }, createElement('i', { className: 'fas fa-trash' }))
                 )
               ),
               createElement(
                 'div', { className: 'flex items-center justify-between mb-2' },
-                createElement('span', { className: 'level-pill', style: { background: lvl.color + '22', color: lvl.color } }, lvl.emoji + ' ' + lvl.label),
+                createElement('span', { className: 'level-pill', style: { background: lvl.color + '22', color: lvl.color } }, createElement('i', { className: 'fas ' + lvl.icon + ' mr-1' }), ' ' + lvl.label),
                 createElement('span', { className: 'text-sm font-bold font-display' }, pred.pct.toFixed(0) + '%')
               ),
               createElement(ProgressBar, { pct: pred.pct }),
-              createElement('p', { className: 'text-xs text-[var(--text-secondary)] mt-3 leading-relaxed font-body' }, '🔮 ' + previsaoTexto)
+              createElement('p', { className: 'text-xs text-[var(--text-secondary)] mt-3 leading-relaxed font-body' }, createElement('i', { className: 'fas fa-rocket mr-1' }), ' ' + previsaoTexto)
             );
           })
         )
@@ -1571,7 +1731,7 @@
           createElement('button', {
             onClick: function() { showEcoForm ? resetEco() : setShowEcoForm(true); },
             className: 'btn-secondary w-full'
-          }, showEcoForm ? '✕ Cancelar' : '＋ Nova Economia')
+          }, showEcoForm ? createElement('i', { className: 'fas fa-times mr-2' }) : createElement('i', { className: 'fas fa-plus mr-2' }), showEcoForm ? 'Cancelar' : 'Nova Economia')
         ),
         showEcoForm ? createElement(
           'form', { onSubmit: submitEconomia, className: 'mx-4 mt-4 mb-4 p-4 space-y-4 card-modern' },
@@ -1581,7 +1741,7 @@
           createElement(
             'select', { value: ecoObjetivoId, onChange: function(e) { setEcoObjetivoId(e.target.value); }, className: 'select-modern' },
             createElement('option', { value: '' }, 'Sem vínculo com objetivo'),
-            objetivos.map(function(o) { return createElement('option', { key: o.id, value: o.id }, (o.icone || '🎯') + ' ' + o.nome); })
+            objetivos.map(function(o) { return createElement('option', { key: o.id, value: o.id }, createElement('i', { className: 'fas ' + (o.icone || 'fa-flag') }), ' ' + o.nome); })
           ),
           createElement('input', { type: 'text', placeholder: 'Observação (opcional)', value: ecoObs, onChange: function(e) { setEcoObs(e.target.value); }, className: 'input-modern' }),
           createElement('div', { className: 'flex gap-2' },
@@ -1594,7 +1754,7 @@
           loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)] font-body' }, 'Carregando…') :
           economias.length === 0 ? createElement(
             'div', { className: 'text-center py-8 text-[var(--text-muted)] font-body' },
-            createElement('p', { className: 'text-4xl mb-2' }, '💰'),
+            createElement('i', { className: 'fas fa-coins text-4xl mb-2 block' }),
             createElement('p', null, 'Nenhuma economia registrada'),
             createElement('p', { className: 'text-sm' }, 'Toda vez que guardar dinheiro, registre aqui')
           ) :
@@ -1608,13 +1768,13 @@
                 createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' },
                   formatDate(ec.data) + (vinculo ? ' • ' + vinculo : ' • sem vínculo')
                 ),
-                ec.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, '📝 ' + ec.obs) : null
+                ec.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, createElement('i', { className: 'fas fa-pencil-alt mr-1' }), ec.obs) : null
               ),
               createElement(
                 'div', { className: 'flex items-center gap-2 flex-shrink-0' },
                 createElement('span', { className: 'font-bold text-[var(--accent)]' }, '+ ' + formatCurrency(ec.valor)),
-                createElement('button', { onClick: function() { editEconomia(ec); }, className: 'text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-1' }, '✏️'),
-                createElement('button', { onClick: function() { delEconomia(ec.id); }, className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1' }, '🗑️')
+                createElement('button', { onClick: function() { editEconomia(ec); }, className: 'text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-1' }, createElement('i', { className: 'fas fa-pen' })),
+                createElement('button', { onClick: function() { delEconomia(ec.id); }, className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1' }, createElement('i', { className: 'fas fa-trash' }))
               )
             );
           })
@@ -1665,11 +1825,10 @@
       createElement(
         'div',
         { className: 'sticky top-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border-color)] p-4' },
-        createElement('h1', { className: 'text-xl font-bold font-display' }, 'Perfil')
+        createElement('h1', { className: 'text-xl font-bold font-display' }, createElement('i', { className: 'fas fa-user mr-2' }), 'Perfil')
       ),
       createElement(
         'div', { className: 'p-4 space-y-4' },
-        // Info do usuário
         createElement(
           'div', { className: 'card-modern flex items-center gap-4' },
           createElement('div', { className: 'w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--accent)] to-[var(--accent-dark)] flex items-center justify-center text-white text-xl font-bold font-display' },
@@ -1681,12 +1840,11 @@
             createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, 'Logado com ' + (user && user.app_metadata ? (user.app_metadata.provider || 'email').toUpperCase() : 'EMAIL'))
           )
         ),
-        // Temas
         createElement(
           'div', { className: 'card-modern' },
           createElement(
             'div', { className: 'flex items-center justify-between mb-3' },
-            createElement('p', { className: 'text-sm font-bold font-display' }, '🎨 Temas'),
+            createElement('p', { className: 'text-sm font-bold font-display' }, createElement('i', { className: 'fas fa-palette mr-2' }), 'Temas'),
             createElement('span', { className: 'text-xs text-[var(--text-muted)] font-body' }, 'Padrão: ' + themes.find(function(t) { return t.id === defaultTheme; })?.label || 'Dark Modern')
           ),
           createElement(
@@ -1709,16 +1867,15 @@
                   onClick: function() { setDefault(theme.id); },
                   className: 'p-2 rounded-lg hover:bg-[var(--bg-card-hover)] transition-colors text-[var(--text-muted)] hover:text-[var(--accent)]',
                   title: 'Definir como padrão'
-                }, '⭐')
+                }, createElement('i', { className: 'fas fa-star' }))
               );
             })
           )
         ),
-        // Logout
         createElement('button', {
           onClick: logout,
           className: 'w-full p-3 rounded-xl border border-[#ef4444] text-[#ef4444] hover:bg-[#ef4444] hover:text-white transition-colors font-bold font-body'
-        }, '🚪 Sair')
+        }, createElement('i', { className: 'fas fa-sign-out-alt mr-2' }), 'Sair')
       )
     );
   }
@@ -1731,7 +1888,6 @@
     var _a2 = useState(true), loading = _a2[0], setLoading = _a2[1];
     var _a3 = useState('dashboard'), currentPage = _a3[0], setCurrentPage = _a3[1];
 
-    // Carregar tema padrão ao iniciar
     useEffect(function() {
       var savedTheme = getDefaultTheme();
       setTheme(savedTheme);
