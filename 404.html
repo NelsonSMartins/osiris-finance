@@ -38,11 +38,10 @@
       // Pega o caminho atual da URL
       var path = window.location.pathname;
       
-      // Remove o prefixo '/osiris-finance/' se existir, para não duplicar
+      // Remove o prefixo '/osiris-finance' se existir, para não duplicar
       var route = path.replace('/osiris-finance', '') || '/';
       
       // Constrói a nova URL completa para o index.html, passando a rota como parâmetro ou fragmento
-      // A maneira mais confiável no GitHub Pages é redirecionar para o index.html e passar a rota na URL.
       var newUrl = '/osiris-finance/index.html' + route;
       
       // Redireciona
