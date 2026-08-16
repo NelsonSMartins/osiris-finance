@@ -30,24 +30,33 @@
       0% { opacity: 0.7; }
       100% { opacity: 1; text-shadow: 0 0 30px rgba(0, 255, 136, 0.5); }
     }
+    a { color: #d4a847; text-decoration: none; }
+    a:hover { text-decoration: underline; }
   </style>
   <script>
-    // Redireciona para o index com a rota correta
     (function() {
+      // Pega o caminho atual da URL
       var path = window.location.pathname;
-      var newPath = '/osiris-finance/' + path.replace('/osiris-finance/', '');
-      if (newPath.endsWith('/')) {
-        newPath = newPath.slice(0, -1);
-      }
-      window.location.replace('/osiris-finance/' + path);
+      
+      // Remove o prefixo '/osiris-finance/' se existir, para não duplicar
+      var route = path.replace('/osiris-finance', '') || '/';
+      
+      // Constrói a nova URL completa para o index.html, passando a rota como parâmetro ou fragmento
+      // A maneira mais confiável no GitHub Pages é redirecionar para o index.html e passar a rota na URL.
+      var newUrl = '/osiris-finance/index.html' + route;
+      
+      // Redireciona
+      window.location.replace(newUrl);
     })();
   </script>
 </head>
 <body>
   <div class="container">
     <h1 class="pixel-halo">🏛️ OSIRIS</h1>
-    <p>Redirecionando...</p>
-    <p style="font-size: 12px; margin-top: 20px;">Se não redirecionar, <a href="/osiris-finance/" style="color: #d4a847;">clique aqui</a></p>
+    <p>Redirecionando para a página correta...</p>
+    <p style="font-size: 12px; margin-top: 20px;">
+      Se não redirecionar, <a href="/osiris-finance/">clique aqui</a>
+    </p>
   </div>
 </body>
 </html>
