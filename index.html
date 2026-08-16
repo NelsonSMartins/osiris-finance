@@ -995,7 +995,7 @@
   }
 
   // ============================================
-  // TRANSAÇÕES (COM CAMPO DE ECONOMIA)
+  // TRANSAÇÕES (COM CAMPO DE VINCULAR ECONOMIA)
   // ============================================
   function Transacoes() {
     var _t1 = useState(false), showForm = _t1[0], setShowForm = _t1[1];
@@ -1014,9 +1014,8 @@
     var _t14 = useState(1), totalParcelas = _t14[0], setTotalParcelas = _t14[1];
     var _t15 = useState(''), primeiraData = _t15[0], setPrimeiraData = _t15[1];
     var _t16 = useState(false), pago = _t16[0], setPago = _t16[1];
-    var _t17 = useState(false), isEconomia = _t17[0], setIsEconomia = _t17[1];
+    var _t17 = useState(false), vincularEconomia = _t17[0], setVincularEconomia = _t17[1];
     var _t18 = useState(''), economiaMetaId = _t18[0], setEconomiaMetaId = _t18[1];
-    var _t19 = useState(''), economiaValor = _t19[0], setEconomiaValor = _t19[1];
 
     useEffect(function() {
       supabase.auth.getUser().then(function(result) {
@@ -1044,7 +1043,7 @@
     var resetForm = function() {
       setNome(''); setCategoriaNome(''); setValor(''); setData(''); setObs('');
       setIsParcelado(false); setTotalParcelas(1); setPrimeiraData(''); setPago(false);
-      setIsEconomia(false); setEconomiaMetaId(''); setEconomiaValor('');
+      setVincularEconomia(false); setEconomiaMetaId('');
       setShowForm(false);
     };
 
@@ -1052,25 +1051,19 @@
       e.preventDefault();
       if (!userId || !categoriaNome) return;
 
-      // Se for uma Economia (Receita vinculada a uma meta)
-      if (isEconomia && tipo === 'receita' && economiaMetaId && economiaValor) {
-        var eco = {
-          nome: nome.trim(),
-          valor: parseCurrency(economiaValor),
-          data: data || new Date().toISOString().split('T')[0],
-          objetivo_id: economiaMetaId,
-          obs: obs.trim() || null,
-          user_id: userId
-        };
-        supabase.from('economias').insert([eco]).then(function() {
-          load();
-          resetForm();
-        });
-        return;
-      }
+      var trans = {
+        nome: nome.trim(),
+        categoria_nome: categoriaNome,
+        valor: parseCurrency(valor),
+        tipo: tipo,
+        data: data || new Date().toISOString().split('T')[0],
+        obs: obs.trim() || null,
+        pago: pago,
+        user_id: userId
+      };
 
-      // Transação normal (Despesa ou Receita sem economia)
-      if (isParcelado && totalParcelas > 1 && primeiraData) {
+      // Se for uma transação normal (Despesa ou Receita sem vínculo)
+      if (isParcelado && totalParcelas > 1 && primeiraData && tipo === 'despesa') {
         var parcelas = [];
         var dataBase = new Date(primeiraData + 'T00:00:00');
         var valorParcela = parseCurrency(valor) / totalParcelas;
@@ -1092,17 +1085,28 @@
           load();
           resetForm();
         });
+        return;
+      }
+
+      // Lógica para vincular a ECONOMIA (Fazer um "PIX para a Meta")
+      if (vincularEconomia && tipo === 'receita' && economiaMetaId) {
+        // 1. Insere a Transação normalmente
+        supabase.from('transacoes').insert([trans]).then(function() {
+          // 2. Insere o depósito na tabela de Economias vinculado à Meta
+          supabase.from('economias').insert([{
+            nome: 'Transferência para: ' + nome.trim(),
+            valor: parseCurrency(valor), // Usa o mesmo valor da transação
+            data: data || new Date().toISOString().split('T')[0],
+            objetivo_id: economiaMetaId,
+            obs: 'Vinculado à transação',
+            user_id: userId
+          }]).then(function() {
+            load();
+            resetForm();
+          });
+        });
       } else {
-        var trans = {
-          nome: nome.trim(),
-          categoria_nome: categoriaNome,
-          valor: parseCurrency(valor),
-          tipo: tipo,
-          data: data || new Date().toISOString().split('T')[0],
-          obs: obs.trim() || null,
-          pago: pago,
-          user_id: userId
-        };
+        // Transação comum (sem vínculo com economia)
         supabase.from('transacoes').insert([trans]).then(function() {
           load();
           resetForm();
@@ -1166,64 +1170,67 @@
           createElement('label', { htmlFor: 'pago', className: 'text-sm font-medium font-body' }, 'Já está pago? (Se não marcar, vai para o Extrato)')
         ),
 
-        // CAMPO: Compra parcelada
-        createElement(
-          'div', { className: 'flex items-center gap-3 mt-2' },
-          createElement('input', {
-            type: 'checkbox',
-            id: 'parcelado',
-            checked: isParcelado,
-            onChange: function(e) { setIsParcelado(e.target.checked); },
-            className: 'checkbox-modern'
-          }),
-          createElement('label', { htmlFor: 'parcelado', className: 'text-sm font-medium font-body' }, 'Compra parcelada?')
-        ),
-        isParcelado ? createElement(
-          'div', { className: 'grid grid-cols-2 gap-3' },
-          createElement('div', null,
-            createElement('label', { className: 'text-xs text-[var(--text-muted)] block mb-1 font-body' }, 'Número de parcelas'),
+        // CAMPO: Compra parcelada (Apenas Despesa)
+        tipo === 'despesa' ? createElement(
+          React.Fragment, null,
+          createElement(
+            'div', { className: 'flex items-center gap-3 mt-2' },
             createElement('input', {
-              type: 'number',
-              min: 2,
-              max: 36,
-              value: totalParcelas,
-              onChange: function(e) { setTotalParcelas(Number(e.target.value) || 1); },
-              className: 'input-modern'
-            })
+              type: 'checkbox',
+              id: 'parcelado',
+              checked: isParcelado,
+              onChange: function(e) { setIsParcelado(e.target.checked); },
+              className: 'checkbox-modern'
+            }),
+            createElement('label', { htmlFor: 'parcelado', className: 'text-sm font-medium font-body' }, 'Compra parcelada?')
           ),
-          createElement('div', null,
-            createElement('label', { className: 'text-xs text-[var(--text-muted)] block mb-1 font-body' }, 'Primeiro vencimento'),
-            createElement('input', {
-              type: 'date',
-              value: primeiraData,
-              onChange: function(e) { setPrimeiraData(e.target.value); },
-              className: 'input-modern'
-            })
-          )
+          isParcelado ? createElement(
+            'div', { className: 'grid grid-cols-2 gap-3' },
+            createElement('div', null,
+              createElement('label', { className: 'text-xs text-[var(--text-muted)] block mb-1 font-body' }, 'Número de parcelas'),
+              createElement('input', {
+                type: 'number',
+                min: 2,
+                max: 36,
+                value: totalParcelas,
+                onChange: function(e) { setTotalParcelas(Number(e.target.value) || 1); },
+                className: 'input-modern'
+              })
+            ),
+            createElement('div', null,
+              createElement('label', { className: 'text-xs text-[var(--text-muted)] block mb-1 font-body' }, 'Primeiro vencimento'),
+              createElement('input', {
+                type: 'date',
+                value: primeiraData,
+                onChange: function(e) { setPrimeiraData(e.target.value); },
+                className: 'input-modern'
+              })
+            )
+          ) : null
         ) : null,
 
-        // CAMPO: Economia (Apenas para Receitas)
+        // CAMPO: Vincular a uma Economia (Apenas Receitas)
         tipo === 'receita' ? createElement(
           React.Fragment, null,
           createElement(
             'div', { className: 'flex items-center gap-3 mt-4 pt-4 border-t border-[var(--border-color)]' },
             createElement('input', {
               type: 'checkbox',
-              id: 'isEconomia',
-              checked: isEconomia,
-              onChange: function(e) { setIsEconomia(e.target.checked); },
+              id: 'vincularEconomia',
+              checked: vincularEconomia,
+              onChange: function(e) { setVincularEconomia(e.target.checked); },
               className: 'checkbox-modern'
             }),
-            createElement('label', { htmlFor: 'isEconomia', className: 'text-sm font-medium font-body' }, 'Quero guardar esse valor em uma Economia (Meta)')
+            createElement('label', { htmlFor: 'vincularEconomia', className: 'text-sm font-medium font-body' }, 'Vincular a uma Economia (PIX para a Meta)')
           ),
-          isEconomia ? createElement(
+          vincularEconomia ? createElement(
             'div', { className: 'space-y-3 mt-2 p-3 bg-[var(--bg-card)] rounded-xl border border-[var(--border-color)]' },
             createElement(
-              'select', { value: economiaMetaId, onChange: function(e) { setEconomiaMetaId(e.target.value); }, className: 'select-modern', required: isEconomia },
+              'select', { value: economiaMetaId, onChange: function(e) { setEconomiaMetaId(e.target.value); }, className: 'select-modern', required: vincularEconomia },
               createElement('option', { value: '' }, 'Selecione uma meta para vincular'),
               objetivos.map(function(o) { return createElement('option', { key: o.id, value: o.id }, o.nome); })
             ),
-            createElement(CurrencyInput, { value: economiaValor, onChange: setEconomiaValor, placeholder: 'Valor a guardar (R$)', className: 'input-modern', required: isEconomia })
+            createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, 'O valor informado acima será depositado nesta meta.')
           ) : null
         ) : null,
 
@@ -1472,7 +1479,7 @@
             'div', { className: 'text-center py-8 text-[var(--text-muted)] font-body' },
             createElement('i', { className: 'fas fa-coins text-4xl mb-2 block' }),
             createElement('p', null, 'Nenhuma economia registrada'),
-            createElement('p', { className: 'text-sm' }, 'Cadastre uma Receita e marque "Quero guardar esse valor em uma Economia"')
+            createElement('p', { className: 'text-sm' }, 'Cadastre uma Receita e marque "Vincular a uma Economia"')
           ) :
           economias.map(function(ec) {
             var nomeObj = objetivos.filter(function(o) { return o.id === ec.objetivo_id; })[0];
