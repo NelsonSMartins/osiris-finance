@@ -162,14 +162,13 @@
   'use strict';
 
   // ============================================
-  // SUPABASE - COM LOGS
+  // SUPABASE
   // ============================================
   var SUPABASE_URL = 'https://nzyqhqxfpvzljcunnnsq.supabase.co';
   var SUPABASE_ANON_KEY = 'sb_publishable_vSSbaS4QS-mp0pbFb4cr3g_0edR7d97';
   var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   console.log('🚀 OSIRIS iniciado!');
-  console.log('🔗 Conectado ao Supabase:', SUPABASE_URL);
 
   var React = window.React;
   var ReactDOM = window.ReactDOM;
@@ -300,7 +299,6 @@
           setSuccess('✅ CONTA CRIADA! VERIFIQUE SEU E-MAIL.');
           setEmail(''); setPassword('');
         } else {
-          console.log('✅ Login bem-sucedido!', result.data.user);
           onLogin(result.data.user);
         }
         setLoading(false);
@@ -367,23 +365,19 @@
       supabase.auth.getUser().then(function(result) {
         if (result.data && result.data.user) {
           setUserId(result.data.user.id);
-          console.log('✅ Dashboard - User ID:', result.data.user.id);
-        } else {
-          console.log('❌ Dashboard - Nenhum usuário logado!');
         }
       });
     }, []);
 
     var loadTransactions = function() {
-      if (!userId) { console.log('⏳ Aguardando userId...'); return; }
+      if (!userId) return;
       setLoading(true);
       var range = getMonthRange(currentDate);
-      console.log('🔄 Carregando transações para:', userId);
       supabase.from('transacoes').select('*').eq('user_id', userId).gte('data', range.start).lte('data', range.end).order('data', { ascending: false })
         .then(function(result) {
-          if (result.error) { console.error('❌ Erro:', result.error); } else { console.log('✅ Transações:', result.data); setTransactions(result.data || []); }
+          if (!result.error) setTransactions(result.data || []);
           setLoading(false);
-        }).catch(function(err) { console.error('❌ Erro:', err); setLoading(false); });
+        }).catch(function() { setLoading(false); });
     };
 
     useEffect(function() { if (userId) loadTransactions(); }, [currentDate, userId]);
@@ -473,7 +467,7 @@
   }
 
   // ============================================
-  // CATEGORIAS (COM LOGS)
+  // CATEGORIAS (VISUAL MELHORADO - GRADE 2 COLUNAS)
   // ============================================
   function Categorias() {
     var _c1 = useState([]), categorias = _c1[0], setCategorias = _c1[1];
@@ -485,47 +479,25 @@
     var _c7 = useState(''), obs = _c7[0], setObs = _c7[1];
     var _c8 = useState(null), userId = _c8[0], setUserId = _c8[1];
 
-    // Pegar userId
     useEffect(function() {
       supabase.auth.getUser().then(function(result) {
         if (result.data && result.data.user) {
-          var uid = result.data.user.id;
-          setUserId(uid);
-          console.log('✅ Categorias - User ID obtido:', uid);
-        } else {
-          console.log('❌ Categorias - Nenhum usuário logado!');
+          setUserId(result.data.user.id);
         }
-      }).catch(function(err) {
-        console.error('❌ Erro ao pegar usuário:', err);
       });
     }, []);
 
-    // Carregar categorias
     var load = function() {
-      if (!userId) {
-        console.log('⏳ Categorias - Aguardando userId...');
-        return;
-      }
+      if (!userId) return;
       setLoading(true);
-      console.log('🔄 Categorias - Carregando para userId:', userId);
       supabase.from('categorias').select('*').eq('user_id', userId).order('nome')
         .then(function(result) {
-          if (result.error) {
-            console.error('❌ Categorias - Erro ao carregar:', result.error);
-          } else {
-            console.log('✅ Categorias - Carregadas:', result.data);
-            setCategorias(result.data || []);
-          }
+          if (!result.error) setCategorias(result.data || []);
           setLoading(false);
-        }).catch(function(err) {
-          console.error('❌ Categorias - Erro:', err);
-          setLoading(false);
-        });
+        }).catch(function() { setLoading(false); });
     };
 
-    useEffect(function() {
-      if (userId) load();
-    }, [userId]);
+    useEffect(function() { if (userId) load(); }, [userId]);
 
     var reset = function() {
       setNome(''); setTipo('despesa'); setObs(''); setEditando(null); setShowForm(false);
@@ -533,47 +505,12 @@
 
     var submit = function(e) {
       e.preventDefault();
-      console.log('📝 Categorias - Submit iniciado');
-      console.log('   nome:', nome);
-      console.log('   tipo:', tipo);
-      console.log('   userId:', userId);
-
-      if (!nome.trim()) {
-        alert('Digite o nome da categoria!');
-        return;
-      }
-      if (!userId) {
-        alert('Usuário não identificado! Faça login novamente.');
-        console.error('❌ Categorias - userId é null!');
-        return;
-      }
-
-      var dados = {
-        nome: nome.trim(),
-        tipo: tipo,
-        obs: obs.trim() || null,
-        user_id: userId
-      };
-
-      console.log('📝 Categorias - Salvando:', dados);
-
+      if (!nome.trim() || !userId) return;
+      var dados = { nome: nome.trim(), tipo: tipo, obs: obs.trim() || null, user_id: userId };
       var promise = editando
         ? supabase.from('categorias').update({ nome: dados.nome, tipo: dados.tipo, obs: dados.obs }).eq('id', editando)
         : supabase.from('categorias').insert([dados]);
-
-      promise.then(function(result) {
-        if (result.error) {
-          console.error('❌ Categorias - Erro ao salvar:', result.error);
-          alert('❌ Erro: ' + result.error.message);
-        } else {
-          console.log('✅ Categorias - Salva com sucesso!', result);
-          load();
-          reset();
-        }
-      }).catch(function(err) {
-        console.error('❌ Categorias - Erro:', err);
-        alert('❌ Erro ao salvar: ' + err.message);
-      });
+      promise.then(function() { load(); reset(); });
     };
 
     var del = function(id) {
@@ -586,9 +523,13 @@
       setNome(cat.nome); setTipo(cat.tipo); setObs(cat.obs || ''); setEditando(cat.id); setShowForm(true);
     };
 
+    var receitas = categorias.filter(function(c) { return c.tipo === 'receita'; });
+    var despesas = categorias.filter(function(c) { return c.tipo === 'despesa'; });
+
     return createElement(
       'div',
       { className: 'pb-24 max-w-md mx-auto' },
+      // Header
       createElement(
         'div',
         { className: 'sticky top-0 z-40 bg-[#050a08] border-b-4 border-[#00ff88] p-4 flex items-center justify-between shadow-lg shadow-[#00ff88]/5' },
@@ -598,6 +539,7 @@
           className: 'zone-green min-w-[56px] min-h-[56px] text-2xl font-bold flex items-center justify-center'
         }, showForm ? '✕' : '＋')
       ),
+      // Form
       showForm ? createElement(
         'form',
         { onSubmit: submit, className: 'p-4 space-y-4 border-b-4 border-[#00ff88] bg-[#050a08]' },
@@ -633,9 +575,10 @@
           createElement('button', { type: 'button', onClick: reset, className: 'zone-yellow flex-1 border-[#006644] text-[#006644]' }, 'CANCELAR')
         )
       ) : null,
+      // Lista em Grade 2 colunas
       createElement(
         'div',
-        { className: 'p-4 space-y-2' },
+        { className: 'p-4' },
         loading ? createElement('p', { className: 'text-center py-8 pixel-text-muted' }, 'CARREGANDO…') :
         categorias.length === 0 ? createElement(
           'div',
@@ -644,19 +587,102 @@
           createElement('p', null, 'NENHUMA CATEGORIA CADASTRADA'),
           createElement('p', { className: 'text-sm' }, 'CLIQUE NO + PARA CRIAR')
         ) :
-        categorias.map(function(cat) {
-          return createElement(
-            TouchableCard,
-            { key: cat.id, className: cat.tipo === 'despesa' ? 'border-l-4 border-[#00ff88]' : 'border-l-4 border-[#d4a847]' },
-            createElement('div', { className: 'flex-1' },
-              createElement('p', { className: 'font-medium pixel-text' }, cat.nome),
-              createElement('p', { className: 'text-xs pixel-text-muted' }, cat.tipo === 'despesa' ? '💸 DESPESA' : '💰 RECEITA'),
-              cat.obs ? createElement('p', { className: 'text-xs text-[#008855]' }, '📝 ' + cat.obs) : null
+        createElement(
+          'div',
+          { className: 'grid grid-cols-2 gap-3' },
+          // Coluna Despesas
+          createElement(
+            'div',
+            null,
+            createElement(
+              'p',
+              { className: 'pixel-text-muted text-xs uppercase tracking-wider mb-2 border-b-2 border-[#ff4444]/30 pb-1' },
+              '💸 Despesas'
             ),
-            createElement('button', { onClick: function(e) { e.stopPropagation(); edit(cat); }, className: 'zone-red' }, '✏️'),
-            createElement('button', { onClick: function(e) { e.stopPropagation(); del(cat.id); }, className: 'zone-red' }, '🗑️')
-          );
-        })
+            despesas.length === 0 ? createElement(
+              'p',
+              { className: 'text-[#006644] text-xs py-2' },
+              'Nenhuma despesa'
+            ) :
+            despesas.map(function(cat) {
+              return createElement(
+                'div',
+                {
+                  key: cat.id,
+                  className: 'bg-[#0d1520] border-l-4 border-[#ff4444] p-3 rounded-r-xl mb-2 hover:bg-[#1a2332] transition-all cursor-pointer group relative'
+                },
+                createElement(
+                  'div',
+                  { className: 'flex items-start justify-between' },
+                  createElement(
+                    'div',
+                    { className: 'flex-1 min-w-0' },
+                    createElement('p', { className: 'pixel-text text-sm truncate' }, cat.nome),
+                    cat.obs ? createElement('p', { className: 'text-[#008855] text-xs truncate font-mono' }, '📝 ' + cat.obs) : null
+                  ),
+                  createElement(
+                    'div',
+                    { className: 'flex items-center gap-1 flex-shrink-0 ml-2' },
+                    createElement('button', {
+                      onClick: function(e) { e.stopPropagation(); edit(cat); },
+                      className: 'text-[#00ff88] hover:text-[#d4a847] transition-colors p-1 opacity-50 hover:opacity-100'
+                    }, '✏️'),
+                    createElement('button', {
+                      onClick: function(e) { e.stopPropagation(); del(cat.id); },
+                      className: 'text-[#ff4444] hover:text-[#ff6666] transition-colors p-1 opacity-50 hover:opacity-100'
+                    }, '🗑️')
+                  )
+                )
+              );
+            })
+          ),
+          // Coluna Receitas
+          createElement(
+            'div',
+            null,
+            createElement(
+              'p',
+              { className: 'pixel-text-muted text-xs uppercase tracking-wider mb-2 border-b-2 border-[#10b981]/30 pb-1' },
+              '💰 Receitas'
+            ),
+            receitas.length === 0 ? createElement(
+              'p',
+              { className: 'text-[#006644] text-xs py-2' },
+              'Nenhuma receita'
+            ) :
+            receitas.map(function(cat) {
+              return createElement(
+                'div',
+                {
+                  key: cat.id,
+                  className: 'bg-[#0d1520] border-l-4 border-[#10b981] p-3 rounded-r-xl mb-2 hover:bg-[#1a2332] transition-all cursor-pointer group relative'
+                },
+                createElement(
+                  'div',
+                  { className: 'flex items-start justify-between' },
+                  createElement(
+                    'div',
+                    { className: 'flex-1 min-w-0' },
+                    createElement('p', { className: 'pixel-text text-sm truncate' }, cat.nome),
+                    cat.obs ? createElement('p', { className: 'text-[#008855] text-xs truncate font-mono' }, '📝 ' + cat.obs) : null
+                  ),
+                  createElement(
+                    'div',
+                    { className: 'flex items-center gap-1 flex-shrink-0 ml-2' },
+                    createElement('button', {
+                      onClick: function(e) { e.stopPropagation(); edit(cat); },
+                      className: 'text-[#00ff88] hover:text-[#d4a847] transition-colors p-1 opacity-50 hover:opacity-100'
+                    }, '✏️'),
+                    createElement('button', {
+                      onClick: function(e) { e.stopPropagation(); del(cat.id); },
+                      className: 'text-[#ff4444] hover:text-[#ff6666] transition-colors p-1 opacity-50 hover:opacity-100'
+                    }, '🗑️')
+                  )
+                )
+              );
+            })
+          )
+        )
       )
     );
   }
@@ -681,7 +707,6 @@
       supabase.auth.getUser().then(function(result) {
         if (result.data && result.data.user) {
           setUserId(result.data.user.id);
-          console.log('✅ Transações - User ID:', result.data.user.id);
         }
       });
     }, []);
@@ -713,17 +738,10 @@
         obs: obs.trim() || null,
         user_id: userId
       };
-      console.log('📝 Transação - Salvando:', trans);
-      supabase.from('transacoes').insert([trans]).then(function(result) {
-        if (result.error) {
-          console.error('❌ Transação - Erro:', result.error);
-          alert('❌ Erro: ' + result.error.message);
-        } else {
-          console.log('✅ Transação - Salva!');
-          load();
-          setShowForm(false);
-          setNome(''); setCategoriaNome(''); setValor(''); setData(''); setObs('');
-        }
+      supabase.from('transacoes').insert([trans]).then(function() {
+        load();
+        setShowForm(false);
+        setNome(''); setCategoriaNome(''); setValor(''); setData(''); setObs('');
       });
     };
 
@@ -891,19 +909,12 @@
       supabase.auth.getSession().then(function(_ref) {
         var session = _ref.data.session;
         if (session && session.user) {
-          console.log('✅ App - Usuário logado:', session.user.email);
           setUser(session.user);
-        } else {
-          console.log('❌ App - Nenhum usuário logado');
         }
         setLoading(false);
-      }).catch(function(err) {
-        console.error('❌ App - Erro ao buscar sessão:', err);
-        setLoading(false);
-      });
+      }).catch(function() { setLoading(false); });
 
       var listener = supabase.auth.onAuthStateChange(function(event, session) {
-        console.log('🔄 App - Auth state changed:', event, session ? session.user.email : 'none');
         if (session && session.user) {
           setUser(session.user);
         } else {
@@ -923,7 +934,7 @@
     }
 
     if (!user) {
-      return createElement(Login, { onLogin: function(u) { console.log('✅ Login callback:', u); setUser(u); } });
+      return createElement(Login, { onLogin: function(u) { setUser(u); } });
     }
 
     var content;
