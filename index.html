@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>OSIRIS · Controle Financeiro</title>
 
-  <!-- Google Fonts Modernas -->
+  <!-- Google Fonts com foco em acessibilidade -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Atkinson Hyperlegible - fonte desenvolvida para dislexia -->
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
 
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -17,75 +18,95 @@
 
   <style>
     /* ============================================
-       OSIRIS MODERNO - TEMA DARK/LIGHT/PIXEL
+       OSIRIS MODERNO - ACESSIBILIDADE OTIMIZADA
+       Contraste WCAG AA+ / Fonte para dislexia
        ============================================ */
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
+      /* Cores com contraste melhorado */
       --bg-primary: #0a0e1a;
       --bg-secondary: #111827;
       --bg-card: #1a2332;
       --bg-card-hover: #243044;
       --bg-input: #0d1520;
-      --text-primary: #e8edf5;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
+      --text-primary: #f0f4f8;
+      --text-secondary: #c8d6e5;
+      --text-muted: #94a3b8;
       --border-color: #2d3a4a;
       --accent: #10b981;
       --accent-dark: #059669;
-      --accent-glow: rgba(16, 185, 129, 0.3);
+      --accent-glow: rgba(16, 185, 129, 0.25);
       --danger: #ef4444;
       --warning: #f59e0b;
       --purple: #8b5cf6;
       --blue: #3b82f6;
-      --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
       --radius: 16px;
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      --font-display: 'Space Grotesk', 'Inter', sans-serif;
+      --font-display: 'Space Grotesk', 'Atkinson Hyperlegible', 'Inter', sans-serif;
+      --font-body: 'Atkinson Hyperlegible', 'Inter', sans-serif;
+      --letter-spacing: 0.02em;
+      --line-height: 1.7;
     }
 
     [data-theme="light"] {
       --bg-primary: #f0f2f5;
       --bg-secondary: #ffffff;
       --bg-card: #ffffff;
-      --bg-card-hover: #f8f9fa;
-      --bg-input: #ffffff;
+      --bg-card-hover: #f1f3f5;
+      --bg-input: #f8f9fa;
       --text-primary: #0a0e1a;
-      --text-secondary: #475569;
-      --text-muted: #94a3b8;
-      --border-color: #e2e8f0;
+      --text-secondary: #1e293b;
+      --text-muted: #475569;
+      --border-color: #d1d5db;
       --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+      --accent: #059669;
+      --accent-dark: #047857;
     }
 
-    /* ===== TEMA PIXEL 90 ===== */
+    /* ===== TEMA PIXEL 90 (contraste melhorado) ===== */
     [data-theme="pixel"] {
-      --bg-primary: #050a08;
-      --bg-secondary: #0d1520;
+      --bg-primary: #0a0e0a;
+      --bg-secondary: #111811;
       --bg-card: #0d1520;
       --bg-card-hover: #1a2332;
       --bg-input: #050a08;
       --text-primary: #00ff88;
-      --text-secondary: #008855;
-      --text-muted: #006644;
+      --text-secondary: #66ffbb;
+      --text-muted: #00cc77;
       --border-color: #00ff88;
       --accent: #00ff88;
       --accent-dark: #00cc66;
       --accent-glow: rgba(0, 255, 136, 0.2);
       --shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
       --radius: 4px;
+      --font-body: 'VT323', 'Atkinson Hyperlegible', monospace;
+      --font-display: 'Press Start 2P', 'Atkinson Hyperlegible', monospace;
+      --letter-spacing: 0.04em;
+      --line-height: 1.6;
     }
 
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: var(--font-body);
+      letter-spacing: var(--letter-spacing);
+      line-height: var(--line-height);
       background: var(--bg-primary);
       color: var(--text-primary);
       transition: var(--transition);
       min-height: 100vh;
     }
 
+    /* ===== FONTE PARA DISLEXIA ===== */
+    .font-dyslexic {
+      font-family: 'Atkinson Hyperlegible', 'Inter', sans-serif;
+      letter-spacing: 0.04em;
+      word-spacing: 0.08em;
+    }
+
     /* ===== SCROLLBAR ===== */
-    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: var(--bg-secondary); }
     ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 8px; }
 
@@ -114,10 +135,10 @@
     /* ===== BUTTONS ===== */
     .btn-primary {
       background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-      color: white;
+      color: #ffffff;
       padding: 12px 24px;
       border-radius: 12px;
-      font-weight: 600;
+      font-weight: 700;
       border: none;
       cursor: pointer;
       transition: var(--transition);
@@ -126,6 +147,9 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      letter-spacing: 0.04em;
     }
     .btn-primary:hover {
       transform: scale(1.02);
@@ -143,33 +167,42 @@
       cursor: pointer;
       transition: var(--transition);
       min-height: 48px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      letter-spacing: 0.04em;
     }
     .btn-secondary:hover {
       background: var(--bg-card-hover);
     }
 
-    /* ===== INPUTS ===== */
+    /* ===== INPUTS COM CONTRASTE MELHORADO ===== */
     .input-modern {
       background: var(--bg-input);
-      border: 1px solid var(--border-color);
+      border: 2px solid var(--border-color);
       border-radius: 12px;
       padding: 12px 16px;
       color: var(--text-primary);
       width: 100%;
       min-height: 48px;
       transition: var(--transition);
-      font-family: 'Inter', sans-serif;
+      font-family: var(--font-body);
+      font-size: 16px;
+      letter-spacing: 0.04em;
     }
     .input-modern:focus {
       outline: none;
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow);
+      box-shadow: 0 0 0 4px var(--accent-glow);
+    }
+    .input-modern::placeholder {
+      color: var(--text-muted);
+      opacity: 0.8;
     }
 
     /* ===== SELECT ===== */
     .select-modern {
       background: var(--bg-input);
-      border: 1px solid var(--border-color);
+      border: 2px solid var(--border-color);
       border-radius: 12px;
       padding: 12px 16px;
       color: var(--text-primary);
@@ -178,12 +211,14 @@
       transition: var(--transition);
       appearance: none;
       cursor: pointer;
-      font-family: 'Inter', sans-serif;
+      font-family: var(--font-body);
+      font-size: 16px;
+      letter-spacing: 0.04em;
     }
     .select-modern:focus {
       outline: none;
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow);
+      box-shadow: 0 0 0 4px var(--accent-glow);
     }
     .select-modern option {
       background: var(--bg-card);
@@ -209,11 +244,11 @@
       cursor: pointer;
       border: none;
       background: transparent;
-      font-family: 'Inter', sans-serif;
-      font-size: 9.5px;
-      font-weight: 600;
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.06em;
       position: relative;
     }
     .nav-item.active {
@@ -225,7 +260,7 @@
       top: -1px;
       left: 50%;
       transform: translateX(-50%);
-      width: 22px;
+      width: 24px;
       height: 3px;
       background: var(--accent);
       border-radius: 0 0 4px 4px;
@@ -254,7 +289,7 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 3px;
+      height: 4px;
       border-radius: 0 0 4px 4px;
     }
     .stat-card.revenue::before { background: linear-gradient(90deg, #10b981, #34d399); }
@@ -270,7 +305,7 @@
 
     @keyframes pulse-glow {
       0%, 100% { box-shadow: 0 0 20px var(--accent-glow); }
-      50% { box-shadow: 0 0 40px var(--accent-glow), 0 0 60px rgba(16, 185, 129, 0.1); }
+      50% { box-shadow: 0 0 40px var(--accent-glow), 0 0 60px rgba(16, 185, 129, 0.08); }
     }
     .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
 
@@ -286,26 +321,26 @@
 
     /* ===== CATEGORY BADGE ===== */
     .badge-income {
-      background: rgba(16, 185, 129, 0.15);
+      background: rgba(16, 185, 129, 0.2);
       color: #10b981;
-      padding: 2px 10px;
+      padding: 2px 12px;
       border-radius: 20px;
-      font-size: 10px;
-      font-weight: 600;
+      font-size: 11px;
+      font-weight: 700;
     }
     .badge-expense {
-      background: rgba(239, 68, 68, 0.15);
+      background: rgba(239, 68, 68, 0.2);
       color: #ef4444;
-      padding: 2px 10px;
+      padding: 2px 12px;
       border-radius: 20px;
-      font-size: 10px;
-      font-weight: 600;
+      font-size: 11px;
+      font-weight: 700;
     }
 
-    /* ===== METAS / GAMIFICAÇÃO ===== */
+    /* ===== METAS ===== */
     .progress-track {
       width: 100%;
-      height: 14px;
+      height: 16px;
       background: var(--bg-input);
       border-radius: 20px;
       overflow: hidden;
@@ -334,29 +369,29 @@
       top: 0;
       bottom: 0;
       width: 2px;
-      background: rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.2);
     }
     .level-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 12px;
+      padding: 4px 14px;
       border-radius: 20px;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 700;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.04em;
     }
     .streak-chip {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(239,68,68,0.1));
-      border: 1px solid rgba(245,158,11,0.35);
+      gap: 8px;
+      background: linear-gradient(135deg, rgba(245,158,11,0.2), rgba(239,68,68,0.1));
+      border: 1px solid rgba(245,158,11,0.4);
       color: var(--warning);
-      padding: 6px 14px;
+      padding: 6px 16px;
       border-radius: 20px;
       font-weight: 700;
-      font-size: 13px;
+      font-size: 14px;
     }
     .goal-icon-circle {
       width: 52px;
@@ -365,7 +400,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      font-size: 26px;
       background: var(--bg-input);
       border: 1px solid var(--border-color);
       flex-shrink: 0;
@@ -374,17 +409,19 @@
       flex: 1;
       padding: 10px;
       border-radius: 12px;
-      font-weight: 600;
-      font-size: 13px;
+      font-weight: 700;
+      font-size: 14px;
       border: 1px solid var(--border-color);
       background: var(--bg-input);
       color: var(--text-muted);
       cursor: pointer;
       transition: var(--transition);
+      font-family: var(--font-body);
+      letter-spacing: 0.04em;
     }
     .subtab-btn.active {
       background: var(--accent);
-      color: white;
+      color: #ffffff;
       border-color: var(--accent);
     }
     .emoji-pick {
@@ -405,18 +442,21 @@
       background: var(--accent-glow);
     }
     .insight-card {
-      background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(139,92,246,0.06));
+      background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(139,92,246,0.06));
       border: 1px solid var(--border-color);
       border-radius: var(--radius);
       padding: 18px 20px;
     }
     .font-display { font-family: var(--font-display); }
+    .font-body { font-family: var(--font-body); }
 
     /* ===== RESPONSIVO ===== */
     @media (max-width: 640px) {
       .stat-card { padding: 12px 16px; }
       .btn-primary { padding: 10px 18px; font-size: 13px; }
       .nav-item { font-size: 9px; min-height: 56px; }
+      .input-modern { font-size: 15px; }
+      .select-modern { font-size: 15px; }
     }
 
     .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
@@ -452,10 +492,43 @@
   var createElement = React.createElement;
 
   // ============================================
-  // UTILITÁRIOS
+  // UTILITÁRIOS COM FORMATTAÇÃO
   // ============================================
+
+  // Formatar valor para moeda BR
   function formatCurrency(v) {
-    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0);
+    if (v === undefined || v === null || isNaN(v)) v = 0;
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(v);
+  }
+
+  // Converter string para número (ex: "1.234,56" → 1234.56)
+  function parseCurrency(str) {
+    if (!str) return 0;
+    var clean = str.replace(/[R$\s]/g, '').replace(/\./g, '').replace(/,/g, '.');
+    var num = parseFloat(clean);
+    return isNaN(num) ? 0 : num;
+  }
+
+  // Máscara de valor monetário para input
+  function maskCurrency(value) {
+    if (!value) return '';
+    var num = parseCurrency(value);
+    if (num === 0) return '';
+    return formatCurrency(num);
+  }
+
+  // Formatar data para exibição
+  function formatDate(dateStr) {
+    if (!dateStr) return '';
+    try {
+      var d = new Date(dateStr + 'T00:00:00');
+      return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    } catch (e) { return dateStr; }
   }
 
   function getMonthRange(date) {
@@ -484,7 +557,6 @@
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
   }
 
-  // Média mensal de aportes (soma / nº de meses distintos com registro)
   function computeMonthlyAverage(economias) {
     var map = {};
     economias.forEach(function(e) {
@@ -497,7 +569,6 @@
     return total / keys.length;
   }
 
-  // Sequência de meses consecutivos (até o mês atual) com pelo menos uma economia
   function computeStreak(economias) {
     var map = {};
     economias.forEach(function(e) { map[monthKey(e.data)] = true; });
@@ -519,8 +590,6 @@
     return { label: 'Iniciante', emoji: '🌱', color: '#64748b' };
   }
 
-  // Análise preditiva: quanto tempo falta para bater o objetivo,
-  // com base no ritmo médio mensal de economias vinculadas a ele.
   function predictGoal(objetivo, economiasDoObjetivo) {
     var total = economiasDoObjetivo.reduce(function(acc, e) { return acc + Number(e.valor); }, 0);
     var alvo = Number(objetivo.valor_alvo) || 0;
@@ -540,10 +609,10 @@
     return { total: total, restante: restante, mediaMensal: mediaMensal, pct: pct, mesesRestantes: mesesRestantes, dataPrevista: dataPrevista };
   }
 
-  var EMOJI_OPTIONS = ['🎯', '🏠', '🚗', '✈️', '🎓', '💍', '📱', '🏖️', '💻', '🧳'];
+  var EMOJI_OPTIONS = ['🎯', '🏠', '🚗', '✈️', '🎓', '💍', '📱', '🏖️', '💻', '🧳', '🏡', '🌍', '🎸', '📚', '🎮'];
 
   // ============================================
-  // COMPONENTES DE UI PARTILHADOS
+  // COMPONENTES DE UI
   // ============================================
 
   function ProgressBar(props) {
@@ -565,7 +634,44 @@
     );
   }
 
-  // ----- Header Moderno -----
+  // ----- Input com máscara de valor -----
+  function CurrencyInput(props) {
+    var value = props.value || '';
+    var onChange = props.onChange;
+    var placeholder = props.placeholder || '0,00';
+    var className = props.className || 'input-modern';
+    var required = props.required || false;
+
+    var handleChange = function(e) {
+      var raw = e.target.value;
+      // Remove tudo que não é número ou vírgula
+      var cleaned = raw.replace(/[^0-9,]/g, '');
+      onChange(cleaned);
+    };
+
+    var handleBlur = function(e) {
+      var val = e.target.value;
+      if (val) {
+        var num = parseCurrency(val);
+        if (num > 0) {
+          onChange(formatCurrency(num));
+        }
+      }
+    };
+
+    return createElement('input', {
+      type: 'text',
+      inputMode: 'decimal',
+      placeholder: placeholder,
+      value: value,
+      onChange: handleChange,
+      onBlur: handleBlur,
+      className: className,
+      required: required
+    });
+  }
+
+  // ----- Header -----
   function Header(props) {
     var currentDate = props.currentDate, onDateChange = props.onDateChange;
     return createElement(
@@ -603,7 +709,7 @@
     );
   }
 
-  // ----- BottomNavigation Moderno -----
+  // ----- BottomNavigation -----
   function BottomNavigation(props) {
     var currentPage = props.currentPage;
     var setPage = props.setPage;
@@ -640,7 +746,7 @@
   }
 
   // ============================================
-  // LOGIN MODERNO
+  // LOGIN
   // ============================================
   function Login(props) {
     var onLogin = props.onLogin;
@@ -723,8 +829,8 @@
             className: 'input-modern',
             minLength: 6
           }),
-          error ? createElement('p', { className: 'text-[#ef4444] text-sm text-center' }, error) : null,
-          success ? createElement('p', { className: 'text-[#10b981] text-sm text-center' }, success) : null,
+          error ? createElement('p', { className: 'text-[#ef4444] text-sm text-center font-bold' }, '⚠️ ' + error) : null,
+          success ? createElement('p', { className: 'text-[#10b981] text-sm text-center font-bold' }, success) : null,
           createElement('button', {
             type: 'submit',
             disabled: loading,
@@ -733,7 +839,7 @@
           createElement('button', {
             type: 'button',
             onClick: function() { setIsSignUp(!isSignUp); setError(''); setSuccess(''); },
-            className: 'w-full text-[var(--text-muted)] text-sm hover:text-[var(--accent)] transition-colors'
+            className: 'w-full text-[var(--text-muted)] text-sm hover:text-[var(--accent)] transition-colors font-bold'
           }, isSignUp ? '← Já tem conta? Entre' : '→ Não tem conta? Cadastre-se')
         )
       )
@@ -741,7 +847,7 @@
   }
 
   // ============================================
-  // DASHBOARD MODERNO (com storytelling + metas)
+  // DASHBOARD
   // ============================================
   function Dashboard(props) {
     var setPage = props.setPage;
@@ -812,7 +918,6 @@
       }).sort(function(a, b) { return b.pred.pct - a.pred.pct; }).slice(0, 2);
     }, [objetivos, economias]);
 
-    // Renderizar gráfico com Chart.js
     useEffect(function() {
       if (chartInstance.current) chartInstance.current.destroy();
       if (!chartRef.current || summary.categorias.length === 0) return;
@@ -831,7 +936,7 @@
           plugins: {
             legend: {
               position: 'bottom',
-              labels: { color: 'var(--text-secondary)', font: { size: 11, family: 'Inter' }, padding: 12, usePointStyle: true, pointStyle: 'circle' }
+              labels: { color: 'var(--text-secondary)', font: { size: 11, family: 'Atkinson Hyperlegible, Inter' }, padding: 12, usePointStyle: true, pointStyle: 'circle' }
             }
           },
           cutout: '65%'
@@ -861,12 +966,11 @@
 
     return createElement(
       'div',
-      { className: 'pb-24 max-w-md mx-auto' },
+      { className: 'pb-24 max-w-md mx-auto font-body' },
       createElement(Header, { currentDate: currentDate, onDateChange: changeDate }),
       createElement(
         'div',
         { className: 'p-4 space-y-4' },
-        // Storytelling insight
         storyText ? createElement(
           'div',
           { className: 'insight-card fade-in-up' },
@@ -874,40 +978,38 @@
             'div',
             { className: 'flex items-start gap-3' },
             createElement('span', { className: 'text-2xl' }, storyText.icon),
-            createElement('p', { className: 'text-sm leading-relaxed', style: { color: 'var(--text-primary)' } }, storyText.text)
+            createElement('p', { className: 'text-sm leading-relaxed font-body', style: { color: 'var(--text-primary)' } }, storyText.text)
           )
         ) : null,
-        // Stats Row
         createElement(
           'div',
           { className: 'grid grid-cols-3 gap-3' },
           createElement(
             'div', { className: 'stat-card revenue' },
-            createElement('p', { className: 'text-[var(--text-muted)] text-xs font-medium uppercase tracking-wider' }, 'Receitas'),
+            createElement('p', { className: 'text-[var(--text-muted)] text-xs font-bold uppercase tracking-wider' }, 'Receitas'),
             createElement('p', { className: 'text-lg font-bold text-[#10b981] font-display' }, formatCurrency(summary.totalReceitas))
           ),
           createElement(
             'div', { className: 'stat-card expense' },
-            createElement('p', { className: 'text-[var(--text-muted)] text-xs font-medium uppercase tracking-wider' }, 'Despesas'),
+            createElement('p', { className: 'text-[var(--text-muted)] text-xs font-bold uppercase tracking-wider' }, 'Despesas'),
             createElement('p', { className: 'text-lg font-bold text-[#ef4444] font-display' }, formatCurrency(summary.totalDespesas))
           ),
           createElement(
             'div', { className: 'stat-card balance' },
-            createElement('p', { className: 'text-[var(--text-muted)] text-xs font-medium uppercase tracking-wider' }, 'Saldo'),
+            createElement('p', { className: 'text-[var(--text-muted)] text-xs font-bold uppercase tracking-wider' }, 'Saldo'),
             createElement('p', { className: 'text-lg font-bold text-[#8b5cf6] font-display' }, formatCurrency(summary.saldo))
           )
         ),
-        // Metas resumo
         metasResumo.length > 0 ? createElement(
           'div',
           { className: 'card-modern' },
           createElement(
             'div',
             { className: 'flex items-center justify-between mb-4' },
-            createElement('h3', { className: 'text-sm font-semibold' }, '🎯 Suas Metas'),
+            createElement('h3', { className: 'text-sm font-bold font-display' }, '🎯 Suas Metas'),
             createElement('button', {
               onClick: function() { setPage('metas'); },
-              className: 'text-[var(--accent)] text-xs font-medium hover:underline'
+              className: 'text-[var(--accent)] text-xs font-bold hover:underline'
             }, 'Ver todas →')
           ),
           createElement(
@@ -921,7 +1023,7 @@
                 createElement(
                   'div',
                   { className: 'flex items-center justify-between mb-1.5' },
-                  createElement('span', { className: 'text-sm font-medium' }, (m.objetivo.icone || '🎯') + ' ' + m.objetivo.nome),
+                  createElement('span', { className: 'text-sm font-bold' }, (m.objetivo.icone || '🎯') + ' ' + m.objetivo.nome),
                   createElement('span', { className: 'text-xs font-bold', style: { color: lvl.color } }, m.pred.pct.toFixed(0) + '%')
                 ),
                 createElement(ProgressBar, { pct: m.pred.pct })
@@ -929,46 +1031,44 @@
             })
           )
         ) : null,
-        // Gráfico
         createElement(
           'div',
           { className: 'card-modern' },
-          createElement('h3', { className: 'text-sm font-semibold mb-4' }, 'Gastos por Categoria'),
+          createElement('h3', { className: 'text-sm font-bold font-display mb-4' }, 'Gastos por Categoria'),
           createElement(
             'div',
             { className: 'h-48' },
             summary.categorias.length === 0
-              ? createElement('p', { className: 'text-center text-[var(--text-muted)] py-8' }, loading ? 'Carregando...' : 'Nenhum gasto registrado')
+              ? createElement('p', { className: 'text-center text-[var(--text-muted)] py-8 font-body' }, loading ? 'Carregando...' : 'Nenhum gasto registrado')
               : createElement('canvas', { ref: chartRef })
           )
         ),
-        // Últimas transações
         createElement(
           'div',
           { className: 'card-modern' },
           createElement(
             'div',
             { className: 'flex items-center justify-between mb-4' },
-            createElement('h3', { className: 'text-sm font-semibold' }, 'Últimas Transações'),
+            createElement('h3', { className: 'text-sm font-bold font-display' }, 'Últimas Transações'),
             createElement('button', {
               onClick: function() { setPage('transacoes'); },
-              className: 'text-[var(--accent)] text-xs font-medium hover:underline'
+              className: 'text-[var(--accent)] text-xs font-bold hover:underline'
             }, 'Ver todas →')
           ),
           transactions.length === 0
-            ? createElement('p', { className: 'text-[var(--text-muted)] text-sm text-center py-4' }, 'Nenhuma transação este mês')
+            ? createElement('p', { className: 'text-[var(--text-muted)] text-sm text-center py-4 font-body' }, 'Nenhuma transação este mês')
             : transactions.slice(0, 5).map(function(t) {
                 return createElement(
                   'div',
                   { key: t.id, className: 'flex items-center justify-between py-2 border-b border-[var(--border-color)] last:border-0' },
                   createElement(
                     'div', null,
-                    createElement('p', { className: 'text-sm font-medium' }, t.nome),
-                    createElement('p', { className: 'text-xs text-[var(--text-muted)]' }, t.categoria_nome + ' • ' + new Date(t.data).toLocaleDateString('pt-BR'))
+                    createElement('p', { className: 'text-sm font-bold' }, t.nome),
+                    createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, t.categoria_nome + ' • ' + formatDate(t.data))
                   ),
                   createElement(
                     'span',
-                    { className: 'font-semibold ' + (t.tipo === 'despesa' ? 'text-[#ef4444]' : 'text-[#10b981]') },
+                    { className: 'font-bold ' + (t.tipo === 'despesa' ? 'text-[#ef4444]' : 'text-[#10b981]') },
                     (t.tipo === 'despesa' ? '-' : '+') + ' ' + formatCurrency(t.valor)
                   )
                 );
@@ -979,7 +1079,7 @@
   }
 
   // ============================================
-  // CATEGORIAS MODERNO
+  // CATEGORIAS
   // ============================================
   function Categorias() {
     var _c1 = useState([]), categorias = _c1[0], setCategorias = _c1[1];
@@ -1034,7 +1134,7 @@
 
     return createElement(
       'div',
-      { className: 'pb-24 max-w-md mx-auto' },
+      { className: 'pb-24 max-w-md mx-auto font-body' },
       createElement(
         'div',
         { className: 'sticky top-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border-color)] p-4 flex items-center justify-between' },
@@ -1052,7 +1152,7 @@
           ['despesa', 'receita'].map(function(t) {
             return createElement('button', {
               key: t, type: 'button', onClick: function() { setTipo(t); },
-              className: 'flex-1 py-2 rounded-xl font-medium transition-colors ' + (tipo === t ? (t === 'despesa' ? 'bg-[#ef4444] text-white' : 'bg-[#10b981] text-white') : 'bg-[var(--bg-input)] text-[var(--text-muted)] border border-[var(--border-color)]')
+              className: 'flex-1 py-2 rounded-xl font-bold transition-colors ' + (tipo === t ? (t === 'despesa' ? 'bg-[#ef4444] text-white' : 'bg-[#10b981] text-white') : 'bg-[var(--bg-input)] text-[var(--text-muted)] border border-[var(--border-color)]')
             }, t === 'despesa' ? 'Despesa' : 'Receita');
           })
         ),
@@ -1065,9 +1165,9 @@
       ) : null,
       createElement(
         'div', { className: 'p-4' },
-        loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)]' }, 'Carregando…') :
+        loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)] font-body' }, 'Carregando…') :
         categorias.length === 0 ? createElement(
-          'div', { className: 'text-center py-8 text-[var(--text-muted)]' },
+          'div', { className: 'text-center py-8 text-[var(--text-muted)] font-body' },
           createElement('p', { className: 'text-4xl mb-2' }, '📂'),
           createElement('p', null, 'Nenhuma categoria cadastrada'),
           createElement('p', { className: 'text-sm' }, 'Clique no + para criar')
@@ -1076,8 +1176,8 @@
           'div', { className: 'grid grid-cols-2 gap-3' },
           createElement(
             'div', null,
-            createElement('p', { className: 'text-xs font-medium uppercase tracking-wider text-[var(--text-muted)] mb-2 border-b border-[var(--border-color)] pb-1' }, 'Despesas'),
-            despesas.length === 0 ? createElement('p', { className: 'text-[var(--text-muted)] text-xs py-2' }, 'Nenhuma') :
+            createElement('p', { className: 'text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-2 border-b border-[var(--border-color)] pb-1' }, 'Despesas'),
+            despesas.length === 0 ? createElement('p', { className: 'text-[var(--text-muted)] text-xs py-2 font-body' }, 'Nenhuma') :
             despesas.map(function(cat) {
               return createElement(
                 'div', { key: cat.id, className: 'card-modern p-3 mb-2 hover:border-[#ef4444] transition-all cursor-pointer group' },
@@ -1085,8 +1185,8 @@
                   'div', { className: 'flex items-start justify-between' },
                   createElement(
                     'div', { className: 'flex-1 min-w-0' },
-                    createElement('p', { className: 'text-sm font-medium truncate' }, cat.nome),
-                    cat.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)] truncate' }, cat.obs) : null
+                    createElement('p', { className: 'text-sm font-bold truncate' }, cat.nome),
+                    cat.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)] truncate font-body' }, cat.obs) : null
                   ),
                   createElement(
                     'div', { className: 'flex items-center gap-1 flex-shrink-0 ml-2' },
@@ -1099,8 +1199,8 @@
           ),
           createElement(
             'div', null,
-            createElement('p', { className: 'text-xs font-medium uppercase tracking-wider text-[var(--text-muted)] mb-2 border-b border-[var(--border-color)] pb-1' }, 'Receitas'),
-            receitas.length === 0 ? createElement('p', { className: 'text-[var(--text-muted)] text-xs py-2' }, 'Nenhuma') :
+            createElement('p', { className: 'text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-2 border-b border-[var(--border-color)] pb-1' }, 'Receitas'),
+            receitas.length === 0 ? createElement('p', { className: 'text-[var(--text-muted)] text-xs py-2 font-body' }, 'Nenhuma') :
             receitas.map(function(cat) {
               return createElement(
                 'div', { key: cat.id, className: 'card-modern p-3 mb-2 hover:border-[#10b981] transition-all cursor-pointer group' },
@@ -1108,8 +1208,8 @@
                   'div', { className: 'flex items-start justify-between' },
                   createElement(
                     'div', { className: 'flex-1 min-w-0' },
-                    createElement('p', { className: 'text-sm font-medium truncate' }, cat.nome),
-                    cat.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)] truncate' }, cat.obs) : null
+                    createElement('p', { className: 'text-sm font-bold truncate' }, cat.nome),
+                    cat.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)] truncate font-body' }, cat.obs) : null
                   ),
                   createElement(
                     'div', { className: 'flex items-center gap-1 flex-shrink-0 ml-2' },
@@ -1126,7 +1226,7 @@
   }
 
   // ============================================
-  // TRANSAÇÕES MODERNO
+  // TRANSAÇÕES
   // ============================================
   function Transacoes() {
     var _t1 = useState(false), showForm = _t1[0], setShowForm = _t1[1];
@@ -1166,7 +1266,7 @@
       e.preventDefault();
       if (!userId || !categoriaNome) return;
       var trans = {
-        nome: nome.trim(), categoria_nome: categoriaNome, valor: Number(valor), tipo: tipo,
+        nome: nome.trim(), categoria_nome: categoriaNome, valor: parseCurrency(valor), tipo: tipo,
         data: data || new Date().toISOString().split('T')[0], obs: obs.trim() || null, user_id: userId
       };
       supabase.from('transacoes').insert([trans]).then(function() {
@@ -1185,7 +1285,7 @@
 
     return createElement(
       'div',
-      { className: 'pb-24 max-w-md mx-auto' },
+      { className: 'pb-24 max-w-md mx-auto font-body' },
       createElement(
         'div',
         { className: 'sticky top-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border-color)] p-4 flex items-center justify-between' },
@@ -1203,7 +1303,7 @@
           ['despesa', 'receita'].map(function(t) {
             return createElement('button', {
               key: t, type: 'button', onClick: function() { setTipo(t); },
-              className: 'flex-1 py-2 rounded-xl font-medium transition-colors ' + (tipo === t ? (t === 'despesa' ? 'bg-[#ef4444] text-white' : 'bg-[#10b981] text-white') : 'bg-[var(--bg-input)] text-[var(--text-muted)] border border-[var(--border-color)]')
+              className: 'flex-1 py-2 rounded-xl font-bold transition-colors ' + (tipo === t ? (t === 'despesa' ? 'bg-[#ef4444] text-white' : 'bg-[#10b981] text-white') : 'bg-[var(--bg-input)] text-[var(--text-muted)] border border-[var(--border-color)]')
             }, t === 'despesa' ? 'Despesa' : 'Receita');
           })
         ),
@@ -1214,16 +1314,16 @@
           filtradas.length === 0 ? createElement('option', { value: '', disabled: true }, '❗ Crie categorias primeiro') :
           filtradas.map(function(c) { return createElement('option', { key: c.id, value: c.nome }, c.nome); })
         ),
-        createElement('input', { type: 'number', step: '0.01', placeholder: 'Valor', value: valor, onChange: function(e) { setValor(e.target.value); }, className: 'input-modern', required: true }),
+        createElement(CurrencyInput, { value: valor, onChange: setValor, placeholder: '0,00', className: 'input-modern', required: true }),
         createElement('input', { type: 'date', value: data, onChange: function(e) { setData(e.target.value); }, className: 'input-modern' }),
         createElement('input', { type: 'text', placeholder: 'Observação (opcional)', value: obs, onChange: function(e) { setObs(e.target.value); }, className: 'input-modern' }),
         createElement('button', { type: 'submit', className: 'btn-primary w-full' }, 'Salvar')
       ) : null,
       createElement(
         'div', { className: 'p-4 space-y-2' },
-        loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)]' }, 'Carregando…') :
+        loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)] font-body' }, 'Carregando…') :
         transactions.length === 0 ? createElement(
-          'div', { className: 'text-center py-8 text-[var(--text-muted)]' },
+          'div', { className: 'text-center py-8 text-[var(--text-muted)] font-body' },
           createElement('p', { className: 'text-4xl mb-2' }, '📭'),
           createElement('p', null, 'Nenhuma transação registrada'),
           createElement('p', { className: 'text-sm' }, 'Clique no + para adicionar')
@@ -1233,13 +1333,13 @@
             'div', { key: t.id, className: 'card-modern p-3 flex items-center justify-between hover:border-[var(--accent)] transition-all cursor-pointer' },
             createElement(
               'div', { className: 'flex-1' },
-              createElement('p', { className: 'font-medium text-sm' }, t.nome),
-              createElement('p', { className: 'text-xs text-[var(--text-muted)]' }, t.categoria_nome + ' • ' + new Date(t.data).toLocaleDateString('pt-BR')),
-              t.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)]' }, '📝 ' + t.obs) : null
+              createElement('p', { className: 'font-bold text-sm' }, t.nome),
+              createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, t.categoria_nome + ' • ' + formatDate(t.data)),
+              t.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, '📝 ' + t.obs) : null
             ),
             createElement(
               'div', { className: 'flex items-center gap-2' },
-              createElement('span', { className: 'font-semibold ' + (t.tipo === 'despesa' ? 'text-[#ef4444]' : 'text-[#10b981]') }, (t.tipo === 'despesa' ? '-' : '+') + ' ' + formatCurrency(t.valor)),
+              createElement('span', { className: 'font-bold ' + (t.tipo === 'despesa' ? 'text-[#ef4444]' : 'text-[#10b981]') }, (t.tipo === 'despesa' ? '-' : '+') + ' ' + formatCurrency(t.valor)),
               createElement('button', { onClick: function(e) { e.stopPropagation(); del(t.id); }, className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1' }, '🗑️')
             )
           );
@@ -1249,7 +1349,7 @@
   }
 
   // ============================================
-  // METAS: OBJETIVOS + ECONOMIAS + PREVISÃO + GAMIFICAÇÃO
+  // METAS (OBJETIVOS + ECONOMIAS)
   // ============================================
   function Metas() {
     var _m1 = useState('objetivos'), subTab = _m1[0], setSubTab = _m1[1];
@@ -1296,13 +1396,12 @@
 
     useEffect(function() { if (userId) load(); }, [userId]);
 
-    // ---- Objetivo CRUD ----
     var resetObj = function() { setObjNome(''); setObjValor(''); setObjPrazo(''); setObjIcone('🎯'); setObjEditando(null); setShowObjForm(false); };
 
     var submitObjetivo = function(e) {
       e.preventDefault();
       if (!objNome.trim() || !objValor || !userId) return;
-      var dados = { nome: objNome.trim(), valor_alvo: Number(objValor), prazo: objPrazo || null, icone: objIcone, user_id: userId };
+      var dados = { nome: objNome.trim(), valor_alvo: parseCurrency(objValor), prazo: objPrazo || null, icone: objIcone, user_id: userId };
       var promise = objEditando
         ? supabase.from('objetivos').update({ nome: dados.nome, valor_alvo: dados.valor_alvo, prazo: dados.prazo, icone: dados.icone }).eq('id', objEditando)
         : supabase.from('objetivos').insert([dados]);
@@ -1318,17 +1417,16 @@
     };
 
     var editObjetivo = function(o) {
-      setObjNome(o.nome); setObjValor(String(o.valor_alvo)); setObjPrazo(o.prazo || ''); setObjIcone(o.icone || '🎯'); setObjEditando(o.id); setShowObjForm(true);
+      setObjNome(o.nome); setObjValor(formatCurrency(o.valor_alvo)); setObjPrazo(o.prazo || ''); setObjIcone(o.icone || '🎯'); setObjEditando(o.id); setShowObjForm(true);
     };
 
-    // ---- Economia CRUD ----
     var resetEco = function() { setEcoNome(''); setEcoValor(''); setEcoData(''); setEcoObjetivoId(''); setEcoObs(''); setEcoEditando(null); setShowEcoForm(false); };
 
     var submitEconomia = function(e) {
       e.preventDefault();
       if (!ecoNome.trim() || !ecoValor || !userId) return;
       var dados = {
-        nome: ecoNome.trim(), valor: Number(ecoValor), data: ecoData || new Date().toISOString().split('T')[0],
+        nome: ecoNome.trim(), valor: parseCurrency(ecoValor), data: ecoData || new Date().toISOString().split('T')[0],
         objetivo_id: ecoObjetivoId || null, obs: ecoObs.trim() || null, user_id: userId
       };
       var promise = ecoEditando
@@ -1344,7 +1442,7 @@
     };
 
     var editEconomia = function(ec) {
-      setEcoNome(ec.nome); setEcoValor(String(ec.valor)); setEcoData(ec.data); setEcoObjetivoId(ec.objetivo_id || ''); setEcoObs(ec.obs || ''); setEcoEditando(ec.id); setShowEcoForm(true);
+      setEcoNome(ec.nome); setEcoValor(formatCurrency(ec.valor)); setEcoData(ec.data); setEcoObjetivoId(ec.objetivo_id || ''); setEcoObs(ec.obs || ''); setEcoEditando(ec.id); setShowEcoForm(true);
     };
 
     var streak = useMemo(function() { return computeStreak(economias); }, [economias]);
@@ -1357,7 +1455,7 @@
 
     return createElement(
       'div',
-      { className: 'pb-24 max-w-md mx-auto' },
+      { className: 'pb-24 max-w-md mx-auto font-body' },
       createElement(
         'div',
         { className: 'sticky top-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border-color)] p-4' },
@@ -1378,8 +1476,6 @@
           }, '💰 Economias')
         )
       ),
-
-      // ===== ABA OBJETIVOS =====
       subTab === 'objetivos' ? createElement(
         React.Fragment, null,
         createElement(
@@ -1400,10 +1496,10 @@
               }, em);
             })
           ),
-          createElement('input', { type: 'text', placeholder: 'Nome do objetivo (ex: Viagem para o Japão)', value: objNome, onChange: function(e) { setObjNome(e.target.value); }, className: 'input-modern', required: true }),
-          createElement('input', { type: 'number', step: '0.01', placeholder: 'Valor alvo (R$)', value: objValor, onChange: function(e) { setObjValor(e.target.value); }, className: 'input-modern', required: true }),
+          createElement('input', { type: 'text', placeholder: 'Nome do objetivo', value: objNome, onChange: function(e) { setObjNome(e.target.value); }, className: 'input-modern', required: true }),
+          createElement(CurrencyInput, { value: objValor, onChange: setObjValor, placeholder: 'Valor alvo (R$)', className: 'input-modern', required: true }),
           createElement('div', null,
-            createElement('label', { className: 'text-xs text-[var(--text-muted)] mb-1 block' }, 'Prazo desejado (opcional)'),
+            createElement('label', { className: 'text-xs text-[var(--text-muted)] mb-1 block font-bold' }, 'Prazo desejado (opcional)'),
             createElement('input', { type: 'date', value: objPrazo, onChange: function(e) { setObjPrazo(e.target.value); }, className: 'input-modern' })
           ),
           createElement('div', { className: 'flex gap-2' },
@@ -1413,12 +1509,12 @@
         ) : null,
         createElement(
           'div', { className: 'p-4 space-y-4' },
-          loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)]' }, 'Carregando…') :
+          loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)] font-body' }, 'Carregando…') :
           objetivos.length === 0 ? createElement(
-            'div', { className: 'text-center py-8 text-[var(--text-muted)]' },
+            'div', { className: 'text-center py-8 text-[var(--text-muted)] font-body' },
             createElement('p', { className: 'text-4xl mb-2' }, '🎯'),
             createElement('p', null, 'Nenhum objetivo cadastrado'),
-            createElement('p', { className: 'text-sm' }, 'Crie um objetivo e vincule suas economias a ele')
+            createElement('p', { className: 'text-sm' }, 'Crie um objetivo e vincule suas economias')
           ) :
           objetivos.map(function(o) {
             var econsDoObjetivo = economias.filter(function(e) { return e.objetivo_id === o.id; });
@@ -1430,7 +1526,7 @@
             if (pred.pct >= 100) {
               previsaoTexto = '🎉 Objetivo alcançado! Parabéns pela conquista.';
             } else if (pred.mesesRestantes === null) {
-              previsaoTexto = 'Registre economias vinculadas a este objetivo para calcular a previsão de tempo.';
+              previsaoTexto = 'Registre economias vinculadas a este objetivo para calcular a previsão.';
             } else {
               var dp = pred.dataPrevista;
               var mesAno = dp.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
@@ -1445,8 +1541,8 @@
                 createElement('div', { className: 'goal-icon-circle' }, o.icone || '🎯'),
                 createElement(
                   'div', { className: 'flex-1 min-w-0' },
-                  createElement('p', { className: 'font-semibold text-base' }, o.nome),
-                  createElement('p', { className: 'text-xs text-[var(--text-muted)]' },
+                  createElement('p', { className: 'font-bold text-base' }, o.nome),
+                  createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' },
                     formatCurrency(pred.total) + ' de ' + formatCurrency(o.valor_alvo) +
                     (prazoDate ? ' • prazo: ' + prazoDate.toLocaleDateString('pt-BR') : '')
                   )
@@ -1463,20 +1559,18 @@
                 createElement('span', { className: 'text-sm font-bold font-display' }, pred.pct.toFixed(0) + '%')
               ),
               createElement(ProgressBar, { pct: pred.pct }),
-              createElement('p', { className: 'text-xs text-[var(--text-secondary)] mt-3 leading-relaxed' }, '🔮 ' + previsaoTexto)
+              createElement('p', { className: 'text-xs text-[var(--text-secondary)] mt-3 leading-relaxed font-body' }, '🔮 ' + previsaoTexto)
             );
           })
         )
       ) : null,
-
-      // ===== ABA ECONOMIAS =====
       subTab === 'economias' ? createElement(
         React.Fragment, null,
         createElement(
           'div', { className: 'p-4 pb-0 space-y-3' },
           createElement(
             'div', { className: 'card-modern flex items-center justify-between' },
-            createElement('span', { className: 'text-sm text-[var(--text-muted)]' }, 'Total guardado'),
+            createElement('span', { className: 'text-sm text-[var(--text-muted)] font-body' }, 'Total guardado'),
             createElement('span', { className: 'text-lg font-bold text-[var(--accent)] font-display' }, formatCurrency(totalGuardado))
           ),
           createElement('button', {
@@ -1487,7 +1581,7 @@
         showEcoForm ? createElement(
           'form', { onSubmit: submitEconomia, className: 'mx-4 mt-4 mb-4 p-4 space-y-4 card-modern' },
           createElement('input', { type: 'text', placeholder: 'Nome (ex: Aporte mensal)', value: ecoNome, onChange: function(e) { setEcoNome(e.target.value); }, className: 'input-modern', required: true }),
-          createElement('input', { type: 'number', step: '0.01', placeholder: 'Valor guardado (R$)', value: ecoValor, onChange: function(e) { setEcoValor(e.target.value); }, className: 'input-modern', required: true }),
+          createElement(CurrencyInput, { value: ecoValor, onChange: setEcoValor, placeholder: 'Valor guardado (R$)', className: 'input-modern', required: true }),
           createElement('input', { type: 'date', value: ecoData, onChange: function(e) { setEcoData(e.target.value); }, className: 'input-modern' }),
           createElement(
             'select', { value: ecoObjetivoId, onChange: function(e) { setEcoObjetivoId(e.target.value); }, className: 'select-modern' },
@@ -1502,9 +1596,9 @@
         ) : null,
         createElement(
           'div', { className: 'p-4 space-y-2' },
-          loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)]' }, 'Carregando…') :
+          loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)] font-body' }, 'Carregando…') :
           economias.length === 0 ? createElement(
-            'div', { className: 'text-center py-8 text-[var(--text-muted)]' },
+            'div', { className: 'text-center py-8 text-[var(--text-muted)] font-body' },
             createElement('p', { className: 'text-4xl mb-2' }, '💰'),
             createElement('p', null, 'Nenhuma economia registrada'),
             createElement('p', { className: 'text-sm' }, 'Toda vez que guardar dinheiro, registre aqui')
@@ -1515,15 +1609,15 @@
               'div', { key: ec.id, className: 'card-modern p-3 flex items-center justify-between' },
               createElement(
                 'div', { className: 'flex-1 min-w-0' },
-                createElement('p', { className: 'font-medium text-sm truncate' }, ec.nome),
-                createElement('p', { className: 'text-xs text-[var(--text-muted)]' },
-                  new Date(ec.data).toLocaleDateString('pt-BR') + (vinculo ? ' • ' + vinculo : ' • sem vínculo')
+                createElement('p', { className: 'font-bold text-sm truncate' }, ec.nome),
+                createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' },
+                  formatDate(ec.data) + (vinculo ? ' • ' + vinculo : ' • sem vínculo')
                 ),
-                ec.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)]' }, '📝 ' + ec.obs) : null
+                ec.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, '📝 ' + ec.obs) : null
               ),
               createElement(
                 'div', { className: 'flex items-center gap-2 flex-shrink-0' },
-                createElement('span', { className: 'font-semibold text-[var(--accent)]' }, '+ ' + formatCurrency(ec.valor)),
+                createElement('span', { className: 'font-bold text-[var(--accent)]' }, '+ ' + formatCurrency(ec.valor)),
                 createElement('button', { onClick: function() { editEconomia(ec); }, className: 'text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-1' }, '✏️'),
                 createElement('button', { onClick: function() { delEconomia(ec.id); }, className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1' }, '🗑️')
               )
@@ -1535,7 +1629,7 @@
   }
 
   // ============================================
-  // PERFIL MODERNO
+  // PERFIL
   // ============================================
   function Perfil() {
     var _p1 = useState(null), user = _p1[0], setUser = _p1[1];
@@ -1558,7 +1652,7 @@
 
     return createElement(
       'div',
-      { className: 'pb-24 max-w-md mx-auto' },
+      { className: 'pb-24 max-w-md mx-auto font-body' },
       createElement(
         'div',
         { className: 'sticky top-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border-color)] p-4' },
@@ -1573,13 +1667,13 @@
           ),
           createElement(
             'div', { className: 'flex-1' },
-            createElement('p', { className: 'font-medium' }, user ? user.email : 'Usuário'),
-            createElement('p', { className: 'text-xs text-[var(--text-muted)]' }, 'Logado com ' + (user && user.app_metadata ? (user.app_metadata.provider || 'email').toUpperCase() : 'EMAIL'))
+            createElement('p', { className: 'font-bold' }, user ? user.email : 'Usuário'),
+            createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, 'Logado com ' + (user && user.app_metadata ? (user.app_metadata.provider || 'email').toUpperCase() : 'EMAIL'))
           )
         ),
         createElement(
           'div', { className: 'card-modern' },
-          createElement('p', { className: 'text-sm font-medium mb-3' }, '🎨 Tema'),
+          createElement('p', { className: 'text-sm font-bold mb-3 font-display' }, '🎨 Tema'),
           createElement(
             'div', { className: 'space-y-2' },
             themes.map(function(theme) {
@@ -1587,10 +1681,10 @@
               return createElement(
                 'button', {
                   key: theme.id, onClick: function() { changeTheme(theme.id); },
-                  className: 'w-full flex items-center gap-3 p-3 rounded-xl border transition-all ' + (active ? 'border-[var(--accent)] bg-[var(--accent-glow)]' : 'border-[var(--border-color)] hover:border-[var(--accent)]')
+                  className: 'w-full flex items-center gap-3 p-3 rounded-xl border transition-all font-body ' + (active ? 'border-[var(--accent)] bg-[var(--accent-glow)]' : 'border-[var(--border-color)] hover:border-[var(--accent)]')
                 },
                 createElement('i', { className: 'fas ' + theme.icon + ' w-5 text-center' }),
-                createElement('span', { className: 'flex-1 text-left text-sm' }, theme.label),
+                createElement('span', { className: 'flex-1 text-left text-sm font-bold' }, theme.label),
                 active ? createElement('i', { className: 'fas fa-check-circle text-[var(--accent)]' }) : null
               );
             })
@@ -1598,7 +1692,7 @@
         ),
         createElement('button', {
           onClick: logout,
-          className: 'w-full p-3 rounded-xl border border-[#ef4444] text-[#ef4444] hover:bg-[#ef4444] hover:text-white transition-colors font-medium'
+          className: 'w-full p-3 rounded-xl border border-[#ef4444] text-[#ef4444] hover:bg-[#ef4444] hover:text-white transition-colors font-bold font-body'
         }, '🚪 Sair')
       )
     );
@@ -1635,7 +1729,7 @@
     }, []);
 
     if (loading) {
-      return createElement('div', { className: 'min-h-screen flex items-center justify-center text-[var(--text-muted)]' }, 'Carregando...');
+      return createElement('div', { className: 'min-h-screen flex items-center justify-center text-[var(--text-muted)] font-body' }, 'Carregando...');
     }
 
     if (!user) {
