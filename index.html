@@ -5,157 +5,320 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>OSIRIS · Controle Financeiro</title>
 
+  <!-- Google Fonts Modernas -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome para ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
+    /* ============================================
+       OSIRIS MODERNO - TEMA DARK/LIGHT
+       ============================================ */
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-primary: #0a0e1a;
+      --bg-secondary: #111827;
+      --bg-card: #1a2332;
+      --bg-card-hover: #243044;
+      --bg-input: #0d1520;
+      --text-primary: #e8edf5;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border-color: #2d3a4a;
+      --accent: #10b981;
+      --accent-dark: #059669;
+      --accent-glow: rgba(16, 185, 129, 0.3);
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+      --radius: 16px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #f0f2f5;
+      --bg-secondary: #ffffff;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f8f9fa;
+      --bg-input: #ffffff;
+      --text-primary: #0a0e1a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --border-color: #e2e8f0;
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    /* ===== TEMA PIXEL 90 ===== */
+    [data-theme="pixel"] {
+      --bg-primary: #050a08;
+      --bg-secondary: #0d1520;
+      --bg-card: #0d1520;
+      --bg-card-hover: #1a2332;
+      --bg-input: #050a08;
+      --text-primary: #00ff88;
+      --text-secondary: #008855;
+      --text-muted: #006644;
+      --border-color: #00ff88;
+      --accent: #00ff88;
+      --accent-dark: #00cc66;
+      --accent-glow: rgba(0, 255, 136, 0.2);
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+      --radius: 4px;
+    }
+
     body {
-      font-family: 'Press Start 2P', 'VT323', monospace;
-      background: #050a08;
-      color: #00ff88;
-      image-rendering: pixelated;
-    }
-    .crt-effect {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      pointer-events: none;
-      z-index: 9999;
-      background: 
-        repeating-linear-gradient(0deg, rgba(0,0,0,0.06) 0px, rgba(0,0,0,0.06) 2px, transparent 2px, transparent 4px),
-        radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.5) 100%);
-    }
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #050a08; border: 2px solid #00ff88; }
-    ::-webkit-scrollbar-thumb { background: #00ff88; border: 2px solid #050a08; box-shadow: 0 0 20px rgba(0,255,136,0.5); }
-
-    /* ===== ZONAS DE TOQUE ===== */
-    .zone-green {
-      min-height: 64px; min-width: 64px; padding: 16px 24px;
-      border: 4px solid #00ff88; background: transparent; color: #00ff88;
-      font-family: 'Press Start 2P', monospace; font-size: 11px;
-      cursor: pointer; transition: all 0.15s ease;
-      text-transform: uppercase; letter-spacing: 2px;
-      box-shadow: 0 0 20px rgba(0,255,136,0.1);
-      display: flex; align-items: center; justify-content: center; gap: 12px;
-    }
-    .zone-green:hover { background: #00ff88; color: #050a08; box-shadow: 0 0 40px rgba(0,255,136,0.6); transform: scale(1.02); }
-    .zone-green:active { transform: scale(0.97); }
-    .zone-green-gold { border-color: #d4a847; color: #d4a847; box-shadow: 0 0 20px rgba(212,168,71,0.1); }
-    .zone-green-gold:hover { background: #d4a847; color: #050a08; box-shadow: 0 0 40px rgba(212,168,71,0.6); }
-
-    .zone-yellow {
-      min-height: 48px; min-width: 48px; padding: 12px 20px;
-      border: 3px solid #d4a847; background: transparent; color: #d4a847;
-      font-family: 'Press Start 2P', monospace; font-size: 10px;
-      cursor: pointer; transition: all 0.15s ease;
-      text-transform: uppercase; letter-spacing: 1.5px;
-      box-shadow: 0 0 15px rgba(212,168,71,0.08);
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-    }
-    .zone-yellow:hover { background: #d4a847; color: #050a08; box-shadow: 0 0 30px rgba(212,168,71,0.4); }
-    .zone-yellow:active { transform: scale(0.97); }
-
-    .zone-red {
-      min-height: 44px; min-width: 44px; padding: 10px 16px;
-      border: 2px solid #ff4444; background: transparent; color: #ff4444;
-      font-family: 'VT323', monospace; font-size: 14px;
-      cursor: pointer; transition: all 0.15s ease;
-      display: flex; align-items: center; justify-content: center; gap: 4px;
-    }
-    .zone-red:hover { background: #ff4444; color: #050a08; box-shadow: 0 0 20px rgba(255,68,68,0.3); }
-    .zone-red:active { transform: scale(0.95); }
-
-    .pixel-input {
-      font-family: 'VT323', monospace; font-size: 20px;
-      background: #050a08; color: #00ff88;
-      border: 3px solid #d4a847; padding: 12px 16px;
-      outline: none; width: 100%; letter-spacing: 1px;
-      min-height: 48px; box-shadow: inset 0 0 20px rgba(212,168,71,0.05);
-    }
-    .pixel-input:focus { box-shadow: 0 0 30px rgba(212,168,71,0.3); border-color: #00ff88; }
-    .pixel-input::placeholder { color: #006644; font-size: 16px; }
-
-    .pixel-select {
-      font-family: 'VT323', monospace; font-size: 20px;
-      background: #050a08; color: #00ff88;
-      border: 3px solid #d4a847; padding: 12px 16px;
-      outline: none; width: 100%; appearance: none;
-      cursor: pointer; min-height: 48px;
-      box-shadow: inset 0 0 20px rgba(212,168,71,0.05);
-    }
-    .pixel-select:focus { box-shadow: 0 0 30px rgba(212,168,71,0.3); border-color: #00ff88; }
-    .pixel-select option { background: #050a08; color: #00ff88; padding: 8px; }
-
-    .pixel-card {
-      background: #050a08;
-      border: 4px solid #00ff88;
-      box-shadow: inset 0 0 0 2px #050a08, 0 0 0 2px #00ff88, 0 0 30px rgba(0,255,136,0.1);
-      padding: 20px; min-height: 64px;
-      transition: all 0.3s ease;
-    }
-    .pixel-card:hover { box-shadow: inset 0 0 0 2px #050a08, 0 0 0 2px #00ff88, 0 0 50px rgba(0,255,136,0.2); }
-    .pixel-card-gold { border-color: #d4a847; box-shadow: inset 0 0 0 2px #050a08, 0 0 0 2px #d4a847, 0 0 30px rgba(212,168,71,0.1); }
-    .pixel-card-gold:hover { box-shadow: inset 0 0 0 2px #050a08, 0 0 0 2px #d4a847, 0 0 50px rgba(212,168,71,0.2); }
-
-    .pixel-text { font-family: 'Press Start 2P', monospace; color: #00ff88; text-shadow: 0 0 20px rgba(0,255,136,0.4); letter-spacing: 2px; }
-    .pixel-text-gold { color: #d4a847; text-shadow: 0 0 20px rgba(212,168,71,0.4); }
-    .pixel-text-muted { font-family: 'VT323', monospace; color: #008855; font-size: 18px; text-shadow: 0 0 10px rgba(0,136,85,0.2); }
-
-    .pixel-divider {
-      display: flex; align-items: center; gap: 16px;
-      color: #006644; font-family: 'Press Start 2P', monospace; font-size: 10px; margin: 16px 0;
-    }
-    .pixel-divider::before, .pixel-divider::after {
-      content: ''; flex: 1; height: 2px;
-      background: repeating-linear-gradient(90deg, #00ff88 0px, #00ff88 4px, transparent 4px, transparent 8px);
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      transition: var(--transition);
+      min-height: 100vh;
     }
 
-    .pixel-nav {
-      border-top: 4px solid #00ff88;
-      background: #050a08;
-      box-shadow: 0 -10px 30px rgba(0,255,136,0.05);
-    }
-    .pixel-nav-item {
-      font-family: 'Press Start 2P', monospace; font-size: 8px;
-      text-transform: uppercase; letter-spacing: 1px;
-      color: #006644; transition: all 0.2s ease;
-      min-height: 64px; min-width: 64px; padding: 8px 12px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      cursor: pointer; border: none; background: transparent;
-    }
-    .pixel-nav-item.active { color: #00ff88; text-shadow: 0 0 30px rgba(0,255,136,0.5); }
-    .pixel-nav-item:hover { color: #d4a847; text-shadow: 0 0 20px rgba(212,168,71,0.3); }
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 8px; }
 
-    @keyframes pixel-pulse {
-      0% { opacity: 0.7; transform: scale(0.95); filter: drop-shadow(0 0 10px rgba(0,255,136,0.3)); }
-      50% { opacity: 1; transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(0,255,136,0.6)); }
-      100% { opacity: 0.7; transform: scale(0.95); filter: drop-shadow(0 0 10px rgba(0,255,136,0.3)); }
+    /* ===== GLASSMORPHISM ===== */
+    .glass {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow);
     }
-    .pixel-halo { animation: pixel-pulse 2s ease-in-out infinite; }
 
+    .glass-light {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* ===== CARDS ===== */
+    .card-modern {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border-color);
+      padding: 20px;
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+    }
+    .card-modern:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: white;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-primary:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 30px var(--accent-glow);
+    }
+
+    .btn-secondary {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: var(--transition);
+      min-height: 48px;
+    }
+    .btn-secondary:hover {
+      background: var(--bg-card-hover);
+    }
+
+    /* ===== INPUTS ===== */
+    .input-modern {
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: var(--text-primary);
+      width: 100%;
+      min-height: 48px;
+      transition: var(--transition);
+      font-family: 'Inter', sans-serif;
+    }
+    .input-modern:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    /* ===== SELECT ===== */
+    .select-modern {
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: var(--text-primary);
+      width: 100%;
+      min-height: 48px;
+      transition: var(--transition);
+      appearance: none;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+    }
+    .select-modern:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .select-modern option {
+      background: var(--bg-card);
+      color: var(--text-primary);
+    }
+
+    /* ===== NAV ===== */
+    .nav-modern {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border-color);
+      backdrop-filter: blur(12px);
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 64px;
+      min-width: 64px;
+      padding: 8px 12px;
+      color: var(--text-muted);
+      transition: var(--transition);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      position: relative;
+    }
+    .nav-item.active {
+      color: var(--accent);
+    }
+    .nav-item.active::after {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 24px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 0 0 4px 4px;
+    }
+    .nav-item:hover {
+      color: var(--text-primary);
+    }
+    .nav-item .icon {
+      font-size: 20px;
+      margin-bottom: 2px;
+    }
+
+    /* ===== STATS ===== */
+    .stat-card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border-color);
+      padding: 16px 20px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      border-radius: 0 0 4px 4px;
+    }
+    .stat-card.revenue::before { background: linear-gradient(90deg, #10b981, #34d399); }
+    .stat-card.expense::before { background: linear-gradient(90deg, #ef4444, #f87171); }
+    .stat-card.balance::before { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+
+    /* ===== ANIMAÇÕES ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in-up {
+      animation: fadeInUp 0.4s ease-out forwards;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px var(--accent-glow); }
+      50% { box-shadow: 0 0 40px var(--accent-glow), 0 0 60px rgba(16, 185, 129, 0.1); }
+    }
+    .pulse-glow {
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    /* ===== CATEGORY BADGE ===== */
+    .badge-income {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .badge-expense {
+      background: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    /* ===== RESPONSIVO ===== */
     @media (max-width: 640px) {
-      .zone-green { font-size: 9px; padding: 14px 16px; min-height: 56px; }
-      .zone-yellow { font-size: 9px; padding: 10px 14px; min-height: 44px; }
-      .zone-red { font-size: 12px; padding: 8px 12px; min-height: 40px; }
-      .pixel-text { font-size: 13px; }
-      .pixel-input { font-size: 16px; min-height: 44px; }
-      .pixel-select { font-size: 16px; min-height: 44px; }
-      .pixel-nav-item { min-height: 56px; min-width: 56px; }
+      .stat-card { padding: 12px 16px; }
+      .btn-primary { padding: 10px 18px; font-size: 13px; }
+      .nav-item { font-size: 9px; min-height: 56px; }
     }
-    .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+
+    .safe-bottom {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
   </style>
 </head>
 <body>
 
-<div class="crt-effect"></div>
 <div id="root"></div>
 
+<!-- ========== CDN ========== -->
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 <script>
 (function() {
@@ -168,13 +331,12 @@
   var SUPABASE_ANON_KEY = 'sb_publishable_vSSbaS4QS-mp0pbFb4cr3g_0edR7d97';
   var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  console.log('🚀 OSIRIS iniciado!');
-
   var React = window.React;
   var ReactDOM = window.ReactDOM;
   var useState = React.useState;
   var useEffect = React.useEffect;
   var useMemo = React.useMemo;
+  var useRef = React.useRef;
   var createElement = React.createElement;
 
   // ============================================
@@ -183,34 +345,32 @@
   function formatCurrency(v) {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0);
   }
+
   function getMonthRange(date) {
     var start = new Date(date.getFullYear(), date.getMonth(), 1).toISOString().split('T')[0];
     var end = new Date(date.getFullYear(), date.getMonth() + 1, 0).toISOString().split('T')[0];
     return { start: start, end: end };
   }
 
+  function getTheme() {
+    return document.documentElement.getAttribute('data-theme') || 'dark';
+  }
+
+  function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('osiris-theme', theme);
+  }
+
   // ============================================
   // COMPONENTES
   // ============================================
 
-  // ----- TouchableCard -----
-  function TouchableCard(props) {
-    var children = props.children;
-    var onClick = props.onClick;
-    var className = props.className || '';
-    var gold = props.gold || false;
-    var touchSize = props.touchSize || 'large';
-    var sizes = { large: 'min-h-[64px] p-4', medium: 'min-h-[48px] p-3', small: 'min-h-[44px] p-2' };
-    var cardClass = 'pixel-card ' + (gold ? 'pixel-card-gold' : '') + ' ' + (onClick ? 'cursor-pointer' : '');
-    return createElement('div', { onClick: onClick, className: sizes[touchSize] + ' ' + cardClass + ' ' + className }, children);
-  }
-
-  // ----- Header -----
+  // ----- Header Moderno -----
   function Header(props) {
-    var currentDate = props.currentDate, onDateChange = props.onDateChange;
+    var currentDate = props.currentDate, onDateChange = props.onDateChange, title = props.title;
     return createElement(
       'header',
-      { className: 'sticky top-0 z-40 bg-[#050a08] border-b-4 border-[#00ff88] px-4 py-3 shadow-lg shadow-[#00ff88]/5' },
+      { className: 'sticky top-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border-color)] px-4 py-3' },
       createElement(
         'div',
         { className: 'max-w-md mx-auto flex items-center justify-between' },
@@ -218,44 +378,50 @@
           'div',
           { className: 'flex items-center gap-3' },
           createElement(
-            'svg',
-            { width: '32', height: '32', viewBox: '0 0 100 100', className: 'pixel-halo' },
-            createElement('circle', { cx: '50', cy: '50', r: '48', fill: '#050a08', stroke: '#00ff88', strokeWidth: '4' }),
-            createElement('path', { d: 'M50 15 L65 40 L60 40 L50 25 L40 40 L35 40 L50 15Z', fill: '#00ff88' }),
-            createElement('path', { d: 'M50 85 L35 60 L40 60 L50 75 L60 60 L65 60 L50 85Z', fill: '#00ff88' }),
-            createElement('path', { d: 'M20 40 L45 40 L45 60 L20 60 L20 40Z', fill: '#00ff88', opacity: '0.6' }),
-            createElement('path', { d: 'M80 40 L55 40 L55 60 L80 60 L80 40Z', fill: '#00ff88', opacity: '0.6' }),
-            createElement('circle', { cx: '50', cy: '50', r: '6', fill: '#d4a847' }),
-            createElement('circle', { cx: '50', cy: '50', r: '3', fill: '#050a08' })
+            'div',
+            { className: 'w-8 h-8 rounded-xl bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center text-white font-bold text-sm' },
+            'O'
           ),
-          createElement('span', { className: 'pixel-text text-lg pixel-text-gold' }, 'OSIRIS')
+          createElement(
+            'span',
+            { className: 'text-lg font-bold tracking-tight' },
+            'OSIRIS'
+          )
         ),
         onDateChange ? createElement(
           'div',
           { className: 'flex items-center gap-1' },
-          createElement('button', { onClick: function() { onDateChange('prev'); }, className: 'zone-yellow text-xs px-3 py-2 min-h-[44px] min-w-[44px] border-2' }, '◀'),
-          createElement('span', { className: 'pixel-text-muted text-sm min-w-[80px] text-center' }, currentDate ? currentDate.toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' }) : ''),
-          createElement('button', { onClick: function() { onDateChange('next'); }, className: 'zone-yellow text-xs px-3 py-2 min-h-[44px] min-w-[44px] border-2' }, '▶')
+          createElement('button', {
+            onClick: function() { onDateChange('prev'); },
+            className: 'p-2 rounded-lg hover:bg-[var(--bg-card-hover)] transition-colors min-w-[40px] min-h-[40px] text-[var(--text-secondary)]'
+          }, '◀'),
+          createElement('span', { className: 'text-sm font-medium min-w-[80px] text-center text-[var(--text-primary)]' },
+            currentDate ? currentDate.toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' }) : ''
+          ),
+          createElement('button', {
+            onClick: function() { onDateChange('next'); },
+            className: 'p-2 rounded-lg hover:bg-[var(--bg-card-hover)] transition-colors min-w-[40px] min-h-[40px] text-[var(--text-secondary)]'
+          }, '▶')
         ) : null
       )
     );
   }
 
-  // ----- BottomNavigation -----
+  // ----- BottomNavigation Moderno -----
   function BottomNavigation(props) {
     var currentPage = props.currentPage;
     var setPage = props.setPage;
 
     var items = [
-      { id: 'dashboard', label: 'PAINEL', icon: '📊' },
-      { id: 'transacoes', label: 'TRANS.', icon: '🔄' },
-      { id: 'categorias', label: 'CATEG.', icon: '📂' },
-      { id: 'perfil', label: 'PERFIL', icon: '👤' }
+      { id: 'dashboard', label: 'Painel', icon: 'fa-chart-pie' },
+      { id: 'transacoes', label: 'Transações', icon: 'fa-exchange-alt' },
+      { id: 'categorias', label: 'Categorias', icon: 'fa-tags' },
+      { id: 'perfil', label: 'Perfil', icon: 'fa-user' }
     ];
 
     return createElement(
       'nav',
-      { className: 'fixed bottom-0 left-0 right-0 z-40 bg-[#050a08] border-t-4 border-[#00ff88] safe-bottom pixel-nav' },
+      { className: 'fixed bottom-0 left-0 right-0 z-40 nav-modern safe-bottom' },
       createElement(
         'div',
         { className: 'flex justify-around items-center h-20 max-w-md mx-auto' },
@@ -266,10 +432,10 @@
             {
               key: item.id,
               onClick: function() { setPage(item.id); },
-              className: 'pixel-nav-item ' + (active ? 'active' : '')
+              className: 'nav-item ' + (active ? 'active' : '')
             },
-            createElement('span', { className: 'text-xl ' + (active ? 'scale-110' : '') }, item.icon),
-            createElement('span', { className: 'text-xs mt-1 ' + (active ? 'text-[#00ff88]' : 'text-[#006644]') }, item.label)
+            createElement('i', { className: 'fas ' + item.icon + ' icon' }),
+            createElement('span', null, item.label)
           );
         })
       )
@@ -277,7 +443,7 @@
   }
 
   // ============================================
-  // LOGIN
+  // LOGIN MODERNO
   // ============================================
   function Login(props) {
     var onLogin = props.onLogin;
@@ -296,13 +462,13 @@
         if (result.error) {
           setError(result.error.message);
         } else if (isSignUp) {
-          setSuccess('✅ CONTA CRIADA! VERIFIQUE SEU E-MAIL.');
+          setSuccess('✅ Conta criada! Verifique seu e-mail.');
           setEmail(''); setPassword('');
         } else {
           onLogin(result.data.user);
         }
         setLoading(false);
-      }).catch(function(err) { setError(err.message || 'ERRO'); setLoading(false); });
+      }).catch(function(err) { setError(err.message || 'Erro'); setLoading(false); });
     };
 
     var handleGoogle = function() {
@@ -314,58 +480,83 @@
 
     return createElement(
       'div',
-      { className: 'min-h-screen flex items-center justify-center p-4 bg-[#050a08]' },
+      { className: 'min-h-screen flex items-center justify-center p-4 bg-[var(--bg-primary)]' },
       createElement(
         'div',
-        { className: 'w-full max-w-sm pixel-card pixel-card-gold' },
+        { className: 'w-full max-w-sm card-modern p-8' },
         createElement(
           'div',
-          { className: 'text-center mb-6' },
-          createElement('svg', { width: '64', height: '64', viewBox: '0 0 100 100', className: 'mx-auto mb-3 pixel-halo' },
-            createElement('circle', { cx: '50', cy: '50', r: '48', fill: '#050a08', stroke: '#d4a847', strokeWidth: '4' }),
-            createElement('path', { d: 'M50 15 L65 40 L60 40 L50 25 L40 40 L35 40 L50 15Z', fill: '#d4a847' }),
-            createElement('path', { d: 'M50 85 L35 60 L40 60 L50 75 L60 60 L65 60 L50 85Z', fill: '#d4a847' }),
-            createElement('path', { d: 'M20 40 L45 40 L45 60 L20 60 L20 40Z', fill: '#d4a847', opacity: '0.6' }),
-            createElement('path', { d: 'M80 40 L55 40 L55 60 L80 60 L80 40Z', fill: '#d4a847', opacity: '0.6' }),
-            createElement('circle', { cx: '50', cy: '50', r: '6', fill: '#00ff88' }),
-            createElement('circle', { cx: '50', cy: '50', r: '3', fill: '#050a08' })
+          { className: 'text-center mb-8' },
+          createElement(
+            'div',
+            { className: 'w-16 h-16 rounded-2xl bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4' },
+            'O'
           ),
-          createElement('h1', { className: 'pixel-text text-2xl pixel-text-gold' }, 'OSIRIS'),
-          createElement('p', { className: 'pixel-text-muted text-sm' }, 'CONTROLE FINANCEIRO')
+          createElement('h1', { className: 'text-2xl font-bold' }, 'OSIRIS'),
+          createElement('p', { className: 'text-[var(--text-secondary)] text-sm' }, 'Controle Financeiro Inteligente')
         ),
-        createElement('button', { onClick: handleGoogle, disabled: loading, className: 'zone-green zone-green-gold w-full' },
-          createElement('img', { src: 'https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg', alt: 'Google', style: { width: '24px', height: '24px' } }),
-          createElement('span', null, loading ? 'CARREGANDO...' : 'ENTRAR COM GOOGLE')
+        createElement('button', {
+          onClick: handleGoogle,
+          disabled: loading,
+          className: 'w-full flex items-center justify-center gap-3 p-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-card-hover)] transition-colors min-h-[48px] text-[var(--text-primary)] font-medium'
+        },
+          createElement('img', { src: 'https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg', alt: 'Google', style: { width: '20px', height: '20px' } }),
+          'Entrar com Google'
         ),
-        createElement('div', { className: 'pixel-divider' }, 'OU'),
+        createElement('div', { className: 'flex items-center gap-4 my-4' },
+          createElement('div', { className: 'flex-1 h-px bg-[var(--border-color)]' }),
+          createElement('span', { className: 'text-[var(--text-muted)] text-sm' }, 'ou'),
+          createElement('div', { className: 'flex-1 h-px bg-[var(--border-color)]' })
+        ),
         createElement(
           'form',
           { onSubmit: handleSubmit, className: 'space-y-4' },
-          createElement('input', { type: 'email', placeholder: 'EMAIL', value: email, onChange: function(e) { setEmail(e.target.value); }, className: 'pixel-input zone-yellow' }),
-          createElement('input', { type: 'password', placeholder: 'SENHA (6+)', value: password, onChange: function(e) { setPassword(e.target.value); }, className: 'pixel-input zone-yellow', minLength: 6 }),
-          error ? createElement('p', { className: 'text-[#ff4444] text-xs text-center pixel-text-muted' }, '❌ ' + error) : null,
-          success ? createElement('p', { className: 'text-[#00ff88] text-xs text-center pixel-text-muted' }, success) : null,
-          createElement('button', { type: 'submit', disabled: loading, className: 'zone-green w-full' }, loading ? 'CARREGANDO...' : (isSignUp ? '📝 CRIAR CONTA' : '🔑 ENTRAR')),
-          createElement('button', { type: 'button', onClick: function() { setIsSignUp(!isSignUp); setError(''); setSuccess(''); }, className: 'zone-yellow w-full' }, isSignUp ? '← JÁ TEM CONTA? ENTRE' : '→ NÃO TEM CONTA? CADASTRE-SE')
+          createElement('input', {
+            type: 'email',
+            placeholder: 'E-mail',
+            value: email,
+            onChange: function(e) { setEmail(e.target.value); },
+            className: 'input-modern'
+          }),
+          createElement('input', {
+            type: 'password',
+            placeholder: 'Senha (6+)',
+            value: password,
+            onChange: function(e) { setPassword(e.target.value); },
+            className: 'input-modern',
+            minLength: 6
+          }),
+          error ? createElement('p', { className: 'text-[#ef4444] text-sm text-center' }, error) : null,
+          success ? createElement('p', { className: 'text-[#10b981] text-sm text-center' }, success) : null,
+          createElement('button', {
+            type: 'submit',
+            disabled: loading,
+            className: 'btn-primary w-full'
+          }, loading ? 'Carregando...' : (isSignUp ? 'Criar Conta' : 'Entrar')),
+          createElement('button', {
+            type: 'button',
+            onClick: function() { setIsSignUp(!isSignUp); setError(''); setSuccess(''); },
+            className: 'w-full text-[var(--text-muted)] text-sm hover:text-[var(--accent)] transition-colors'
+          }, isSignUp ? '← Já tem conta? Entre' : '→ Não tem conta? Cadastre-se')
         )
       )
     );
   }
 
   // ============================================
-  // DASHBOARD
+  // DASHBOARD MODERNO
   // ============================================
   function Dashboard() {
     var _d1 = useState(new Date()), currentDate = _d1[0], setCurrentDate = _d1[1];
     var _d2 = useState([]), transactions = _d2[0], setTransactions = _d2[1];
     var _d3 = useState(true), loading = _d3[0], setLoading = _d3[1];
     var _d4 = useState(null), userId = _d4[0], setUserId = _d4[1];
+    var chartRef = useRef(null);
+    var chartInstance = useRef(null);
 
     useEffect(function() {
       supabase.auth.getUser().then(function(result) {
-        if (result.data && result.data.user) {
-          setUserId(result.data.user.id);
-        }
+        if (result.data && result.data.user) setUserId(result.data.user.id);
       });
     }, []);
 
@@ -393,6 +584,55 @@
       return { totalReceitas: totalReceitas, totalDespesas: totalDespesas, saldo: totalReceitas - totalDespesas, categorias: categorias };
     }, [transactions]);
 
+    // Renderizar gráfico com Chart.js
+    useEffect(function() {
+      if (chartInstance.current) {
+        chartInstance.current.destroy();
+      }
+      if (!chartRef.current || summary.categorias.length === 0) return;
+
+      var ctx = chartRef.current.getContext('2d');
+      var labels = summary.categorias.slice(0, 6).map(function(c) { return c.nome; });
+      var data = summary.categorias.slice(0, 6).map(function(c) { return c.total; });
+      var colors = ['#10b981', '#34d399', '#6ee7b7', '#059669', '#047857', '#065f46'];
+
+      chartInstance.current = new window.Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: data,
+            backgroundColor: colors,
+            borderWidth: 2,
+            borderColor: 'var(--bg-card)'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                color: 'var(--text-secondary)',
+                font: { size: 11, family: 'Inter' },
+                padding: 12,
+                usePointStyle: true,
+                pointStyle: 'circle'
+              }
+            }
+          },
+          cutout: '65%'
+        }
+      });
+
+      return function() {
+        if (chartInstance.current) {
+          chartInstance.current.destroy();
+        }
+      };
+    }, [summary.categorias]);
+
     var changeDate = function(dir) {
       var d = new Date(currentDate);
       if (dir === 'prev') d.setMonth(d.getMonth() - 1);
@@ -403,71 +643,85 @@
     return createElement(
       'div',
       { className: 'pb-24 max-w-md mx-auto' },
-      createElement(Header, { currentDate: currentDate, onDateChange: changeDate }),
+      createElement(Header, { currentDate: currentDate, onDateChange: changeDate, title: 'Dashboard' }),
       createElement(
         'div',
         { className: 'p-4 space-y-4' },
-        createElement(
-          TouchableCard,
-          { gold: true, className: 'relative overflow-hidden' },
-          createElement('div', { className: 'w-12 h-12 flex items-center justify-center shrink-0 border-2 border-[#d4a847]' }, '💳'),
-          createElement('div', { className: 'flex-1' },
-            createElement('p', { className: 'pixel-text-muted text-xs' }, 'SALDO DO MÊS'),
-            createElement('p', { className: 'pixel-text pixel-text-gold text-2xl' }, formatCurrency(summary.saldo))
-          )
-        ),
+        // Stats Row
         createElement(
           'div',
-          { className: 'grid grid-cols-2 gap-3' },
-          createElement(
-            TouchableCard,
-            { touchSize: 'medium' },
-            createElement('span', { className: 'text-xl' }, '⬆️'),
-            createElement('div', null,
-              createElement('p', { className: 'pixel-text-muted text-xs' }, 'RECEITAS'),
-              createElement('p', { className: 'pixel-text text-base' }, formatCurrency(summary.totalReceitas))
-            )
-          ),
-          createElement(
-            TouchableCard,
-            { touchSize: 'medium' },
-            createElement('span', { className: 'text-xl' }, '⬇️'),
-            createElement('div', null,
-              createElement('p', { className: 'pixel-text-muted text-xs' }, 'DESPESAS'),
-              createElement('p', { className: 'pixel-text text-base' }, formatCurrency(summary.totalDespesas))
-            )
-          )
-        ),
-        createElement(
-          'div',
-          { className: 'pixel-card' },
-          createElement('h3', { className: 'pixel-text text-sm mb-3' }, 'GASTOS POR CATEGORIA'),
-          summary.categorias.length === 0 ? createElement('p', { className: 'pixel-text-muted text-center py-4 text-sm' }, loading ? 'CARREGANDO…' : 'NENHUM GASTO REGISTRADO') :
+          { className: 'grid grid-cols-3 gap-3' },
           createElement(
             'div',
-            { className: 'space-y-3' },
-            summary.categorias.slice(0, 5).map(function(cat) {
-              var pct = summary.totalDespesas > 0 ? (cat.total / summary.totalDespesas) * 100 : 0;
-              return createElement(
-                'div',
-                { key: cat.nome },
-                createElement('div', { className: 'flex justify-between text-sm mb-1' },
-                  createElement('span', { className: 'pixel-text-muted' }, cat.nome),
-                  createElement('span', { className: 'pixel-text pixel-text-gold text-sm' }, formatCurrency(cat.total))
-                ),
-                createElement('div', { className: 'w-full bg-[#050a08] border-2 border-[#00ff88] h-4' },
-                  createElement('div', { className: 'bg-[#00ff88] h-full transition-all shadow-lg shadow-[#00ff88]/30', style: { width: Math.min(pct, 100) + '%' } })
-                )
-              );
-            })
+            { className: 'stat-card revenue' },
+            createElement('p', { className: 'text-[var(--text-muted)] text-xs font-medium uppercase tracking-wider' }, 'Receitas'),
+            createElement('p', { className: 'text-lg font-bold text-[#10b981]' }, formatCurrency(summary.totalReceitas))
+          ),
+          createElement(
+            'div',
+            { className: 'stat-card expense' },
+            createElement('p', { className: 'text-[var(--text-muted)] text-xs font-medium uppercase tracking-wider' }, 'Despesas'),
+            createElement('p', { className: 'text-lg font-bold text-[#ef4444]' }, formatCurrency(summary.totalDespesas))
+          ),
+          createElement(
+            'div',
+            { className: 'stat-card balance' },
+            createElement('p', { className: 'text-[var(--text-muted)] text-xs font-medium uppercase tracking-wider' }, 'Saldo'),
+            createElement('p', { className: 'text-lg font-bold text-[#8b5cf6]' }, formatCurrency(summary.saldo))
           )
+        ),
+        // Gráfico
+        createElement(
+          'div',
+          { className: 'card-modern' },
+          createElement('h3', { className: 'text-sm font-semibold mb-4' }, 'Gastos por Categoria'),
+          createElement(
+            'div',
+            { className: 'h-48' },
+            summary.categorias.length === 0
+              ? createElement('p', { className: 'text-center text-[var(--text-muted)] py-8' }, loading ? 'Carregando...' : 'Nenhum gasto registrado')
+              : createElement('canvas', { ref: chartRef })
+          )
+        ),
+        // Últimas transações
+        createElement(
+          'div',
+          { className: 'card-modern' },
+          createElement(
+            'div',
+            { className: 'flex items-center justify-between mb-4' },
+            createElement('h3', { className: 'text-sm font-semibold' }, 'Últimas Transações'),
+            createElement('button', {
+              onClick: function() { setPage('transacoes'); },
+              className: 'text-[var(--accent)] text-xs font-medium hover:underline'
+            }, 'Ver todas →')
+          ),
+          transactions.length === 0
+            ? createElement('p', { className: 'text-[var(--text-muted)] text-sm text-center py-4' }, 'Nenhuma transação este mês')
+            : transactions.slice(0, 5).map(function(t) {
+                return createElement(
+                  'div',
+                  { key: t.id, className: 'flex items-center justify-between py-2 border-b border-[var(--border-color)] last:border-0' },
+                  createElement(
+                    'div',
+                    null,
+                    createElement('p', { className: 'text-sm font-medium' }, t.nome),
+                    createElement('p', { className: 'text-xs text-[var(--text-muted)]' }, t.categoria_nome + ' • ' + new Date(t.data).toLocaleDateString('pt-BR'))
+                  ),
+                  createElement(
+                    'span',
+                    { className: 'font-semibold ' + (t.tipo === 'despesa' ? 'text-[#ef4444]' : 'text-[#10b981]') },
+                    (t.tipo === 'despesa' ? '-' : '+') + ' ' + formatCurrency(t.valor)
+                  )
+                );
+              })
         )
       )
     );
   }
 
   // ============================================
-  // CATEGORIAS (VISUAL MELHORADO - GRADE 2 COLUNAS)
+  // CATEGORIAS MODERNO
   // ============================================
   function Categorias() {
     var _c1 = useState([]), categorias = _c1[0], setCategorias = _c1[1];
@@ -481,9 +735,7 @@
 
     useEffect(function() {
       supabase.auth.getUser().then(function(result) {
-        if (result.data && result.data.user) {
-          setUserId(result.data.user.id);
-        }
+        if (result.data && result.data.user) setUserId(result.data.user.id);
       });
     }, []);
 
@@ -514,7 +766,7 @@
     };
 
     var del = function(id) {
-      if (window.confirm('EXCLUIR ESTA CATEGORIA?')) {
+      if (window.confirm('Excluir esta categoria?')) {
         supabase.from('categorias').delete().eq('id', id).then(function() { load(); });
       }
     };
@@ -529,20 +781,18 @@
     return createElement(
       'div',
       { className: 'pb-24 max-w-md mx-auto' },
-      // Header
       createElement(
         'div',
-        { className: 'sticky top-0 z-40 bg-[#050a08] border-b-4 border-[#00ff88] p-4 flex items-center justify-between shadow-lg shadow-[#00ff88]/5' },
-        createElement('h1', { className: 'pixel-text text-lg' }, 'CATEGORIAS'),
+        { className: 'sticky top-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border-color)] p-4 flex items-center justify-between' },
+        createElement('h1', { className: 'text-xl font-bold' }, 'Categorias'),
         createElement('button', {
           onClick: function() { setShowForm(!showForm); },
-          className: 'zone-green min-w-[56px] min-h-[56px] text-2xl font-bold flex items-center justify-center'
+          className: 'btn-primary min-w-[48px] min-h-[48px] rounded-full w-12 h-12 flex items-center justify-center text-2xl'
         }, showForm ? '✕' : '＋')
       ),
-      // Form
       showForm ? createElement(
         'form',
-        { onSubmit: submit, className: 'p-4 space-y-4 border-b-4 border-[#00ff88] bg-[#050a08]' },
+        { onSubmit: submit, className: 'p-4 space-y-4 border-b border-[var(--border-color)] bg-[var(--bg-secondary)]' },
         createElement(
           'div',
           { className: 'flex gap-2' },
@@ -551,65 +801,56 @@
               key: t,
               type: 'button',
               onClick: function() { setTipo(t); },
-              className: 'zone-yellow flex-1 ' + (tipo === t ? 'border-[#00ff88] text-[#00ff88]' : 'border-[#006644] text-[#006644]')
-            }, t === 'despesa' ? '💸 DESPESA' : '💰 RECEITA');
+              className: 'flex-1 py-2 rounded-xl font-medium transition-colors ' + (tipo === t ? (t === 'despesa' ? 'bg-[#ef4444] text-white' : 'bg-[#10b981] text-white') : 'bg-[var(--bg-input)] text-[var(--text-muted)] border border-[var(--border-color)]')
+            }, t === 'despesa' ? 'Despesa' : 'Receita');
           })
         ),
         createElement('input', {
           type: 'text',
-          placeholder: 'NOME DA CATEGORIA…',
+          placeholder: 'Nome da categoria…',
           value: nome,
           onChange: function(e) { setNome(e.target.value); },
-          className: 'pixel-input zone-yellow',
+          className: 'input-modern',
           required: true
         }),
         createElement('input', {
           type: 'text',
-          placeholder: 'OBSERVAÇÃO (OPCIONAL)',
+          placeholder: 'Observação (opcional)',
           value: obs,
           onChange: function(e) { setObs(e.target.value); },
-          className: 'pixel-input pixel-input-gold zone-yellow'
+          className: 'input-modern'
         }),
         createElement('div', { className: 'flex gap-2' },
-          createElement('button', { type: 'submit', className: 'zone-green flex-1' }, editando ? 'ATUALIZAR' : 'SALVAR'),
-          createElement('button', { type: 'button', onClick: reset, className: 'zone-yellow flex-1 border-[#006644] text-[#006644]' }, 'CANCELAR')
+          createElement('button', { type: 'submit', className: 'btn-primary flex-1' }, editando ? 'Atualizar' : 'Salvar'),
+          createElement('button', { type: 'button', onClick: reset, className: 'btn-secondary flex-1' }, 'Cancelar')
         )
       ) : null,
-      // Lista em Grade 2 colunas
       createElement(
         'div',
         { className: 'p-4' },
-        loading ? createElement('p', { className: 'text-center py-8 pixel-text-muted' }, 'CARREGANDO…') :
+        loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)]' }, 'Carregando…') :
         categorias.length === 0 ? createElement(
           'div',
-          { className: 'text-center py-8 pixel-text-muted' },
+          { className: 'text-center py-8 text-[var(--text-muted)]' },
           createElement('p', { className: 'text-4xl mb-2' }, '📂'),
-          createElement('p', null, 'NENHUMA CATEGORIA CADASTRADA'),
-          createElement('p', { className: 'text-sm' }, 'CLIQUE NO + PARA CRIAR')
+          createElement('p', null, 'Nenhuma categoria cadastrada'),
+          createElement('p', { className: 'text-sm' }, 'Clique no + para criar')
         ) :
         createElement(
           'div',
           { className: 'grid grid-cols-2 gap-3' },
-          // Coluna Despesas
+          // Despesas
           createElement(
             'div',
             null,
-            createElement(
-              'p',
-              { className: 'pixel-text-muted text-xs uppercase tracking-wider mb-2 border-b-2 border-[#ff4444]/30 pb-1' },
-              '💸 Despesas'
-            ),
-            despesas.length === 0 ? createElement(
-              'p',
-              { className: 'text-[#006644] text-xs py-2' },
-              'Nenhuma despesa'
-            ) :
+            createElement('p', { className: 'text-xs font-medium uppercase tracking-wider text-[var(--text-muted)] mb-2 border-b border-[var(--border-color)] pb-1' }, 'Despesas'),
+            despesas.length === 0 ? createElement('p', { className: 'text-[var(--text-muted)] text-xs py-2' }, 'Nenhuma') :
             despesas.map(function(cat) {
               return createElement(
                 'div',
                 {
                   key: cat.id,
-                  className: 'bg-[#0d1520] border-l-4 border-[#ff4444] p-3 rounded-r-xl mb-2 hover:bg-[#1a2332] transition-all cursor-pointer group relative'
+                  className: 'card-modern p-3 mb-2 hover:border-[#ef4444] transition-all cursor-pointer group'
                 },
                 createElement(
                   'div',
@@ -617,45 +858,37 @@
                   createElement(
                     'div',
                     { className: 'flex-1 min-w-0' },
-                    createElement('p', { className: 'pixel-text text-sm truncate' }, cat.nome),
-                    cat.obs ? createElement('p', { className: 'text-[#008855] text-xs truncate font-mono' }, '📝 ' + cat.obs) : null
+                    createElement('p', { className: 'text-sm font-medium truncate' }, cat.nome),
+                    cat.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)] truncate' }, cat.obs) : null
                   ),
                   createElement(
                     'div',
                     { className: 'flex items-center gap-1 flex-shrink-0 ml-2' },
                     createElement('button', {
                       onClick: function(e) { e.stopPropagation(); edit(cat); },
-                      className: 'text-[#00ff88] hover:text-[#d4a847] transition-colors p-1 opacity-50 hover:opacity-100'
+                      className: 'text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-1 opacity-0 group-hover:opacity-100'
                     }, '✏️'),
                     createElement('button', {
                       onClick: function(e) { e.stopPropagation(); del(cat.id); },
-                      className: 'text-[#ff4444] hover:text-[#ff6666] transition-colors p-1 opacity-50 hover:opacity-100'
+                      className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1 opacity-0 group-hover:opacity-100'
                     }, '🗑️')
                   )
                 )
               );
             })
           ),
-          // Coluna Receitas
+          // Receitas
           createElement(
             'div',
             null,
-            createElement(
-              'p',
-              { className: 'pixel-text-muted text-xs uppercase tracking-wider mb-2 border-b-2 border-[#10b981]/30 pb-1' },
-              '💰 Receitas'
-            ),
-            receitas.length === 0 ? createElement(
-              'p',
-              { className: 'text-[#006644] text-xs py-2' },
-              'Nenhuma receita'
-            ) :
+            createElement('p', { className: 'text-xs font-medium uppercase tracking-wider text-[var(--text-muted)] mb-2 border-b border-[var(--border-color)] pb-1' }, 'Receitas'),
+            receitas.length === 0 ? createElement('p', { className: 'text-[var(--text-muted)] text-xs py-2' }, 'Nenhuma') :
             receitas.map(function(cat) {
               return createElement(
                 'div',
                 {
                   key: cat.id,
-                  className: 'bg-[#0d1520] border-l-4 border-[#10b981] p-3 rounded-r-xl mb-2 hover:bg-[#1a2332] transition-all cursor-pointer group relative'
+                  className: 'card-modern p-3 mb-2 hover:border-[#10b981] transition-all cursor-pointer group'
                 },
                 createElement(
                   'div',
@@ -663,19 +896,19 @@
                   createElement(
                     'div',
                     { className: 'flex-1 min-w-0' },
-                    createElement('p', { className: 'pixel-text text-sm truncate' }, cat.nome),
-                    cat.obs ? createElement('p', { className: 'text-[#008855] text-xs truncate font-mono' }, '📝 ' + cat.obs) : null
+                    createElement('p', { className: 'text-sm font-medium truncate' }, cat.nome),
+                    cat.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)] truncate' }, cat.obs) : null
                   ),
                   createElement(
                     'div',
                     { className: 'flex items-center gap-1 flex-shrink-0 ml-2' },
                     createElement('button', {
                       onClick: function(e) { e.stopPropagation(); edit(cat); },
-                      className: 'text-[#00ff88] hover:text-[#d4a847] transition-colors p-1 opacity-50 hover:opacity-100'
+                      className: 'text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-1 opacity-0 group-hover:opacity-100'
                     }, '✏️'),
                     createElement('button', {
                       onClick: function(e) { e.stopPropagation(); del(cat.id); },
-                      className: 'text-[#ff4444] hover:text-[#ff6666] transition-colors p-1 opacity-50 hover:opacity-100'
+                      className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1 opacity-0 group-hover:opacity-100'
                     }, '🗑️')
                   )
                 )
@@ -688,7 +921,7 @@
   }
 
   // ============================================
-  // TRANSAÇÕES
+  // TRANSAÇÕES MODERNO
   // ============================================
   function Transacoes() {
     var _t1 = useState(false), showForm = _t1[0], setShowForm = _t1[1];
@@ -705,9 +938,7 @@
 
     useEffect(function() {
       supabase.auth.getUser().then(function(result) {
-        if (result.data && result.data.user) {
-          setUserId(result.data.user.id);
-        }
+        if (result.data && result.data.user) setUserId(result.data.user.id);
       });
     }, []);
 
@@ -746,7 +977,7 @@
     };
 
     var del = function(id) {
-      if (window.confirm('EXCLUIR ESTA TRANSAÇÃO?')) {
+      if (window.confirm('Excluir esta transação?')) {
         supabase.from('transacoes').delete().eq('id', id).then(function() { load(); });
       }
     };
@@ -758,16 +989,16 @@
       { className: 'pb-24 max-w-md mx-auto' },
       createElement(
         'div',
-        { className: 'sticky top-0 z-40 bg-[#050a08] border-b-4 border-[#00ff88] p-4 flex items-center justify-between shadow-lg shadow-[#00ff88]/5' },
-        createElement('h1', { className: 'pixel-text text-lg' }, 'TRANSAÇÕES'),
+        { className: 'sticky top-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border-color)] p-4 flex items-center justify-between' },
+        createElement('h1', { className: 'text-xl font-bold' }, 'Transações'),
         createElement('button', {
           onClick: function() { setShowForm(!showForm); },
-          className: 'zone-green min-w-[56px] min-h-[56px] text-2xl font-bold flex items-center justify-center'
+          className: 'btn-primary min-w-[48px] min-h-[48px] rounded-full w-12 h-12 flex items-center justify-center text-2xl'
         }, showForm ? '✕' : '＋')
       ),
       showForm ? createElement(
         'form',
-        { onSubmit: submit, className: 'p-4 space-y-4 border-b-4 border-[#00ff88] bg-[#050a08]' },
+        { onSubmit: submit, className: 'p-4 space-y-4 border-b border-[var(--border-color)] bg-[var(--bg-secondary)]' },
         createElement(
           'div',
           { className: 'flex gap-2' },
@@ -776,16 +1007,16 @@
               key: t,
               type: 'button',
               onClick: function() { setTipo(t); },
-              className: 'zone-yellow flex-1 ' + (tipo === t ? 'border-[#00ff88] text-[#00ff88]' : 'border-[#006644] text-[#006644]')
-            }, t === 'despesa' ? '💸 DESPESA' : '💰 RECEITA');
+              className: 'flex-1 py-2 rounded-xl font-medium transition-colors ' + (tipo === t ? (t === 'despesa' ? 'bg-[#ef4444] text-white' : 'bg-[#10b981] text-white') : 'bg-[var(--bg-input)] text-[var(--text-muted)] border border-[var(--border-color)]')
+            }, t === 'despesa' ? 'Despesa' : 'Receita');
           })
         ),
         createElement('input', {
           type: 'text',
-          placeholder: 'NOME DA TRANSAÇÃO…',
+          placeholder: 'Nome da transação…',
           value: nome,
           onChange: function(e) { setNome(e.target.value); },
-          className: 'pixel-input zone-yellow',
+          className: 'input-modern',
           required: true
         }),
         createElement(
@@ -793,61 +1024,71 @@
           {
             value: categoriaNome,
             onChange: function(e) { setCategoriaNome(e.target.value); },
-            className: 'pixel-select zone-yellow',
+            className: 'select-modern',
             required: true
           },
-          createElement('option', { value: '' }, 'SELECIONE UMA CATEGORIA'),
-          filtradas.length === 0 ? createElement('option', { value: '', disabled: true }, '❗ CRIE CATEGORIAS PRIMEIRO') :
+          createElement('option', { value: '' }, 'Selecione uma categoria'),
+          filtradas.length === 0 ? createElement('option', { value: '', disabled: true }, '❗ Crie categorias primeiro') :
           filtradas.map(function(c) { return createElement('option', { key: c.id, value: c.nome }, c.nome); })
         ),
         createElement('input', {
           type: 'number',
           step: '0.01',
-          placeholder: 'VALOR',
+          placeholder: 'Valor',
           value: valor,
           onChange: function(e) { setValor(e.target.value); },
-          className: 'pixel-input zone-yellow',
+          className: 'input-modern',
           required: true
         }),
         createElement('input', {
           type: 'date',
           value: data,
           onChange: function(e) { setData(e.target.value); },
-          className: 'pixel-input zone-yellow'
+          className: 'input-modern'
         }),
         createElement('input', {
           type: 'text',
-          placeholder: 'OBSERVAÇÃO (OPCIONAL)',
+          placeholder: 'Observação (opcional)',
           value: obs,
           onChange: function(e) { setObs(e.target.value); },
-          className: 'pixel-input pixel-input-gold zone-yellow'
+          className: 'input-modern'
         }),
-        createElement('button', { type: 'submit', className: 'zone-green w-full' }, 'SALVAR')
+        createElement('button', { type: 'submit', className: 'btn-primary w-full' }, 'Salvar')
       ) : null,
       createElement(
         'div',
         { className: 'p-4 space-y-2' },
-        loading ? createElement('p', { className: 'text-center py-8 pixel-text-muted' }, 'CARREGANDO…') :
+        loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)]' }, 'Carregando…') :
         transactions.length === 0 ? createElement(
           'div',
-          { className: 'text-center py-8 pixel-text-muted' },
+          { className: 'text-center py-8 text-[var(--text-muted)]' },
           createElement('p', { className: 'text-4xl mb-2' }, '📭'),
-          createElement('p', null, 'NENHUMA TRANSAÇÃO REGISTRADA'),
-          createElement('p', { className: 'text-sm' }, 'CLIQUE NO + PARA ADICIONAR')
+          createElement('p', null, 'Nenhuma transação registrada'),
+          createElement('p', { className: 'text-sm' }, 'Clique no + para adicionar')
         ) :
         transactions.map(function(t) {
           return createElement(
-            TouchableCard,
-            { key: t.id, className: t.tipo === 'despesa' ? 'border-l-4 border-[#00ff88]' : 'border-l-4 border-[#d4a847]', onClick: function() { del(t.id); } },
-            createElement('div', { className: 'flex-1' },
-              createElement('div', { className: 'flex items-center justify-between' },
-                createElement('p', { className: 'font-medium pixel-text' }, t.nome),
-                createElement('p', { className: 'font-bold ' + (t.tipo === 'despesa' ? 'text-[#00ff88]' : 'text-[#d4a847]') }, (t.tipo === 'despesa' ? '-' : '+') + ' ' + formatCurrency(t.valor))
-              ),
-              createElement('p', { className: 'text-xs pixel-text-muted' }, t.categoria_nome + ' • ' + new Date(t.data).toLocaleDateString('pt-BR')),
-              t.obs ? createElement('p', { className: 'text-xs text-[#008855]' }, '📝 ' + t.obs) : null
+            'div',
+            {
+              key: t.id,
+              className: 'card-modern p-3 flex items-center justify-between hover:border-[var(--accent)] transition-all cursor-pointer'
+            },
+            createElement(
+              'div',
+              { className: 'flex-1' },
+              createElement('p', { className: 'font-medium text-sm' }, t.nome),
+              createElement('p', { className: 'text-xs text-[var(--text-muted)]' }, t.categoria_nome + ' • ' + new Date(t.data).toLocaleDateString('pt-BR')),
+              t.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)]' }, '📝 ' + t.obs) : null
             ),
-            createElement('button', { onClick: function(e) { e.stopPropagation(); del(t.id); }, className: 'zone-red' }, '🗑️')
+            createElement(
+              'div',
+              { className: 'flex items-center gap-2' },
+              createElement('span', { className: 'font-semibold ' + (t.tipo === 'despesa' ? 'text-[#ef4444]' : 'text-[#10b981]') }, (t.tipo === 'despesa' ? '-' : '+') + ' ' + formatCurrency(t.valor)),
+              createElement('button', {
+                onClick: function(e) { e.stopPropagation(); del(t.id); },
+                className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1'
+              }, '🗑️')
+            )
           );
         })
       )
@@ -855,44 +1096,88 @@
   }
 
   // ============================================
-  // PERFIL
+  // PERFIL MODERNO
   // ============================================
   function Perfil() {
     var _p1 = useState(null), user = _p1[0], setUser = _p1[1];
+    var _p2 = useState(getTheme()), currentTheme = _p2[0], setCurrentTheme = _p2[1];
+
     useEffect(function() {
       supabase.auth.getUser().then(function(result) {
         if (result.data && result.data.user) setUser(result.data.user);
       });
     }, []);
+
+    var changeTheme = function(theme) {
+      setTheme(theme);
+      setCurrentTheme(theme);
+    };
+
     var logout = function() {
       supabase.auth.signOut().then(function() { window.location.reload(); });
     };
+
+    var themes = [
+      { id: 'dark', label: 'Dark Modern', icon: 'fa-moon' },
+      { id: 'light', label: 'Light Modern', icon: 'fa-sun' },
+      { id: 'pixel', label: 'Pixel 90', icon: 'fa-gamepad' }
+    ];
+
     return createElement(
       'div',
       { className: 'pb-24 max-w-md mx-auto' },
-      createElement(Header, { title: 'PERFIL' }),
+      createElement(
+        'div',
+        { className: 'sticky top-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border-color)] p-4' },
+        createElement('h1', { className: 'text-xl font-bold' }, 'Perfil')
+      ),
       createElement(
         'div',
         { className: 'p-4 space-y-4' },
+        // Info do usuário
         createElement(
-          TouchableCard,
-          { gold: true, touchSize: 'medium' },
-          createElement('span', { className: 'text-2xl' }, '👤'),
-          createElement('div', { className: 'flex-1' },
-            createElement('p', { className: 'font-medium pixel-text' }, user ? user.email : 'USUÁRIO'),
-            createElement('p', { className: 'text-xs pixel-text-muted' }, 'LOGADO COM ' + (user && user.app_metadata ? (user.app_metadata.provider || 'EMAIL').toUpperCase() : 'EMAIL'))
+          'div',
+          { className: 'card-modern flex items-center gap-4' },
+          createElement(
+            'div',
+            { className: 'w-14 h-14 rounded-2xl bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center text-white text-xl font-bold' },
+            user ? user.email.charAt(0).toUpperCase() : 'U'
+          ),
+          createElement(
+            'div',
+            { className: 'flex-1' },
+            createElement('p', { className: 'font-medium' }, user ? user.email : 'Usuário'),
+            createElement('p', { className: 'text-xs text-[var(--text-muted)]' }, 'Logado com ' + (user && user.app_metadata ? (user.app_metadata.provider || 'email').toUpperCase() : 'EMAIL'))
           )
         ),
+        // Temas
         createElement(
-          TouchableCard,
-          { touchSize: 'medium' },
-          createElement('span', { className: 'text-xl' }, '🎨'),
-          createElement('div', { className: 'flex-1' },
-            createElement('p', { className: 'font-medium pixel-text' }, 'TEMA PIXEL NEON'),
-            createElement('p', { className: 'text-xs pixel-text-muted' }, 'PRETO + VERDE NEON + DOURADO')
+          'div',
+          { className: 'card-modern' },
+          createElement('p', { className: 'text-sm font-medium mb-3' }, '🎨 Tema'),
+          createElement(
+            'div',
+            { className: 'space-y-2' },
+            themes.map(function(theme) {
+              var active = currentTheme === theme.id;
+              return createElement(
+                'button', {
+                  key: theme.id,
+                  onClick: function() { changeTheme(theme.id); },
+                  className: 'w-full flex items-center gap-3 p-3 rounded-xl border transition-all ' + (active ? 'border-[var(--accent)] bg-[var(--accent-glow)]' : 'border-[var(--border-color)] hover:border-[var(--accent)]')
+                },
+                createElement('i', { className: 'fas ' + theme.icon + ' w-5 text-center' }),
+                createElement('span', { className: 'flex-1 text-left text-sm' }, theme.label),
+                active ? createElement('i', { className: 'fas fa-check-circle text-[var(--accent)]' }) : null
+              );
+            })
           )
         ),
-        createElement('button', { onClick: logout, className: 'zone-red w-full text-center' }, '🚪 SAIR')
+        // Logout
+        createElement('button', {
+          onClick: logout,
+          className: 'w-full p-3 rounded-xl border border-[#ef4444] text-[#ef4444] hover:bg-[#ef4444] hover:text-white transition-colors font-medium'
+        }, '🚪 Sair')
       )
     );
   }
@@ -905,21 +1190,22 @@
     var _a2 = useState(true), loading = _a2[0], setLoading = _a2[1];
     var _a3 = useState('dashboard'), currentPage = _a3[0], setCurrentPage = _a3[1];
 
+    // Inicializar tema
+    useEffect(function() {
+      var saved = localStorage.getItem('osiris-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', saved);
+    }, []);
+
     useEffect(function() {
       supabase.auth.getSession().then(function(_ref) {
         var session = _ref.data.session;
-        if (session && session.user) {
-          setUser(session.user);
-        }
+        if (session && session.user) setUser(session.user);
         setLoading(false);
       }).catch(function() { setLoading(false); });
 
       var listener = supabase.auth.onAuthStateChange(function(event, session) {
-        if (session && session.user) {
-          setUser(session.user);
-        } else {
-          setUser(null);
-        }
+        if (session && session.user) setUser(session.user);
+        else setUser(null);
       });
 
       return function() {
@@ -930,7 +1216,7 @@
     }, []);
 
     if (loading) {
-      return createElement('div', { className: 'min-h-screen flex items-center justify-center pixel-text-muted' }, 'CARREGANDO...');
+      return createElement('div', { className: 'min-h-screen flex items-center justify-center text-[var(--text-muted)]' }, 'Carregando...');
     }
 
     if (!user) {
@@ -965,8 +1251,6 @@
   if (rootElement) {
     var root = ReactDOM.createRoot(rootElement);
     root.render(createElement(App));
-  } else {
-    console.error('❌ Elemento #root não encontrado!');
   }
 
 })();
