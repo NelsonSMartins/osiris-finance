@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OSIRIS · Redirecionando...</title>
+  <style>
+    body {
+      background: #050a08;
+      color: #00ff88;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+    .container {
+      padding: 20px;
+      border: 4px solid #00ff88;
+      box-shadow: 0 0 40px rgba(0, 255, 136, 0.2);
+    }
+    h1 { font-size: 24px; }
+    p { color: #008855; }
+    .pixel-halo {
+      animation: pulse 1.5s ease-in-out infinite alternate;
+    }
+    @keyframes pulse {
+      0% { opacity: 0.7; }
+      100% { opacity: 1; text-shadow: 0 0 30px rgba(0, 255, 136, 0.5); }
+    }
+  </style>
+  <script>
+    // Redireciona para o index com a rota correta
+    (function() {
+      var path = window.location.pathname;
+      var newPath = '/osiris-finance/' + path.replace('/osiris-finance/', '');
+      if (newPath.endsWith('/')) {
+        newPath = newPath.slice(0, -1);
+      }
+      window.location.replace('/osiris-finance/' + path);
+    })();
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1 class="pixel-halo">🏛️ OSIRIS</h1>
+    <p>Redirecionando...</p>
+    <p style="font-size: 12px; margin-top: 20px;">Se não redirecionar, <a href="/osiris-finance/" style="color: #d4a847;">clique aqui</a></p>
+  </div>
+</body>
+</html>
