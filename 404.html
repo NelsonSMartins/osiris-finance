@@ -3,18 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OSIRIS · Redirecionando...</title>
+  <title>OSIRIS · Redirecionando</title>
   <script>
-    // Redireciona para o index.html mantendo a rota
-    var path = window.location.pathname;
-    var newPath = '/osiris-finance/index.html' + path.replace('/osiris-finance', '');
-    window.location.replace(newPath);
+    (function() {
+      // Pega o caminho completo da URL
+      var path = window.location.pathname;
+
+      // Remove o prefixo '/osiris-finance' e também '/index.html' se já estiver na URL
+      var route = path.replace('/osiris-finance', '').replace('/index.html', '');
+
+      // Evita redirecionar se já estiver na rota raiz com um caminho válido
+      if (route === '' || route === '/') {
+        window.location.replace('/osiris-finance/');
+        return;
+      }
+
+      // Constrói a nova URL de forma segura, sem adicionar 'index.html' repetidamente
+      // O GitHub Pages serve o index.html automaticamente na raiz do projeto
+      var newUrl = '/osiris-finance/' + route;
+
+      // Remove barras duplicadas
+      newUrl = newUrl.replace(/\/{2,}/g, '/');
+
+      // Redireciona
+      window.location.replace(newUrl);
+    })();
   </script>
 </head>
-<body style="background:#050a08;color:#00ff88;font-family:monospace;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;">
+<body style="display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#050a08;color:#00ff88;font-family:monospace;">
   <div style="text-align:center;border:4px solid #00ff88;padding:40px;">
     <h1 style="font-size:24px;">🏛️ OSIRIS</h1>
-    <p style="color:#008855;">Redirecionando...</p>
+    <p style="color:#008855;">Redirecionando para a página correta...</p>
+    <p style="font-size:12px;margin-top:20px;">
+      Se não redirecionar, <a href="/osiris-finance/" style="color:#d4a847;">clique aqui</a>
+    </p>
   </div>
 </body>
 </html>
