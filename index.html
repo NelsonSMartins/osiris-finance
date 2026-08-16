@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>OSIRIS · Controle Financeiro</title>
 
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -16,7 +15,7 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    [data-theme="dark"] {
+    :root {
       --bg-primary: #0a0e1a;
       --bg-secondary: #111827;
       --bg-card: #1a2332;
@@ -32,88 +31,6 @@
       --danger: #ef4444;
       --warning: #f59e0b;
       --purple: #8b5cf6;
-      --blue: #3b82f6;
-      --shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
-      --radius: 16px;
-      --font-display: 'Space Grotesk', 'Atkinson Hyperlegible', 'Inter', sans-serif;
-      --font-body: 'Atkinson Hyperlegible', 'Inter', sans-serif;
-    }
-
-    [data-theme="light"] {
-      --bg-primary: #f0f2f5;
-      --bg-secondary: #ffffff;
-      --bg-card: #ffffff;
-      --bg-card-hover: #f1f3f5;
-      --bg-input: #f8f9fa;
-      --text-primary: #0a0e1a;
-      --text-secondary: #1e293b;
-      --text-muted: #475569;
-      --border-color: #d1d5db;
-      --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-      --accent: #059669;
-      --accent-dark: #047857;
-      --radius: 16px;
-    }
-
-    [data-theme="pixel"] {
-      --bg-primary: #0a0e0a;
-      --bg-secondary: #111811;
-      --bg-card: #0d1520;
-      --bg-card-hover: #1a2332;
-      --bg-input: #050a08;
-      --text-primary: #00ff88;
-      --text-secondary: #66ffbb;
-      --text-muted: #00cc77;
-      --border-color: #00ff88;
-      --accent: #00ff88;
-      --accent-dark: #00cc66;
-      --accent-glow: rgba(0, 255, 136, 0.2);
-      --shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
-      --radius: 4px;
-      --font-display: 'Press Start 2P', 'Atkinson Hyperlegible', monospace;
-      --font-body: 'VT323', 'Atkinson Hyperlegible', monospace;
-    }
-
-    [data-theme="rose"] {
-      --bg-primary: #1a0a14;
-      --bg-secondary: #2d1524;
-      --bg-card: #3d1a30;
-      --bg-card-hover: #4d2440;
-      --bg-input: #1a0a14;
-      --text-primary: #fce4ec;
-      --text-secondary: #f8bbd0;
-      --text-muted: #f06292;
-      --border-color: #5c2a4a;
-      --accent: #f472b6;
-      --accent-dark: #ec4899;
-      --accent-glow: rgba(244, 114, 182, 0.25);
-      --danger: #f44336;
-      --warning: #f59e0b;
-      --purple: #a78bfa;
-      --blue: #60a5fa;
-      --shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
-      --radius: 16px;
-      --font-display: 'Space Grotesk', 'Atkinson Hyperlegible', 'Inter', sans-serif;
-      --font-body: 'Atkinson Hyperlegible', 'Inter', sans-serif;
-    }
-
-    [data-theme="gold"] {
-      --bg-primary: #1a1208;
-      --bg-secondary: #2d2010;
-      --bg-card: #3d2a18;
-      --bg-card-hover: #4d3420;
-      --bg-input: #1a1208;
-      --text-primary: #fef3c7;
-      --text-secondary: #fde68a;
-      --text-muted: #d4a847;
-      --border-color: #5c4420;
-      --accent: #d4a847;
-      --accent-dark: #b8922f;
-      --accent-glow: rgba(212, 168, 71, 0.25);
-      --danger: #ef4444;
-      --warning: #f59e0b;
-      --purple: #a78bfa;
-      --blue: #60a5fa;
       --shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
       --radius: 16px;
       --font-display: 'Space Grotesk', 'Atkinson Hyperlegible', 'Inter', sans-serif;
@@ -124,9 +41,7 @@
       font-family: var(--font-body);
       background: var(--bg-primary);
       color: var(--text-primary);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       min-height: 100vh;
-      letter-spacing: 0.02em;
       line-height: 1.7;
     }
 
@@ -142,10 +57,9 @@
       border-radius: var(--radius);
       border: 1px solid var(--border-color);
       padding: 20px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s ease;
       box-shadow: var(--shadow);
     }
-    .card-modern:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); }
 
     .btn-primary {
       background: linear-gradient(135deg, var(--accent), var(--accent-dark));
@@ -155,7 +69,7 @@
       font-weight: 700;
       border: none;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s ease;
       min-height: 48px;
       display: inline-flex;
       align-items: center;
@@ -174,7 +88,7 @@
       font-weight: 600;
       border: 1px solid var(--border-color);
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s ease;
       min-height: 48px;
       font-family: var(--font-body);
       font-size: 15px;
@@ -189,12 +103,11 @@
       color: var(--text-primary);
       width: 100%;
       min-height: 48px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s ease;
       font-family: var(--font-body);
       font-size: 16px;
     }
     .input-modern:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); }
-    .input-modern::placeholder { color: var(--text-muted); opacity: 0.8; }
 
     .select-modern {
       background: var(--bg-input);
@@ -204,14 +117,12 @@
       color: var(--text-primary);
       width: 100%;
       min-height: 48px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       appearance: none;
       cursor: pointer;
       font-family: var(--font-body);
       font-size: 16px;
     }
-    .select-modern:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); }
-    .select-modern option { background: var(--bg-card); color: var(--text-primary); }
+    .select-modern:focus { outline: none; border-color: var(--accent); }
 
     .nav-modern {
       background: var(--bg-card);
@@ -227,7 +138,7 @@
       flex: 1;
       padding: 8px 4px;
       color: var(--text-muted);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s ease;
       cursor: pointer;
       border: none;
       background: transparent;
@@ -258,7 +169,6 @@
       border-radius: var(--radius);
       border: 1px solid var(--border-color);
       padding: 16px 20px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       overflow: hidden;
     }
@@ -278,21 +188,19 @@
     @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     .fade-in-up { animation: fadeInUp 0.4s ease-out forwards; }
 
-    @keyframes floatUp {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-4px); }
-      100% { transform: translateY(0); }
+    .pendencia-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-input);
+      transition: all 0.3s ease;
     }
-    .float-badge { animation: floatUp 2.4s ease-in-out infinite; }
-
-    .checkbox-modern {
-      width: 20px;
-      height: 20px;
-      accent-color: var(--accent);
-      cursor: pointer;
-      border-radius: 4px;
-      flex-shrink: 0;
-    }
+    .pendencia-item:hover { border-color: var(--accent); }
+    .pendencia-item.pago { opacity: 0.55; }
+    .pendencia-item.pago .pendencia-nome { text-decoration: line-through; color: var(--text-muted); }
 
     .tab-btn {
       flex: 1;
@@ -304,7 +212,7 @@
       background: var(--bg-input);
       color: var(--text-muted);
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s ease;
       font-family: var(--font-body);
       display: flex;
       align-items: center;
@@ -312,159 +220,6 @@
       gap: 6px;
     }
     .tab-btn.active { background: var(--accent); color: #ffffff; border-color: var(--accent); }
-
-    .pendencia-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-      background: var(--bg-input);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .pendencia-item:hover { border-color: var(--accent); }
-    .pendencia-item.pago { opacity: 0.55; }
-    .pendencia-item.pago .pendencia-nome { text-decoration: line-through; color: var(--text-muted); }
-
-    .theme-option {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
-      border-radius: 12px;
-      border: 2px solid var(--border-color);
-      background: var(--bg-input);
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      width: 100%;
-      font-family: var(--font-body);
-      color: var(--text-primary);
-    }
-    .theme-option:hover { border-color: var(--accent); }
-    .theme-option.active { border-color: var(--accent); background: var(--accent-glow); }
-    .theme-dot {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      border: 2px solid var(--border-color);
-      flex-shrink: 0;
-    }
-    .theme-dot.dark { background: #0a0e1a; }
-    .theme-dot.light { background: #f0f2f5; border-color: #d1d5db; }
-    .theme-dot.pixel { background: #00ff88; }
-    .theme-dot.rose { background: #f472b6; }
-    .theme-dot.gold { background: #d4a847; }
-
-    .badge-default {
-      background: var(--accent);
-      color: #ffffff;
-      font-size: 9px;
-      font-weight: 700;
-      padding: 2px 10px;
-      border-radius: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .goal-icon-circle {
-      width: 52px;
-      height: 52px;
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 26px;
-      background: var(--bg-input);
-      border: 1px solid var(--border-color);
-      flex-shrink: 0;
-    }
-
-    .subtab-btn {
-      flex: 1;
-      padding: 10px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 14px;
-      border: 1px solid var(--border-color);
-      background: var(--bg-input);
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      font-family: var(--font-body);
-    }
-    .subtab-btn.active { background: var(--accent); color: #ffffff; border-color: var(--accent); }
-
-    .emoji-pick {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
-      background: var(--bg-input);
-      font-size: 18px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .emoji-pick.selected { border-color: var(--accent); background: var(--accent-glow); }
-
-    .insight-card {
-      background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(139,92,246,0.06));
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius);
-      padding: 18px 20px;
-    }
-
-    .level-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .streak-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: linear-gradient(135deg, rgba(245,158,11,0.2), rgba(239,68,68,0.1));
-      border: 1px solid rgba(245,158,11,0.4);
-      color: var(--warning);
-      padding: 6px 16px;
-      border-radius: 20px;
-      font-weight: 700;
-      font-size: 14px;
-    }
-
-    .progress-track {
-      width: 100%;
-      height: 16px;
-      background: var(--bg-input);
-      border-radius: 20px;
-      overflow: hidden;
-      position: relative;
-      border: 1px solid var(--border-color);
-    }
-    .progress-fill {
-      height: 100%;
-      border-radius: 20px;
-      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-      background: linear-gradient(90deg, var(--accent), var(--accent-dark));
-      position: relative;
-    }
-    .progress-fill.milestone-100 { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
-    .progress-ticks { position: absolute; inset: 0; display: flex; pointer-events: none; }
-    .progress-tick {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: rgba(255,255,255,0.2);
-    }
 
     .extrato-scroll {
       max-height: 400px;
@@ -475,61 +230,40 @@
     .extrato-scroll::-webkit-scrollbar-track { background: var(--bg-input); border-radius: 4px; }
     .extrato-scroll::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
 
-    .resumo-card {
-      padding: 12px 16px;
-      border-radius: 12px;
-      text-align: center;
-      border: 1px solid var(--border-color);
-    }
-    .resumo-card.pago { border-color: rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.05); }
-    .resumo-card.pendente { border-color: rgba(245, 158, 11, 0.3); background: rgba(245, 158, 11, 0.05); }
-
-    @media (max-width: 640px) {
-      .stat-card { padding: 12px 16px; }
-      .btn-primary { padding: 10px 18px; font-size: 13px; }
-      .nav-item { font-size: 9px; min-height: 56px; }
-      .input-modern { font-size: 15px; }
-      .select-modern { font-size: 15px; }
-      .tab-btn { font-size: 11px; padding: 8px 10px; }
-    }
     .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
 
-    /* =========================================
-       NOVOS ESTILOS DA TELA DE LOGIN (Cores da Logo)
-       ========================================= */
+    /* ===== ESTILOS DA TELA DE LOGIN ===== */
     .login-wrapper {
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #050505; /* Fundo preto total para destacar a logo */
+      background: #050505;
       padding: 20px;
     }
     .login-card-custom {
       background: #0a0e0a;
       padding: 40px 30px;
       border-radius: 20px;
-      border: 2px solid #10b981; /* Borda verde esmeralda */
+      border: 2px solid #10b981;
       box-shadow: 0 0 40px rgba(16, 185, 129, 0.15);
       text-align: center;
       max-width: 420px;
       width: 100%;
     }
-    .login-logo-box {
-      margin-bottom: 30px;
-    }
+    .login-logo-box { margin-bottom: 30px; }
     .login-logo-box img {
       width: 100%;
-      max-width: 220px; /* Logo GRANDE */
+      max-width: 220px;
       height: auto;
       display: block;
       margin: 0 auto;
       border-radius: 50%;
-      border: 4px solid #d4af37; /* Borda dourada */
+      border: 4px solid #d4af37;
       box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
     }
     .login-title-custom {
-      color: #d4af37; /* Dourado */
+      color: #d4af37;
       margin-bottom: 25px;
       letter-spacing: 2px;
       font-weight: 700;
@@ -546,10 +280,7 @@
       font-size: 16px;
       margin-bottom: 15px;
     }
-    .login-input-custom:focus {
-      border-color: #d4af37;
-      box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
-    }
+    .login-input-custom:focus { border-color: #d4af37; box-shadow: 0 0 8px rgba(212, 175, 55, 0.3); }
     .login-btn-custom {
       width: 100%;
       padding: 14px;
@@ -564,55 +295,11 @@
       margin-top: 10px;
       font-family: var(--font-body);
     }
-    .login-btn-custom:hover {
-      background: #059669;
-      box-shadow: 0 0 15px #10b981;
-      transform: scale(1.02);
-    }
-    .login-google-btn {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #d4af37;
-      background: transparent;
-      color: #d4af37;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-      margin-bottom: 15px;
-    }
-    .login-google-btn:hover {
-      background: #d4af37;
-      color: #000;
-    }
-    .login-error-msg {
-      color: #ef4444;
-      font-size: 14px;
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
-    .login-success-msg {
-      color: #10b981;
-      font-size: 14px;
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
-    .login-toggle-text {
-      color: #94a3b8;
-      font-size: 14px;
-      cursor: pointer;
-      transition: 0.3s;
-      background: transparent;
-      border: none;
-      margin-top: 10px;
-    }
-    .login-toggle-text:hover {
-      color: #10b981;
-    }
+    .login-btn-custom:hover { background: #059669; box-shadow: 0 0 15px #10b981; transform: scale(1.02); }
+    .login-error-msg { color: #ef4444; font-size: 14px; margin-bottom: 10px; font-weight: bold; }
+    .login-success-msg { color: #10b981; font-size: 14px; margin-bottom: 10px; font-weight: bold; }
+    .login-toggle-text { color: #94a3b8; font-size: 14px; cursor: pointer; transition: 0.3s; background: transparent; border: none; margin-top: 10px; }
+    .login-toggle-text:hover { color: #10b981; }
   </style>
 </head>
 <body>
@@ -623,38 +310,31 @@
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 <script>
 (function() {
   'use strict';
-
-  // ============================================
-  // SUPABASE
-  // ============================================
-  var SUPABASE_URL = 'https://nzyqhqxfpvzljcunnnsq.supabase.co';
-  var SUPABASE_ANON_KEY = 'sb_publishable_vSSbaS4QS-mp0pbFb4cr3g_0edR7d97';
-  var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   var React = window.React;
   var ReactDOM = window.ReactDOM;
   var useState = React.useState;
   var useEffect = React.useEffect;
   var useMemo = React.useMemo;
-  var useRef = React.useRef;
   var createElement = React.createElement;
+
+  // ============================================
+  // SUPABASE CONFIG
+  // ============================================
+  var SUPABASE_URL = 'https://nzyqhqxfpvzljcunnnsq.supabase.co';
+  var SUPABASE_ANON_KEY = 'sb_publishable_vSSbaS4QS-mp0pbFb4cr3g_0edR7d97';
+  var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   // ============================================
   // UTILITÁRIOS
   // ============================================
   function formatCurrency(v) {
     if (v === undefined || v === null || isNaN(v)) v = 0;
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }).format(v);
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
   }
 
   function parseCurrency(str) {
@@ -678,88 +358,6 @@
     return { start: start, end: end };
   }
 
-  function getPrevMonthDate(date) {
-    var d = new Date(date);
-    d.setMonth(d.getMonth() - 1);
-    return d;
-  }
-
-  function getTheme() {
-    return document.documentElement.getAttribute('data-theme') || 'dark';
-  }
-
-  function setTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('osiris-theme', theme);
-  }
-
-  function getDefaultTheme() {
-    return localStorage.getItem('osiris-default-theme') || 'dark';
-  }
-
-  function setDefaultTheme(theme) {
-    localStorage.setItem('osiris-default-theme', theme);
-  }
-
-  function monthKey(dateStr) {
-    var d = new Date(dateStr + 'T00:00:00');
-    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
-  }
-
-  function computeMonthlyAverage(economias) {
-    var map = {};
-    economias.forEach(function(e) {
-      var k = monthKey(e.data);
-      map[k] = (map[k] || 0) + Number(e.valor);
-    });
-    var keys = Object.keys(map);
-    if (keys.length === 0) return 0;
-    var total = keys.reduce(function(acc, k) { return acc + map[k]; }, 0);
-    return total / keys.length;
-  }
-
-  function computeStreak(economias) {
-    var map = {};
-    economias.forEach(function(e) { map[monthKey(e.data)] = true; });
-    var streak = 0;
-    var cursor = new Date();
-    while (true) {
-      var k = cursor.getFullYear() + '-' + String(cursor.getMonth() + 1).padStart(2, '0');
-      if (map[k]) { streak++; cursor.setMonth(cursor.getMonth() - 1); }
-      else break;
-    }
-    return streak;
-  }
-
-  function levelInfo(pct) {
-    if (pct >= 100) return { label: 'Conquistado', icon: 'fa-trophy', color: '#f59e0b' };
-    if (pct >= 75) return { label: 'Reta Final', icon: 'fa-dumbbell', color: '#8b5cf6' };
-    if (pct >= 50) return { label: 'Quase Lá', icon: 'fa-fire', color: '#10b981' };
-    if (pct >= 25) return { label: 'Em Progresso', icon: 'fa-rocket', color: '#3b82f6' };
-    return { label: 'Iniciante', icon: 'fa-seedling', color: '#64748b' };
-  }
-
-  function predictGoal(objetivo, economiasDoObjetivo) {
-    var total = economiasDoObjetivo.reduce(function(acc, e) { return acc + Number(e.valor); }, 0);
-    var alvo = Number(objetivo.valor_alvo) || 0;
-    var restante = Math.max(alvo - total, 0);
-    var mediaMensal = computeMonthlyAverage(economiasDoObjetivo);
-    var pct = alvo > 0 ? Math.min((total / alvo) * 100, 100) : 0;
-    var mesesRestantes = null;
-    var dataPrevista = null;
-    if (restante <= 0) {
-      mesesRestantes = 0;
-    } else if (mediaMensal > 0) {
-      mesesRestantes = Math.ceil(restante / mediaMensal);
-      var d = new Date();
-      d.setMonth(d.getMonth() + mesesRestantes);
-      dataPrevista = d;
-    }
-    return { total: total, restante: restante, mediaMensal: mediaMensal, pct: pct, mesesRestantes: mesesRestantes, dataPrevista: dataPrevista };
-  }
-
-  var ICONE_OPCOES = ['fa-flag', 'fa-home', 'fa-car', 'fa-plane', 'fa-graduation-cap', 'fa-ring', 'fa-mobile-screen', 'fa-umbrella-beach', 'fa-laptop', 'fa-suitcase'];
-
   // ============================================
   // CURRENCY INPUT
   // ============================================
@@ -776,10 +374,7 @@
       var intNum = parseInt(num, 10);
       if (isNaN(intNum)) return '';
       var floatNum = intNum / 100;
-      return floatNum.toLocaleString('pt-BR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
+      return floatNum.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     };
 
     var handleChange = function(e) {
@@ -789,77 +384,32 @@
       onChange(formatted);
     };
 
-    var handleFocus = function(e) {
-      var val = e.target.value;
-      if (val) {
-        var num = parseCurrency(val);
-        if (num > 0) {
-          onChange(String(num).replace('.', ','));
-        }
-      }
-    };
-
-    var handleBlur = function(e) {
-      var val = e.target.value;
-      if (val) {
-        var num = parseCurrency(val);
-        if (num > 0) {
-          onChange(formatCurrency(num));
-        }
-      }
-    };
-
     return createElement('input', {
       type: 'text',
       inputMode: 'decimal',
       placeholder: placeholder,
       value: value,
       onChange: handleChange,
-      onFocus: handleFocus,
-      onBlur: handleBlur,
       className: className,
       required: required
     });
   }
 
   // ============================================
-  // HEADER
+  // HEADER & BOTTOM NAV
   // ============================================
-  function Header(props) {
-    var currentDate = props.currentDate, onDateChange = props.onDateChange;
+  function Header() {
     return createElement(
       'header',
       { className: 'sticky top-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border-color)] px-4 py-3' },
       createElement(
         'div',
         { className: 'max-w-md mx-auto flex items-center justify-between' },
-        createElement(
-          'div',
-          { className: 'flex items-center gap-3' },
-          createElement('span', { className: 'text-lg font-bold tracking-tight font-display' }, 'OSIRIS'),
-          onDateChange ? createElement(
-            'div',
-            { className: 'flex items-center gap-1' },
-            createElement('button', {
-              onClick: function() { onDateChange('prev'); },
-              className: 'p-2 rounded-lg hover:bg-[var(--bg-card-hover)] transition-colors min-w-[40px] min-h-[40px] text-[var(--text-secondary)]'
-            }, createElement('i', { className: 'fas fa-chevron-left' })),
-            createElement('span', { className: 'text-sm font-medium min-w-[80px] text-center text-[var(--text-primary)]' },
-              currentDate ? currentDate.toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' }) : ''
-            ),
-            createElement('button', {
-              onClick: function() { onDateChange('next'); },
-              className: 'p-2 rounded-lg hover:bg-[var(--bg-card-hover)] transition-colors min-w-[40px] min-h-[40px] text-[var(--text-secondary)]'
-            }, createElement('i', { className: 'fas fa-chevron-right' }))
-          ) : null
-        )
+        createElement('span', { className: 'text-lg font-bold tracking-tight font-display' }, 'OSIRIS')
       )
     );
   }
 
-  // ============================================
-  // BOTTOM NAVIGATION
-  // ============================================
   function BottomNavigation(props) {
     var currentPage = props.currentPage;
     var setPage = props.setPage;
@@ -868,7 +418,6 @@
       { id: 'dashboard', label: 'Painel', icon: 'fa-chart-pie' },
       { id: 'transacoes', label: 'Transações', icon: 'fa-exchange-alt' },
       { id: 'metas', label: 'Metas', icon: 'fa-bullseye' },
-      { id: 'categorias', label: 'Categorias', icon: 'fa-tags' },
       { id: 'perfil', label: 'Perfil', icon: 'fa-user' }
     ];
 
@@ -896,7 +445,7 @@
   }
 
   // ============================================
-  // LOGIN (MODIFICADO COM A LOGO E CORES NOVAS)
+  // LOGIN
   // ============================================
   function Login(props) {
     var onLogin = props.onLogin;
@@ -924,13 +473,6 @@
       }).catch(function(err) { setError(err.message || 'Erro'); setLoading(false); });
     };
 
-    var handleGoogle = function() {
-      setLoading(true); setError('');
-      supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin + '/osiris-finance/' } })
-        .then(function(result) { if (result.error) { setError(result.error.message); setLoading(false); } })
-        .catch(function(err) { setError(err.message); setLoading(false); });
-    };
-
     return createElement(
       'div',
       { className: 'login-wrapper' },
@@ -943,19 +485,6 @@
           createElement('img', { src: 'logo.png', alt: 'Logo Osiris' })
         ),
         createElement('h1', { className: 'login-title-custom' }, 'OSIRIS'),
-        createElement('button', {
-          onClick: handleGoogle,
-          disabled: loading,
-          className: 'login-google-btn'
-        },
-          createElement('img', { src: 'https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg', alt: 'Google', style: { width: '20px', height: '20px' } }),
-          'Entrar com Google'
-        ),
-        createElement('div', { className: 'flex items-center gap-4 my-4' },
-          createElement('div', { className: 'flex-1 h-px bg-[#2d3a4a]' }),
-          createElement('span', { className: 'text-[#94a3b8] text-sm font-body' }, 'ou'),
-          createElement('div', { className: 'flex-1 h-px bg-[#2d3a4a]' })
-        ),
         createElement(
           'form',
           { onSubmit: handleSubmit, className: 'space-y-4' },
@@ -992,7 +521,7 @@
   }
 
   // ============================================
-  // DASHBOARD
+  // DASHBOARD (Painel e Extrato)
   // ============================================
   function Dashboard(props) {
     var setPage = props.setPage;
@@ -1000,35 +529,18 @@
     var _d2 = useState([]), transactions = _d2[0], setTransactions = _d2[1];
     var _d3 = useState(true), loading = _d3[0], setLoading = _d3[1];
     var _d4 = useState(null), userId = _d4[0], setUserId = _d4[1];
-    var _d5 = useState(0), prevDespesas = _d5[0], setPrevDespesas = _d5[1];
-    var _d6 = useState([]), objetivos = _d6[0], setObjetivos = _d6[1];
-    var _d7 = useState([]), economias = _d7[0], setEconomias = _d7[1];
-    var _d8 = useState('saude'), dashMode = _d8[0], setDashMode = _d8[1];
-    var _d9 = useState(false), showPendencias = _d9[0], setShowPendencias = _d9[1];
-
-    var chartRef = useRef(null);
-    var chartInstance = useRef(null);
+    var _d5 = useState('saude'), dashMode = _d5[0], setDashMode = _d5[1];
 
     useEffect(function() {
       supabase.auth.getUser().then(function(result) {
-        if (result.data && result.data.user) {
-          var uid = result.data.user.id;
-          setUserId(uid);
-        } else {
-          console.log('❌ Dashboard - Nenhum usuário logado!');
-        }
+        if (result.data && result.data.user) setUserId(result.data.user.id);
       });
     }, []);
 
     var loadTransactions = function() {
-      if (!userId) {
-        console.log('⏳ Aguardando userId para carregar transações...');
-        return;
-      }
+      if (!userId) return;
       setLoading(true);
       var range = getMonthRange(currentDate);
-      console.log('🔄 Carregando transações para:', userId, 'Mês:', range);
-
       supabase.from('transacoes')
         .select('*')
         .eq('user_id', userId)
@@ -1036,95 +548,33 @@
         .lte('data', range.end)
         .order('data', { ascending: false })
         .then(function(result) {
-          if (result.error) {
-            console.error('❌ Erro ao carregar transações:', result.error);
-          } else {
-            console.log('✅ Transações carregadas:', result.data);
-            setTransactions(result.data || []);
-          }
+          if (!result.error) setTransactions(result.data || []);
           setLoading(false);
-        }).catch(function(err) {
-          console.error('❌ Erro:', err);
-          setLoading(false);
-        });
+        }).catch(function() { setLoading(false); });
     };
 
-    // Carregar transações quando userId mudar ou data mudar
     useEffect(function() {
-      if (userId) {
-        loadTransactions();
-      }
+      if (userId) loadTransactions();
     }, [currentDate, userId]);
 
-    var loadMetas = function() {
-      if (!userId) return;
-      Promise.all([
-        supabase.from('objetivos').select('*').eq('user_id', userId).order('created_at'),
-        supabase.from('economias').select('*').eq('user_id', userId)
-      ]).then(function(results) {
-        if (!results[0].error) setObjetivos(results[0].data || []);
-        if (!results[1].error) setEconomias(results[1].data || []);
-      }).catch(function() {});
-    };
-
-    useEffect(function() { if (userId) loadMetas(); }, [userId]);
-
     var summary = useMemo(function() {
-      console.log('📊 Calculando summary com', transactions.length, 'transações');
       var receitas = transactions.filter(function(t) { return t.tipo === 'receita'; });
       var despesas = transactions.filter(function(t) { return t.tipo === 'despesa'; });
       var totalReceitas = receitas.reduce(function(acc, t) { return acc + Number(t.valor); }, 0);
       var totalDespesas = despesas.reduce(function(acc, t) { return acc + Number(t.valor); }, 0);
+      
+      // Apenas despesas NÃO pagas vão para o Extrato
       var despesasPendentes = despesas.filter(function(t) { return !t.pago; });
       var totalPendentes = despesasPendentes.reduce(function(acc, t) { return acc + Number(t.valor); }, 0);
-      var map = {};
-      despesas.forEach(function(t) { map[t.categoria_nome] = (map[t.categoria_nome] || 0) + Number(t.valor); });
-      var categorias = Object.keys(map).map(function(k) { return { nome: k, total: map[k] }; }).sort(function(a, b) { return b.total - a.total; });
-      var variacao = prevDespesas > 0 ? ((totalDespesas - prevDespesas) / prevDespesas) * 100 : null;
-      return { totalReceitas: totalReceitas, totalDespesas: totalDespesas, saldo: totalReceitas - totalDespesas, categorias: categorias, variacao: variacao, totalPendentes: totalPendentes, despesasPendentes: despesasPendentes };
-    }, [transactions, prevDespesas]);
 
-    var metasResumo = useMemo(function() {
-      return objetivos.map(function(o) {
-        var econsDoObjetivo = economias.filter(function(e) { return e.objetivo_id === o.id; });
-        var pred = predictGoal(o, econsDoObjetivo);
-        return { objetivo: o, pred: pred };
-      }).sort(function(a, b) { return b.pred.pct - a.pred.pct; }).slice(0, 2);
-    }, [objetivos, economias]);
-
-    useEffect(function() {
-      if (chartInstance.current) chartInstance.current.destroy();
-      if (!chartRef.current || summary.categorias.length === 0) return;
-
-      var ctx = chartRef.current.getContext('2d');
-      var labels = summary.categorias.slice(0, 6).map(function(c) { return c.nome; });
-      var data = summary.categorias.slice(0, 6).map(function(c) { return c.total; });
-      var colors = ['#10b981', '#34d399', '#6ee7b7', '#059669', '#047857', '#065f46'];
-
-      chartInstance.current = new window.Chart(ctx, {
-        type: 'doughnut',
-        data: { labels: labels, datasets: [{ data: data, backgroundColor: colors, borderWidth: 2, borderColor: 'var(--bg-card)' }] },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              position: 'bottom',
-              labels: {
-                color: 'var(--text-primary)',
-                font: { size: 11, family: 'Atkinson Hyperlegible, Inter' },
-                padding: 12,
-                usePointStyle: true,
-                pointStyle: 'circle'
-              }
-            }
-          },
-          cutout: '65%'
-        }
-      });
-
-      return function() { if (chartInstance.current) chartInstance.current.destroy(); };
-    }, [summary.categorias]);
+      return { 
+        totalReceitas: totalReceitas, 
+        totalDespesas: totalDespesas, 
+        saldo: totalReceitas - totalDespesas, 
+        totalPendentes: totalPendentes, 
+        despesasPendentes: despesasPendentes 
+      };
+    }, [transactions]);
 
     var changeDate = function(dir) {
       var d = new Date(currentDate);
@@ -1134,33 +584,18 @@
     };
 
     var togglePago = function(id, status) {
-      console.log('🔄 Toggle pago:', id, 'novo status:', status);
       supabase.from('transacoes').update({
         pago: status,
         data_pagamento: status ? new Date().toISOString().split('T')[0] : null
       }).eq('id', id).then(function() {
-        console.log('✅ Status atualizado!');
         loadTransactions();
-      }).catch(function(err) {
-        console.error('❌ Erro ao atualizar:', err);
       });
     };
-
-    var storyText = null;
-    if (summary.variacao !== null && !loading) {
-      if (summary.variacao <= -1) {
-        storyText = { icon: 'fa-arrow-down', text: 'Você gastou ' + Math.abs(summary.variacao).toFixed(0) + '% a menos que no mês anterior. Continue assim!', color: '#10b981' };
-      } else if (summary.variacao >= 1) {
-        storyText = { icon: 'fa-arrow-up', text: 'Seus gastos subiram ' + summary.variacao.toFixed(0) + '% em relação ao mês anterior. Vale revisar as categorias.', color: '#ef4444' };
-      } else {
-        storyText = { icon: 'fa-minus', text: 'Seus gastos ficaram estáveis em relação ao mês anterior.', color: '#94a3b8' };
-      }
-    }
 
     return createElement(
       'div',
       { className: 'pb-24 max-w-md mx-auto font-body' },
-      createElement(Header, { currentDate: currentDate, onDateChange: changeDate }),
+      createElement(Header, null),
       createElement(
         'div',
         { className: 'p-4 space-y-4' },
@@ -1172,30 +607,18 @@
           createElement('button', {
             className: 'tab-btn ' + (dashMode === 'saude' ? 'active' : ''),
             onClick: function() { setDashMode('saude'); }
-          }, createElement('i', { className: 'fas fa-heartbeat mr-1' }), 'Saúde Fin.'),
+          }, createElement('i', { className: 'fas fa-heartbeat mr-1' }), 'Visão Geral'),
           createElement('button', {
             className: 'tab-btn ' + (dashMode === 'mes' ? 'active' : ''),
             onClick: function() { setDashMode('mes'); }
-          }, createElement('i', { className: 'fas fa-calendar-check mr-1' }), 'Extrato Mês')
+          }, createElement('i', { className: 'fas fa-calendar-check mr-1' }), 'Extrato (Pendentes)')
         ),
 
         // ============================================
-        // DASHBOARD: SAÚDE FINANCEIRA
+        // VISÃO GERAL
         // ============================================
         dashMode === 'saude' ? createElement(
           React.Fragment, null,
-
-          storyText ? createElement(
-            'div',
-            { className: 'insight-card fade-in-up' },
-            createElement(
-              'div',
-              { className: 'flex items-start gap-3' },
-              createElement('i', { className: 'fas ' + storyText.icon + ' text-xl', style: { color: storyText.color } }),
-              createElement('p', { className: 'text-sm leading-relaxed font-body', style: { color: 'var(--text-primary)' } }, storyText.text)
-            )
-          ) : null,
-
           createElement(
             'div',
             { className: 'grid grid-cols-3 gap-3' },
@@ -1215,94 +638,8 @@
               createElement('p', { className: 'text-lg font-bold text-[#8b5cf6] font-display' }, formatCurrency(summary.saldo))
             )
           ),
-
-          // Botão Pendências
           createElement(
-            'button', {
-              onClick: function() { setShowPendencias(!showPendencias); },
-              className: 'btn-secondary w-full flex items-center justify-center gap-2'
-            },
-            createElement('i', { className: 'fas fa-clock' }),
-            'Pendências do Mês ',
-            summary.totalPendentes > 0 ? createElement('span', { className: 'bg-[#ef4444] text-white text-xs px-2 py-0.5 rounded-full' }, summary.totalPendentes) : null
-          ),
-
-          showPendencias ? createElement(
-            'div',
-            { className: 'card-modern space-y-2' },
-            summary.despesasPendentes.length === 0 ?
-              createElement('p', { className: 'text-[var(--text-muted)] text-center py-4 font-body' }, 'Nenhuma pendência este mês') :
-              summary.despesasPendentes.map(function(t) {
-                return createElement(
-                  'div',
-                  { key: t.id, className: 'pendencia-item' },
-                  createElement(
-                    'div',
-                    { className: 'flex items-center gap-3 flex-1 min-w-0' },
-                    createElement('input', {
-                      type: 'checkbox',
-                      checked: t.pago || false,
-                      onChange: function(e) { togglePago(t.id, e.target.checked); },
-                      className: 'checkbox-modern'
-                    }),
-                    createElement('div', { className: 'flex-1 min-w-0' },
-                      createElement('p', { className: 'text-sm font-bold truncate' }, t.nome),
-                      createElement('p', { className: 'text-xs text-[var(--text-muted)]' }, t.categoria_nome + ' • ' + formatDate(t.data))
-                    )
-                  ),
-                  createElement('span', { className: 'font-bold text-[#ef4444] ml-2' }, formatCurrency(t.valor))
-                );
-              })
-          ) : null,
-
-          metasResumo.length > 0 ? createElement(
-            'div',
-            { className: 'card-modern' },
-            createElement(
-              'div',
-              { className: 'flex items-center justify-between mb-4' },
-              createElement('h3', { className: 'text-sm font-bold font-display' }, createElement('i', { className: 'fas fa-bullseye mr-2' }), 'Suas Metas'),
-              createElement('button', {
-                onClick: function() { setPage('metas'); },
-                className: 'text-[var(--accent)] text-xs font-bold hover:underline font-body'
-              }, 'Ver todas →')
-            ),
-            createElement(
-              'div',
-              { className: 'space-y-4' },
-              metasResumo.map(function(m) {
-                var lvl = levelInfo(m.pred.pct);
-                return createElement(
-                  'div',
-                  { key: m.objetivo.id },
-                  createElement(
-                    'div',
-                    { className: 'flex items-center justify-between mb-1.5' },
-                    createElement('span', { className: 'text-sm font-bold font-body' }, createElement('i', { className: 'fas ' + (m.objetivo.icone || 'fa-flag') + ' mr-1' }), ' ' + m.objetivo.nome),
-                    createElement('span', { className: 'text-xs font-bold', style: { color: lvl.color } }, m.pred.pct.toFixed(0) + '%')
-                  ),
-                  createElement(ProgressBar, { pct: m.pred.pct })
-                );
-              })
-            )
-          ) : null,
-
-          createElement(
-            'div',
-            { className: 'card-modern' },
-            createElement('h3', { className: 'text-sm font-bold font-display mb-4' }, createElement('i', { className: 'fas fa-chart-pie mr-2' }), 'Gastos por Categoria'),
-            createElement(
-              'div',
-              { className: 'h-48' },
-              summary.categorias.length === 0
-                ? createElement('p', { className: 'text-center text-[var(--text-muted)] py-8 font-body' }, loading ? 'Carregando...' : 'Nenhum gasto registrado')
-                : createElement('canvas', { ref: chartRef })
-            )
-          ),
-
-          createElement(
-            'div',
-            { className: 'card-modern' },
+            'div', { className: 'card-modern' },
             createElement(
               'div',
               { className: 'flex items-center justify-between mb-4' },
@@ -1334,91 +671,35 @@
         ) : null,
 
         // ============================================
-        // DASHBOARD: EXTRATO DO MÊS (GASTOS)
+        // EXTRATO (APENAS PENDENTES)
         // ============================================
         dashMode === 'mes' ? createElement(
           React.Fragment, null,
-
-          // Forçar recarregamento ao ativar a aba
-          (function() {
-            console.log('🔄 Aba "Extrato Mês" ativada, recarregando transações...');
-            if (userId) {
-              loadTransactions();
-            }
-            return null;
-          })(),
-
-          // Resumo financeiro do mês
           createElement(
             'div',
-            { className: 'grid grid-cols-2 gap-3' },
-            createElement(
-              'div', { className: 'stat-card expense' },
-              createElement('p', { className: 'text-[var(--text-muted)] text-xs font-bold uppercase tracking-wider font-body' }, 'Total Gasto'),
-              createElement('p', { className: 'text-lg font-bold text-[#ef4444] font-display' }, formatCurrency(summary.totalDespesas))
+            { className: 'flex justify-between items-center mb-2 px-1' },
+            createElement('span', { className: 'text-sm font-bold font-display' }, 
+              'Contas a Pagar (' + summary.despesasPendentes.length + ')'
             ),
             createElement(
-              'div', { className: 'stat-card balance' },
-              createElement('p', { className: 'text-[var(--text-muted)] text-xs font-bold uppercase tracking-wider font-body' }, 'Pendente'),
-              createElement('p', { className: 'text-lg font-bold text-[#f59e0b] font-display' }, formatCurrency(summary.totalPendentes))
+              'div', { className: 'flex gap-2' },
+              createElement('button', { onClick: function() { changeDate('prev'); }, className: 'p-2 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-secondary)]' }, createElement('i', { className: 'fas fa-chevron-left' })),
+              createElement('span', { className: 'text-sm font-medium min-w-[80px] text-center' }, currentDate.toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' })),
+              createElement('button', { onClick: function() { changeDate('next'); }, className: 'p-2 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-secondary)]' }, createElement('i', { className: 'fas fa-chevron-right' }))
             )
           ),
-
-          // Debug: mostrar quantas transações foram carregadas
           createElement(
-            'div',
-            { className: 'text-xs text-[var(--text-muted)] text-center font-body p-2' },
-            transactions.length + ' transações carregadas (' + transactions.filter(function(t) { return t.tipo === 'despesa'; }).length + ' despesas)'
-          ),
-
-          // Barra de progresso
-          createElement(
-            'div',
-            { className: 'card-modern' },
-            createElement(
-              'div',
-              { className: 'flex items-center justify-between mb-2' },
-              createElement('span', { className: 'text-sm font-bold font-body' }, 'Progresso do Mês'),
-              createElement('span', { className: 'text-sm font-bold font-display' },
-                (summary.totalDespesas > 0 ? Math.round(((summary.totalDespesas - summary.totalPendentes) / summary.totalDespesas) * 100) : 0) + '% pago'
-              )
-            ),
-            createElement(ProgressBar, { pct: summary.totalDespesas > 0 ? ((summary.totalDespesas - summary.totalPendentes) / summary.totalDespesas) * 100 : 0 }),
-            createElement(
-              'div',
-              { className: 'flex items-center justify-between mt-2 text-xs text-[var(--text-muted)] font-body' },
-              createElement('span', null, createElement('i', { className: 'fas fa-check-circle text-[#10b981] mr-1' }), 'Pago: ' + formatCurrency(summary.totalDespesas - summary.totalPendentes)),
-              createElement('span', null, createElement('i', { className: 'fas fa-clock text-[#f59e0b] mr-1' }), 'Pendente: ' + formatCurrency(summary.totalPendentes))
-            )
-          ),
-
-          // Lista de despesas do mês (extrato)
-          createElement(
-            'div',
-            { className: 'card-modern' },
-            createElement(
-              'div',
-              { className: 'flex items-center justify-between mb-4' },
-              createElement('h3', { className: 'text-sm font-bold font-display' }, createElement('i', { className: 'fas fa-list-check mr-2' }), 'Extrato do Mês'),
-              createElement(
-                'span',
-                { className: 'text-xs font-bold text-[var(--text-muted)]' },
-                transactions.filter(function(t) { return t.tipo === 'despesa'; }).length + ' despesas'
-              )
-            ),
+            'div', { className: 'card-modern' },
             loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)] font-body' }, 'Carregando...') :
-            transactions.filter(function(t) { return t.tipo === 'despesa'; }).length === 0 ?
-              createElement('p', { className: 'text-[var(--text-muted)] text-center py-4 font-body' }, 'Nenhuma despesa este mês') :
+            summary.despesasPendentes.length === 0 ?
+              createElement('p', { className: 'text-[var(--text-muted)] text-center py-4 font-body' }, '🎉 Nenhuma conta pendente este mês!') :
               createElement(
                 'div',
                 { className: 'extrato-scroll space-y-2' },
-                transactions.filter(function(t) { return t.tipo === 'despesa'; }).sort(function(a, b) {
-                  // Pendentes primeiro, depois pagos
-                  return (a.pago ? 1 : 0) - (b.pago ? 1 : 0);
-                }).map(function(t) {
+                summary.despesasPendentes.map(function(t) {
                   return createElement(
                     'div',
-                    { key: t.id, className: 'pendencia-item ' + (t.pago ? 'pago' : '') },
+                    { key: t.id, className: 'pendencia-item' },
                     createElement(
                       'div',
                       { className: 'flex items-center gap-3 flex-1 min-w-0' },
@@ -1432,30 +713,19 @@
                         className: 'checkbox-modern'
                       }),
                       createElement('div', { className: 'flex-1 min-w-0' },
-                        createElement('p', { className: 'text-sm font-bold truncate pendencia-nome' }, t.nome),
+                        createElement('p', { className: 'text-sm font-bold truncate' }, t.nome),
                         createElement('p', { className: 'text-xs text-[var(--text-muted)]' }, t.categoria_nome + ' • ' + formatDate(t.data))
                       )
                     ),
-                    createElement('span', { className: 'font-bold ' + (t.pago ? 'text-[var(--text-muted)]' : 'text-[#ef4444]') + ' ml-2 flex-shrink-0' }, formatCurrency(t.valor))
+                    createElement('span', { className: 'font-bold text-[#ef4444] ml-2 flex-shrink-0' }, formatCurrency(t.valor))
                   );
                 })
               )
           ),
-
-          // Resumo rápido
           createElement(
-            'div',
-            { className: 'grid grid-cols-2 gap-3' },
-            createElement(
-              'div', { className: 'resumo-card pago' },
-              createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, 'Pago'),
-              createElement('p', { className: 'text-lg font-bold text-[#10b981] font-display' }, formatCurrency(summary.totalDespesas - summary.totalPendentes))
-            ),
-            createElement(
-              'div', { className: 'resumo-card pendente' },
-              createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, 'A Pagar'),
-              createElement('p', { className: 'text-lg font-bold text-[#f59e0b] font-display' }, formatCurrency(summary.totalPendentes))
-            )
+            'div', { className: 'card-modern flex items-center justify-between' },
+            createElement('span', { className: 'text-sm font-bold font-body' }, 'Total Pendente'),
+            createElement('span', { className: 'text-lg font-bold text-[#ef4444] font-display' }, formatCurrency(summary.totalPendentes))
           )
         ) : null
       )
@@ -1463,154 +733,7 @@
   }
 
   // ============================================
-  // CATEGORIAS
-  // ============================================
-  function Categorias() {
-    var _c1 = useState([]), categorias = _c1[0], setCategorias = _c1[1];
-    var _c2 = useState(true), loading = _c2[0], setLoading = _c2[1];
-    var _c3 = useState(false), showForm = _c3[0], setShowForm = _c3[1];
-    var _c4 = useState(''), nome = _c4[0], setNome = _c4[1];
-    var _c5 = useState('despesa'), tipo = _c5[0], setTipo = _c5[1];
-    var _c6 = useState(null), editando = _c6[0], setEditando = _c6[1];
-    var _c7 = useState(''), obs = _c7[0], setObs = _c7[1];
-    var _c8 = useState(null), userId = _c8[0], setUserId = _c8[1];
-
-    useEffect(function() {
-      supabase.auth.getUser().then(function(result) {
-        if (result.data && result.data.user) setUserId(result.data.user.id);
-      });
-    }, []);
-
-    var load = function() {
-      if (!userId) return;
-      setLoading(true);
-      supabase.from('categorias').select('*').eq('user_id', userId).order('nome')
-        .then(function(result) { if (!result.error) setCategorias(result.data || []); setLoading(false); })
-        .catch(function() { setLoading(false); });
-    };
-
-    useEffect(function() { if (userId) load(); }, [userId]);
-
-    var reset = function() { setNome(''); setTipo('despesa'); setObs(''); setEditando(null); setShowForm(false); };
-
-    var submit = function(e) {
-      e.preventDefault();
-      if (!nome.trim() || !userId) return;
-      var dados = { nome: nome.trim(), tipo: tipo, obs: obs.trim() || null, user_id: userId };
-      var promise = editando
-        ? supabase.from('categorias').update({ nome: dados.nome, tipo: dados.tipo, obs: dados.obs }).eq('id', editando)
-        : supabase.from('categorias').insert([dados]);
-      promise.then(function() { load(); reset(); });
-    };
-
-    var del = function(id) {
-      if (window.confirm('Excluir esta categoria?')) {
-        supabase.from('categorias').delete().eq('id', id).then(function() { load(); });
-      }
-    };
-
-    var edit = function(cat) {
-      setNome(cat.nome); setTipo(cat.tipo); setObs(cat.obs || ''); setEditando(cat.id); setShowForm(true);
-    };
-
-    var receitas = categorias.filter(function(c) { return c.tipo === 'receita'; });
-    var despesas = categorias.filter(function(c) { return c.tipo === 'despesa'; });
-
-    return createElement(
-      'div',
-      { className: 'pb-24 max-w-md mx-auto font-body' },
-      createElement(
-        'div',
-        { className: 'sticky top-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border-color)] p-4 flex items-center justify-between' },
-        createElement('h1', { className: 'text-xl font-bold font-display' }, createElement('i', { className: 'fas fa-tags mr-2' }), 'Categorias'),
-        createElement('button', {
-          onClick: function() { setShowForm(!showForm); },
-          className: 'btn-primary min-w-[48px] min-h-[48px] rounded-full w-12 h-12 flex items-center justify-center text-2xl'
-        }, showForm ? createElement('i', { className: 'fas fa-times' }) : createElement('i', { className: 'fas fa-plus' }))
-      ),
-      showForm ? createElement(
-        'form',
-        { onSubmit: submit, className: 'p-4 space-y-4 border-b border-[var(--border-color)] bg-[var(--bg-secondary)]' },
-        createElement(
-          'div', { className: 'flex gap-2' },
-          ['despesa', 'receita'].map(function(t) {
-            return createElement('button', {
-              key: t, type: 'button', onClick: function() { setTipo(t); },
-              className: 'flex-1 py-2 rounded-xl font-bold transition-colors ' + (tipo === t ? (t === 'despesa' ? 'bg-[#ef4444] text-white' : 'bg-[var(--accent)] text-white') : 'bg-[var(--bg-input)] text-[var(--text-muted)] border border-[var(--border-color)]')
-            }, t === 'despesa' ? 'Despesa' : 'Receita');
-          })
-        ),
-        createElement('input', { type: 'text', placeholder: 'Nome da categoria…', value: nome, onChange: function(e) { setNome(e.target.value); }, className: 'input-modern', required: true }),
-        createElement('input', { type: 'text', placeholder: 'Observação (opcional)', value: obs, onChange: function(e) { setObs(e.target.value); }, className: 'input-modern' }),
-        createElement('div', { className: 'flex gap-2' },
-          createElement('button', { type: 'submit', className: 'btn-primary flex-1' }, editando ? 'Atualizar' : 'Salvar'),
-          createElement('button', { type: 'button', onClick: reset, className: 'btn-secondary flex-1' }, 'Cancelar')
-        )
-      ) : null,
-      createElement(
-        'div', { className: 'p-4' },
-        loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)] font-body' }, 'Carregando…') :
-        categorias.length === 0 ? createElement(
-          'div', { className: 'text-center py-8 text-[var(--text-muted)] font-body' },
-          createElement('i', { className: 'fas fa-folder-open text-4xl mb-2 block' }),
-          createElement('p', null, 'Nenhuma categoria cadastrada'),
-          createElement('p', { className: 'text-sm' }, 'Clique no + para criar')
-        ) :
-        createElement(
-          'div', { className: 'grid grid-cols-2 gap-3' },
-          createElement(
-            'div', null,
-            createElement('p', { className: 'text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-2 border-b border-[var(--border-color)] pb-1 font-body' }, 'Despesas'),
-            despesas.length === 0 ? createElement('p', { className: 'text-[var(--text-muted)] text-xs py-2 font-body' }, 'Nenhuma') :
-            despesas.map(function(cat) {
-              return createElement(
-                'div', { key: cat.id, className: 'card-modern p-3 mb-2 hover:border-[#ef4444] transition-all cursor-pointer group' },
-                createElement(
-                  'div', { className: 'flex items-start justify-between' },
-                  createElement(
-                    'div', { className: 'flex-1 min-w-0' },
-                    createElement('p', { className: 'text-sm font-bold truncate font-body' }, cat.nome),
-                    cat.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)] truncate font-body' }, cat.obs) : null
-                  ),
-                  createElement(
-                    'div', { className: 'flex items-center gap-1 flex-shrink-0 ml-2' },
-                    createElement('button', { onClick: function(e) { e.stopPropagation(); edit(cat); }, className: 'text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-1 opacity-0 group-hover:opacity-100' }, createElement('i', { className: 'fas fa-pen' })),
-                    createElement('button', { onClick: function(e) { e.stopPropagation(); del(cat.id); }, className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1 opacity-0 group-hover:opacity-100' }, createElement('i', { className: 'fas fa-trash' }))
-                  )
-                )
-              );
-            })
-          ),
-          createElement(
-            'div', null,
-            createElement('p', { className: 'text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-2 border-b border-[var(--border-color)] pb-1 font-body' }, 'Receitas'),
-            receitas.length === 0 ? createElement('p', { className: 'text-[var(--text-muted)] text-xs py-2 font-body' }, 'Nenhuma') :
-            receitas.map(function(cat) {
-              return createElement(
-                'div', { key: cat.id, className: 'card-modern p-3 mb-2 hover:border-[var(--accent)] transition-all cursor-pointer group' },
-                createElement(
-                  'div', { className: 'flex items-start justify-between' },
-                  createElement(
-                    'div', { className: 'flex-1 min-w-0' },
-                    createElement('p', { className: 'text-sm font-bold truncate font-body' }, cat.nome),
-                    cat.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)] truncate font-body' }, cat.obs) : null
-                  ),
-                  createElement(
-                    'div', { className: 'flex items-center gap-1 flex-shrink-0 ml-2' },
-                    createElement('button', { onClick: function(e) { e.stopPropagation(); edit(cat); }, className: 'text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-1 opacity-0 group-hover:opacity-100' }, createElement('i', { className: 'fas fa-pen' })),
-                    createElement('button', { onClick: function(e) { e.stopPropagation(); del(cat.id); }, className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1 opacity-0 group-hover:opacity-100' }, createElement('i', { className: 'fas fa-trash' }))
-                  )
-                )
-              );
-            })
-          )
-        )
-      )
-    );
-  }
-
-  // ============================================
-  // TRANSAÇÕES
+  // TRANSAÇÕES (COM CAMPO "JÁ PAGO?")
   // ============================================
   function Transacoes() {
     var _t1 = useState(false), showForm = _t1[0], setShowForm = _t1[1];
@@ -1627,6 +750,7 @@
     var _t12 = useState(false), isParcelado = _t12[0], setIsParcelado = _t12[1];
     var _t13 = useState(1), totalParcelas = _t13[0], setTotalParcelas = _t13[1];
     var _t14 = useState(''), primeiraData = _t14[0], setPrimeiraData = _t14[1];
+    var _t15 = useState(false), pago = _t15[0], setPago = _t15[1]; // NOVO CAMPO
 
     useEffect(function() {
       supabase.auth.getUser().then(function(result) {
@@ -1651,7 +775,7 @@
 
     var resetForm = function() {
       setNome(''); setCategoriaNome(''); setValor(''); setData(''); setObs('');
-      setIsParcelado(false); setTotalParcelas(1); setPrimeiraData('');
+      setIsParcelado(false); setTotalParcelas(1); setPrimeiraData(''); setPago(false);
       setShowForm(false);
     };
 
@@ -1673,7 +797,7 @@
             data_vencimento: dataParcela.toISOString().split('T')[0],
             parcela_atual: i + 1,
             total_parcelas: totalParcelas,
-            pago: false,
+            pago: false, // Parcelas sempre começam pendentes
             obs: obs.trim() || null,
             user_id: userId
           });
@@ -1690,7 +814,7 @@
           tipo: tipo,
           data: data || new Date().toISOString().split('T')[0],
           obs: obs.trim() || null,
-          pago: false,
+          pago: pago, // NOVO: Salva o status de pago
           user_id: userId
         };
         supabase.from('transacoes').insert([trans]).then(function() {
@@ -1742,8 +866,22 @@
         createElement(CurrencyInput, { value: valor, onChange: setValor, placeholder: '0,00', className: 'input-modern', required: true }),
         createElement('input', { type: 'date', value: data, onChange: function(e) { setData(e.target.value); }, className: 'input-modern' }),
         createElement('input', { type: 'text', placeholder: 'Observação (opcional)', value: obs, onChange: function(e) { setObs(e.target.value); }, className: 'input-modern' }),
+        
+        // NOVO CAMPO: Já pago?
         createElement(
           'div', { className: 'flex items-center gap-3' },
+          createElement('input', {
+            type: 'checkbox',
+            id: 'pago',
+            checked: pago,
+            onChange: function(e) { setPago(e.target.checked); },
+            className: 'checkbox-modern'
+          }),
+          createElement('label', { htmlFor: 'pago', className: 'text-sm font-medium font-body' }, 'Já está pago? (Se não marcar, vai para o Extrato)')
+        ),
+
+        createElement(
+          'div', { className: 'flex items-center gap-3 mt-2' },
           createElement('input', {
             type: 'checkbox',
             id: 'parcelado',
@@ -1793,7 +931,7 @@
             createElement(
               'div', { className: 'flex-1' },
               createElement('p', { className: 'font-bold text-sm font-body' }, t.nome),
-              createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, t.categoria_nome + ' • ' + formatDate(t.data)),
+              createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, t.categoria_nome + ' • ' + formatDate(t.data) + (t.pago ? ' • ✅ Pago' : ' • ⏳ Pendente')),
               t.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, createElement('i', { className: 'fas fa-pencil-alt mr-1' }), t.obs) : null
             ),
             createElement(
@@ -1813,29 +951,12 @@
   }
 
   // ============================================
-  // METAS
+  // METAS (Simplificado)
   // ============================================
   function Metas() {
-    var _m1 = useState('objetivos'), subTab = _m1[0], setSubTab = _m1[1];
-    var _m2 = useState([]), objetivos = _m2[0], setObjetivos = _m2[1];
-    var _m3 = useState([]), economias = _m3[0], setEconomias = _m3[1];
-    var _m4 = useState(true), loading = _m4[0], setLoading = _m4[1];
-    var _m5 = useState(null), userId = _m5[0], setUserId = _m5[1];
-
-    var _o1 = useState(false), showObjForm = _o1[0], setShowObjForm = _o1[1];
-    var _o2 = useState(''), objNome = _o2[0], setObjNome = _o2[1];
-    var _o3 = useState(''), objValor = _o3[0], setObjValor = _o3[1];
-    var _o4 = useState(''), objPrazo = _o4[0], setObjPrazo = _o4[1];
-    var _o5 = useState('fa-flag'), objIcone = _o5[0], setObjIcone = _o5[1];
-    var _o6 = useState(null), objEditando = _o6[0], setObjEditando = _o6[1];
-
-    var _e1 = useState(false), showEcoForm = _e1[0], setShowEcoForm = _e1[1];
-    var _e2 = useState(''), ecoNome = _e2[0], setEcoNome = _e2[1];
-    var _e3 = useState(''), ecoValor = _e3[0], setEcoValor = _e3[1];
-    var _e4 = useState(''), ecoData = _e4[0], setEcoData = _e4[1];
-    var _e5 = useState(''), ecoObjetivoId = _e5[0], setEcoObjetivoId = _e5[1];
-    var _e6 = useState(''), ecoObs = _e6[0], setEcoObs = _e6[1];
-    var _e7 = useState(null), ecoEditando = _e7[0], setEcoEditando = _e7[1];
+    var _m1 = useState([]), objetivos = _m1[0], setObjetivos = _m1[1];
+    var _m2 = useState([], { nome: '', valor: '' }), novaMeta = _m2[0], setNovaMeta = _m2[1];
+    var _m3 = useState(null), userId = _m3[0], setUserId = _m3[1];
 
     useEffect(function() {
       supabase.auth.getUser().then(function(result) {
@@ -1845,248 +966,46 @@
 
     var load = function() {
       if (!userId) return;
-      setLoading(true);
-      Promise.all([
-        supabase.from('objetivos').select('*').eq('user_id', userId).order('created_at'),
-        supabase.from('economias').select('*').eq('user_id', userId).order('data', { ascending: false })
-      ]).then(function(results) {
-        if (!results[0].error) setObjetivos(results[0].data || []);
-        if (!results[1].error) setEconomias(results[1].data || []);
-        setLoading(false);
-      }).catch(function() { setLoading(false); });
+      supabase.from('objetivos').select('*').eq('user_id', userId).order('created_at')
+        .then(function(result) { if (!result.error) setObjetivos(result.data || []); });
     };
 
     useEffect(function() { if (userId) load(); }, [userId]);
 
-    var resetObj = function() { setObjNome(''); setObjValor(''); setObjPrazo(''); setObjIcone('fa-flag'); setObjEditando(null); setShowObjForm(false); };
-
-    var submitObjetivo = function(e) {
+    var submit = function(e) {
       e.preventDefault();
-      if (!objNome.trim() || !objValor || !userId) return;
-      var dados = { nome: objNome.trim(), valor_alvo: parseCurrency(objValor), prazo: objPrazo || null, icone: objIcone, user_id: userId };
-      var promise = objEditando
-        ? supabase.from('objetivos').update({ nome: dados.nome, valor_alvo: dados.valor_alvo, prazo: dados.prazo, icone: dados.icone }).eq('id', objEditando)
-        : supabase.from('objetivos').insert([dados]);
-      promise.then(function() { load(); resetObj(); });
-    };
-
-    var delObjetivo = function(id) {
-      if (window.confirm('Excluir este objetivo?')) {
-        supabase.from('economias').update({ objetivo_id: null }).eq('objetivo_id', id).then(function() {
-          supabase.from('objetivos').delete().eq('id', id).then(function() { load(); });
-        });
-      }
-    };
-
-    var editObjetivo = function(o) {
-      setObjNome(o.nome); setObjValor(formatCurrency(o.valor_alvo)); setObjPrazo(o.prazo || ''); setObjIcone(o.icone || 'fa-flag'); setObjEditando(o.id); setShowObjForm(true);
-    };
-
-    var resetEco = function() { setEcoNome(''); setEcoValor(''); setEcoData(''); setEcoObjetivoId(''); setEcoObs(''); setEcoEditando(null); setShowEcoForm(false); };
-
-    var submitEconomia = function(e) {
-      e.preventDefault();
-      if (!ecoNome.trim() || !ecoValor || !userId) return;
-      var dados = {
-        nome: ecoNome.trim(), valor: parseCurrency(ecoValor), data: ecoData || new Date().toISOString().split('T')[0],
-        objetivo_id: ecoObjetivoId || null, obs: ecoObs.trim() || null, user_id: userId
-      };
-      var promise = ecoEditando
-        ? supabase.from('economias').update(dados).eq('id', ecoEditando)
-        : supabase.from('economias').insert([dados]);
-      promise.then(function() { load(); resetEco(); });
-    };
-
-    var delEconomia = function(id) {
-      if (window.confirm('Excluir esta economia?')) {
-        supabase.from('economias').delete().eq('id', id).then(function() { load(); });
-      }
-    };
-
-    var editEconomia = function(ec) {
-      setEcoNome(ec.nome); setEcoValor(formatCurrency(ec.valor)); setEcoData(ec.data); setEcoObjetivoId(ec.objetivo_id || ''); setEcoObs(ec.obs || ''); setEcoEditando(ec.id); setShowEcoForm(true);
-    };
-
-    var streak = useMemo(function() { return computeStreak(economias); }, [economias]);
-    var totalGuardado = useMemo(function() { return economias.reduce(function(acc, e) { return acc + Number(e.valor); }, 0); }, [economias]);
-
-    var nomeObjetivo = function(id) {
-      var o = objetivos.filter(function(x) { return x.id === id; })[0];
-      return o ? (o.icone || 'fa-flag') + ' ' + o.nome : null;
+      if (!novaMeta.nome || !novaMeta.valor || !userId) return;
+      supabase.from('objetivos').insert([{
+        nome: novaMeta.nome,
+        valor_alvo: parseCurrency(novaMeta.valor),
+        user_id: userId
+      }]).then(function() { load(); setNovaMeta({ nome: '', valor: '' }); });
     };
 
     return createElement(
       'div',
       { className: 'pb-24 max-w-md mx-auto font-body' },
+      createElement(Header, null),
       createElement(
-        'div',
-        { className: 'sticky top-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border-color)] p-4' },
+        'div', { className: 'p-4 space-y-4' },
+        createElement('h1', { className: 'text-xl font-bold font-display mb-4' }, createElement('i', { className: 'fas fa-bullseye mr-2' }), 'Metas'),
         createElement(
-          'div', { className: 'flex items-center justify-between mb-3' },
-          createElement('h1', { className: 'text-xl font-bold font-display' }, createElement('i', { className: 'fas fa-bullseye mr-2' }), 'Metas'),
-          streak > 0 ? createElement('span', { className: 'streak-chip float-badge' }, createElement('i', { className: 'fas fa-fire mr-1' }), ' ' + streak + (streak === 1 ? ' mês' : ' meses')) : null
+          'form', { onSubmit: submit, className: 'space-y-3 card-modern' },
+          createElement('input', { type: 'text', placeholder: 'Nome da meta', value: novaMeta.nome, onChange: function(e) { setNovaMeta({ ...novaMeta, nome: e.target.value }); }, className: 'input-modern', required: true }),
+          createElement(CurrencyInput, { value: novaMeta.valor, onChange: function(v) { setNovaMeta({ ...novaMeta, valor: v }); }, placeholder: 'Valor alvo', className: 'input-modern', required: true }),
+          createElement('button', { type: 'submit', className: 'btn-primary w-full' }, 'Adicionar Meta')
         ),
-        createElement(
-          'div', { className: 'flex gap-2' },
-          createElement('button', {
-            className: 'subtab-btn ' + (subTab === 'objetivos' ? 'active' : ''),
-            onClick: function() { setSubTab('objetivos'); }
-          }, createElement('i', { className: 'fas fa-flag mr-1' }), ' Objetivos'),
-          createElement('button', {
-            className: 'subtab-btn ' + (subTab === 'economias' ? 'active' : ''),
-            onClick: function() { setSubTab('economias'); }
-          }, createElement('i', { className: 'fas fa-coins mr-1' }), ' Economias')
-        )
-      ),
-      subTab === 'objetivos' ? createElement(
-        React.Fragment, null,
-        createElement(
-          'div', { className: 'p-4 pb-0' },
-          createElement('button', {
-            onClick: function() { showObjForm ? resetObj() : setShowObjForm(true); },
-            className: 'btn-secondary w-full mb-4'
-          }, showObjForm ? createElement('i', { className: 'fas fa-times mr-2' }) : createElement('i', { className: 'fas fa-plus mr-2' }), showObjForm ? 'Cancelar' : 'Novo Objetivo')
-        ),
-        showObjForm ? createElement(
-          'form', { onSubmit: submitObjetivo, className: 'mx-4 mb-4 p-4 space-y-4 card-modern' },
-          createElement(
-            'div', { className: 'flex flex-wrap gap-2' },
-            ICONE_OPCOES.map(function(ic) {
-              return createElement('button', {
-                key: ic, type: 'button', onClick: function() { setObjIcone(ic); },
-                className: 'emoji-pick ' + (objIcone === ic ? 'selected' : '')
-              }, createElement('i', { className: 'fas ' + ic }));
-            })
-          ),
-          createElement('input', { type: 'text', placeholder: 'Nome do objetivo', value: objNome, onChange: function(e) { setObjNome(e.target.value); }, className: 'input-modern', required: true }),
-          createElement(CurrencyInput, { value: objValor, onChange: setObjValor, placeholder: 'Valor alvo (R$)', className: 'input-modern', required: true }),
-          createElement('div', null,
-            createElement('label', { className: 'text-xs text-[var(--text-muted)] mb-1 block font-bold font-body' }, 'Prazo desejado (opcional)'),
-            createElement('input', { type: 'date', value: objPrazo, onChange: function(e) { setObjPrazo(e.target.value); }, className: 'input-modern' })
-          ),
-          createElement('div', { className: 'flex gap-2' },
-            createElement('button', { type: 'submit', className: 'btn-primary flex-1' }, objEditando ? 'Atualizar' : 'Criar Objetivo'),
-            createElement('button', { type: 'button', onClick: resetObj, className: 'btn-secondary flex-1' }, 'Cancelar')
-          )
-        ) : null,
-        createElement(
-          'div', { className: 'p-4 space-y-4' },
-          loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)] font-body' }, 'Carregando…') :
-          objetivos.length === 0 ? createElement(
-            'div', { className: 'text-center py-8 text-[var(--text-muted)] font-body' },
-            createElement('i', { className: 'fas fa-flag text-4xl mb-2 block' }),
-            createElement('p', null, 'Nenhum objetivo cadastrado'),
-            createElement('p', { className: 'text-sm' }, 'Crie um objetivo e vincule suas economias')
-          ) :
-          objetivos.map(function(o) {
-            var econsDoObjetivo = economias.filter(function(e) { return e.objetivo_id === o.id; });
-            var pred = predictGoal(o, econsDoObjetivo);
-            var lvl = levelInfo(pred.pct);
-            var prazoDate = o.prazo ? new Date(o.prazo + 'T00:00:00') : null;
-
-            var previsaoTexto;
-            if (pred.pct >= 100) {
-              previsaoTexto = 'Objetivo alcançado! Parabéns pela conquista.';
-            } else if (pred.mesesRestantes === null) {
-              previsaoTexto = 'Registre economias vinculadas a este objetivo para calcular a previsão.';
-            } else {
-              var dp = pred.dataPrevista;
-              var mesAno = dp.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
-              previsaoTexto = 'No ritmo atual (' + formatCurrency(pred.mediaMensal) + '/mês), você alcança esse objetivo em ' +
-                pred.mesesRestantes + (pred.mesesRestantes === 1 ? ' mês' : ' meses') + ' — por volta de ' + mesAno + '.';
-            }
-
-            return createElement(
-              'div', { key: o.id, className: 'card-modern fade-in-up' },
-              createElement(
-                'div', { className: 'flex items-start gap-3 mb-3' },
-                createElement('div', { className: 'goal-icon-circle' }, createElement('i', { className: 'fas ' + (o.icone || 'fa-flag') })),
-                createElement(
-                  'div', { className: 'flex-1 min-w-0' },
-                  createElement('p', { className: 'font-bold text-base font-body' }, o.nome),
-                  createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' },
-                    formatCurrency(pred.total) + ' de ' + formatCurrency(o.valor_alvo) +
-                    (prazoDate ? ' • prazo: ' + prazoDate.toLocaleDateString('pt-BR') : '')
-                  )
-                ),
-                createElement(
-                  'div', { className: 'flex items-center gap-1 flex-shrink-0' },
-                  createElement('button', { onClick: function() { editObjetivo(o); }, className: 'text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-1' }, createElement('i', { className: 'fas fa-pen' })),
-                  createElement('button', { onClick: function() { delObjetivo(o.id); }, className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1' }, createElement('i', { className: 'fas fa-trash' }))
-                )
-              ),
-              createElement(
-                'div', { className: 'flex items-center justify-between mb-2' },
-                createElement('span', { className: 'level-pill', style: { background: lvl.color + '22', color: lvl.color } }, createElement('i', { className: 'fas ' + lvl.icon + ' mr-1' }), ' ' + lvl.label),
-                createElement('span', { className: 'text-sm font-bold font-display' }, pred.pct.toFixed(0) + '%')
-              ),
-              createElement(ProgressBar, { pct: pred.pct }),
-              createElement('p', { className: 'text-xs text-[var(--text-secondary)] mt-3 leading-relaxed font-body' }, createElement('i', { className: 'fas fa-rocket mr-1' }), ' ' + previsaoTexto)
-            );
-          })
-        )
-      ) : null,
-      subTab === 'economias' ? createElement(
-        React.Fragment, null,
-        createElement(
-          'div', { className: 'p-4 pb-0 space-y-3' },
-          createElement(
-            'div', { className: 'card-modern flex items-center justify-between' },
-            createElement('span', { className: 'text-sm text-[var(--text-muted)] font-body' }, 'Total guardado'),
-            createElement('span', { className: 'text-lg font-bold text-[var(--accent)] font-display' }, formatCurrency(totalGuardado))
-          ),
-          createElement('button', {
-            onClick: function() { showEcoForm ? resetEco() : setShowEcoForm(true); },
-            className: 'btn-secondary w-full'
-          }, showEcoForm ? createElement('i', { className: 'fas fa-times mr-2' }) : createElement('i', { className: 'fas fa-plus mr-2' }), showEcoForm ? 'Cancelar' : 'Nova Economia')
-        ),
-        showEcoForm ? createElement(
-          'form', { onSubmit: submitEconomia, className: 'mx-4 mt-4 mb-4 p-4 space-y-4 card-modern' },
-          createElement('input', { type: 'text', placeholder: 'Nome (ex: Aporte mensal)', value: ecoNome, onChange: function(e) { setEcoNome(e.target.value); }, className: 'input-modern', required: true }),
-          createElement(CurrencyInput, { value: ecoValor, onChange: setEcoValor, placeholder: 'Valor guardado (R$)', className: 'input-modern', required: true }),
-          createElement('input', { type: 'date', value: ecoData, onChange: function(e) { setEcoData(e.target.value); }, className: 'input-modern' }),
-          createElement(
-            'select', { value: ecoObjetivoId, onChange: function(e) { setEcoObjetivoId(e.target.value); }, className: 'select-modern' },
-            createElement('option', { value: '' }, 'Sem vínculo com objetivo'),
-            objetivos.map(function(o) { return createElement('option', { key: o.id, value: o.id }, createElement('i', { className: 'fas ' + (o.icone || 'fa-flag') }), ' ' + o.nome); })
-          ),
-          createElement('input', { type: 'text', placeholder: 'Observação (opcional)', value: ecoObs, onChange: function(e) { setEcoObs(e.target.value); }, className: 'input-modern' }),
-          createElement('div', { className: 'flex gap-2' },
-            createElement('button', { type: 'submit', className: 'btn-primary flex-1' }, ecoEditando ? 'Atualizar' : 'Salvar'),
-            createElement('button', { type: 'button', onClick: resetEco, className: 'btn-secondary flex-1' }, 'Cancelar')
-          )
-        ) : null,
-        createElement(
-          'div', { className: 'p-4 space-y-2' },
-          loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)] font-body' }, 'Carregando…') :
-          economias.length === 0 ? createElement(
-            'div', { className: 'text-center py-8 text-[var(--text-muted)] font-body' },
-            createElement('i', { className: 'fas fa-coins text-4xl mb-2 block' }),
-            createElement('p', null, 'Nenhuma economia registrada'),
-            createElement('p', { className: 'text-sm' }, 'Toda vez que guardar dinheiro, registre aqui')
-          ) :
-          economias.map(function(ec) {
-            var vinculo = nomeObjetivo(ec.objetivo_id);
-            return createElement(
-              'div', { key: ec.id, className: 'card-modern p-3 flex items-center justify-between' },
-              createElement(
-                'div', { className: 'flex-1 min-w-0' },
-                createElement('p', { className: 'font-bold text-sm truncate font-body' }, ec.nome),
-                createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' },
-                  formatDate(ec.data) + (vinculo ? ' • ' + vinculo : ' • sem vínculo')
-                ),
-                ec.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, createElement('i', { className: 'fas fa-pencil-alt mr-1' }), ec.obs) : null
-              ),
-              createElement(
-                'div', { className: 'flex items-center gap-2 flex-shrink-0' },
-                createElement('span', { className: 'font-bold text-[var(--accent)]' }, '+ ' + formatCurrency(ec.valor)),
-                createElement('button', { onClick: function() { editEconomia(ec); }, className: 'text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-1' }, createElement('i', { className: 'fas fa-pen' })),
-                createElement('button', { onClick: function() { delEconomia(ec.id); }, className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1' }, createElement('i', { className: 'fas fa-trash' }))
-              )
-            );
-          })
-        )
-      ) : null
+        objetivos.map(function(o) {
+          return createElement(
+            'div', { key: o.id, className: 'card-modern flex justify-between items-center' },
+            createElement('div', null,
+              createElement('p', { className: 'font-bold' }, o.nome),
+              createElement('p', { className: 'text-sm text-[var(--text-muted)]' }, 'Alvo: ' + formatCurrency(o.valor_alvo))
+            ),
+            createElement('span', { className: 'text-[var(--accent)] font-bold' }, formatCurrency(o.valor_alvo))
+          );
+        })
+      )
     );
   }
 
@@ -2095,8 +1014,6 @@
   // ============================================
   function Perfil() {
     var _p1 = useState(null), user = _p1[0], setUser = _p1[1];
-    var _p2 = useState(getTheme()), currentTheme = _p2[0], setCurrentTheme = _p2[1];
-    var _p3 = useState(getDefaultTheme()), defaultTheme = _p3[0], setDefaultThemeState = _p3[1];
 
     useEffect(function() {
       supabase.auth.getUser().then(function(result) {
@@ -2104,38 +1021,17 @@
       });
     }, []);
 
-    var changeTheme = function(theme) {
-      setTheme(theme);
-      setCurrentTheme(theme);
-    };
-
-    var setDefault = function(theme) {
-      setDefaultTheme(theme);
-      setDefaultThemeState(theme);
-    };
-
     var logout = function() {
       supabase.auth.signOut().then(function() { window.location.reload(); });
     };
 
-    var themes = [
-      { id: 'dark', label: 'Dark Modern', icon: 'fa-moon', dotClass: 'dark' },
-      { id: 'light', label: 'Light Modern', icon: 'fa-sun', dotClass: 'light' },
-      { id: 'pixel', label: 'Pixel 90', icon: 'fa-gamepad', dotClass: 'pixel' },
-      { id: 'rose', label: 'Rose', icon: 'fa-heart', dotClass: 'rose' },
-      { id: 'gold', label: 'Gold', icon: 'fa-crown', dotClass: 'gold' }
-    ];
-
     return createElement(
       'div',
       { className: 'pb-24 max-w-md mx-auto font-body' },
-      createElement(
-        'div',
-        { className: 'sticky top-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border-color)] p-4' },
-        createElement('h1', { className: 'text-xl font-bold font-display' }, createElement('i', { className: 'fas fa-user mr-2' }), 'Perfil')
-      ),
+      createElement(Header, null),
       createElement(
         'div', { className: 'p-4 space-y-4' },
+        createElement('h1', { className: 'text-xl font-bold font-display mb-4' }, createElement('i', { className: 'fas fa-user mr-2' }), 'Perfil'),
         createElement(
           'div', { className: 'card-modern flex items-center gap-4' },
           createElement('div', { className: 'w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--accent)] to-[var(--accent-dark)] flex items-center justify-center text-white text-xl font-bold font-display' },
@@ -2147,38 +1043,6 @@
             createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, 'Logado com ' + (user && user.app_metadata ? (user.app_metadata.provider || 'email').toUpperCase() : 'EMAIL'))
           )
         ),
-        createElement(
-          'div', { className: 'card-modern' },
-          createElement(
-            'div', { className: 'flex items-center justify-between mb-3' },
-            createElement('p', { className: 'text-sm font-bold font-display' }, createElement('i', { className: 'fas fa-palette mr-2' }), 'Temas'),
-            createElement('span', { className: 'text-xs text-[var(--text-muted)] font-body' }, 'Padrão: ' + themes.find(function(t) { return t.id === defaultTheme; })?.label || 'Dark Modern')
-          ),
-          createElement(
-            'div', { className: 'space-y-2' },
-            themes.map(function(theme) {
-              var active = currentTheme === theme.id;
-              var isDefault = defaultTheme === theme.id;
-              return createElement(
-                'div', { key: theme.id, className: 'flex items-center gap-2' },
-                createElement('button', {
-                  onClick: function() { changeTheme(theme.id); },
-                  className: 'theme-option ' + (active ? 'active' : '') + ' flex-1'
-                },
-                  createElement('div', { className: 'theme-dot ' + theme.dotClass }),
-                  createElement('span', { className: 'flex-1 text-left font-bold font-body' }, theme.label),
-                  active ? createElement('i', { className: 'fas fa-check-circle text-[var(--accent)]' }) : null,
-                  isDefault ? createElement('span', { className: 'badge-default' }, 'Padrão') : null
-                ),
-                createElement('button', {
-                  onClick: function() { setDefault(theme.id); },
-                  className: 'p-2 rounded-lg hover:bg-[var(--bg-card-hover)] transition-colors text-[var(--text-muted)] hover:text-[var(--accent)]',
-                  title: 'Definir como padrão'
-                }, createElement('i', { className: 'fas fa-star' }))
-              );
-            })
-          )
-        ),
         createElement('button', {
           onClick: logout,
           className: 'w-full p-3 rounded-xl border border-[#ef4444] text-[#ef4444] hover:bg-[#ef4444] hover:text-white transition-colors font-bold font-body'
@@ -2188,17 +1052,12 @@
   }
 
   // ============================================
-  // APP
+  // APP PRINCIPAL
   // ============================================
   function App() {
     var _a1 = useState(null), user = _a1[0], setUser = _a1[1];
     var _a2 = useState(true), loading = _a2[0], setLoading = _a2[1];
     var _a3 = useState('dashboard'), currentPage = _a3[0], setCurrentPage = _a3[1];
-
-    useEffect(function() {
-      var savedTheme = getDefaultTheme();
-      setTheme(savedTheme);
-    }, []);
 
     useEffect(function() {
       supabase.auth.getSession().then(function(_ref) {
@@ -2229,7 +1088,6 @@
     if (currentPage === 'dashboard') content = createElement(Dashboard, { setPage: setCurrentPage });
     else if (currentPage === 'transacoes') content = createElement(Transacoes, null);
     else if (currentPage === 'metas') content = createElement(Metas, null);
-    else if (currentPage === 'categorias') content = createElement(Categorias, null);
     else if (currentPage === 'perfil') content = createElement(Perfil, null);
     else content = createElement(Dashboard, { setPage: setCurrentPage });
 
