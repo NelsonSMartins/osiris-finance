@@ -269,54 +269,74 @@
       font-weight: 700;
       font-family: var(--font-display);
     }
-    .login-input-custom {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #10b981;
-      background: #1a1a1a;
-      color: #fff;
-      outline: none;
-      font-size: 16px;
-      margin-bottom: 15px;
+    
+    /* ===== ANIMAÇÕES GAMIFICADAS ===== */
+    @keyframes pulse-glow {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
     }
-    .login-input-custom:focus { border-color: #d4af37; box-shadow: 0 0 8px rgba(212, 175, 55, 0.3); }
-    .login-btn-custom {
+    .pulse-glow { animation: pulse-glow 2s infinite; }
+
+    .progress-track {
       width: 100%;
-      padding: 14px;
-      background: #10b981;
-      color: #000;
-      border: none;
-      border-radius: 8px;
+      height: 20px;
+      background: var(--bg-input);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--border-color);
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 20px;
+      transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+      background: linear-gradient(90deg, var(--accent), #f59e0b);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+      font-size: 10px;
       font-weight: bold;
-      font-size: 18px;
-      cursor: pointer;
-      transition: 0.3s;
-      margin-top: 10px;
-      font-family: var(--font-body);
+      color: #000;
     }
-    .login-btn-custom:hover { background: #059669; box-shadow: 0 0 15px #10b981; transform: scale(1.02); }
-    .login-google-btn {
-      width: 100%;
+
+    .streak-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, rgba(245,158,11,0.2), rgba(239,68,68,0.1));
+      border: 1px solid rgba(245,158,11,0.4);
+      color: var(--warning);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .level-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .goal-icon-circle {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #d4af37;
-      background: transparent;
-      color: #d4af37;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-      margin-bottom: 15px;
+      font-size: 26px;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      flex-shrink: 0;
     }
-    .login-google-btn:hover { background: #d4af37; color: #000; }
-    .login-error-msg { color: #ef4444; font-size: 14px; margin-bottom: 10px; font-weight: bold; }
-    .login-success-msg { color: #10b981; font-size: 14px; margin-bottom: 10px; font-weight: bold; }
-    .login-toggle-text { color: #94a3b8; font-size: 14px; cursor: pointer; transition: 0.3s; background: transparent; border: none; margin-top: 10px; }
-    .login-toggle-text:hover { color: #10b981; }
   </style>
 </head>
 <body>
@@ -375,6 +395,66 @@
     var start = new Date(date.getFullYear(), date.getMonth(), 1).toISOString().split('T')[0];
     var end = new Date(date.getFullYear(), date.getMonth() + 1, 0).toISOString().split('T')[0];
     return { start: start, end: end };
+  }
+
+  function monthKey(dateStr) {
+    var d = new Date(dateStr + 'T00:00:00');
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+  }
+
+  // ============================================
+  // ALGORITMOS PREDITIVOS E GAMIFICADOS
+  // ============================================
+  function computeMonthlyAverage(economias) {
+    var map = {};
+    economias.forEach(function(e) {
+      var k = monthKey(e.data);
+      map[k] = (map[k] || 0) + Number(e.valor);
+    });
+    var keys = Object.keys(map);
+    if (keys.length === 0) return 0;
+    var total = keys.reduce(function(acc, k) { return acc + map[k]; }, 0);
+    return total / keys.length;
+  }
+
+  function computeStreak(economias) {
+    var map = {};
+    economias.forEach(function(e) { map[monthKey(e.data)] = true; });
+    var streak = 0;
+    var cursor = new Date();
+    while (true) {
+      var k = cursor.getFullYear() + '-' + String(cursor.getMonth() + 1).padStart(2, '0');
+      if (map[k]) { streak++; cursor.setMonth(cursor.getMonth() - 1); }
+      else break;
+    }
+    return streak;
+  }
+
+  function levelInfo(pct) {
+    if (pct >= 100) return { label: '🏆 Conquistador', icon: 'fa-trophy', color: '#f59e0b' };
+    if (pct >= 75) return { label: '🔥 Reta Final', icon: 'fa-dumbbell', color: '#8b5cf6' };
+    if (pct >= 50) return { label: '🚀 Quase Lá', icon: 'fa-fire', color: '#10b981' };
+    if (pct >= 25) return { label: '📈 Em Progresso', icon: 'fa-rocket', color: '#3b82f6' };
+    return { label: '🧑‍🌾 Iniciante', icon: 'fa-seedling', color: '#64748b' };
+  }
+
+  function predictGoal(objetivo, economiasDoObjetivo) {
+    var total = economiasDoObjetivo.reduce(function(acc, e) { return acc + Number(e.valor); }, 0);
+    var alvo = Number(objetivo.valor_alvo) || 0;
+    var restante = Math.max(alvo - total, 0);
+    var mediaMensal = computeMonthlyAverage(economiasDoObjetivo);
+    var pct = alvo > 0 ? Math.min((total / alvo) * 100, 100) : 0;
+    var mesesRestantes = null;
+    var dataPrevista = null;
+    if (restante <= 0) {
+      mesesRestantes = 0;
+    } else if (mediaMensal > 0) {
+      mesesRestantes = Math.ceil(restante / mediaMensal);
+      var d = new Date();
+      d.setMonth(d.getMonth() + mesesRestantes);
+      dataPrevista = d;
+    }
+    return { total: total, restante: restante, mediaMensal: mediaMensal, pct: pct, mesesRestantes: mesesRestantes, dataPrevista: dataPrevista };
   }
 
   // ============================================
@@ -464,40 +544,37 @@
   }
 
   // ============================================
-  // LOGIN (COM GOOGLE DE VOLTA)
+  // LOGIN (APENAS GOOGLE)
   // ============================================
   function Login(props) {
     var onLogin = props.onLogin;
-    var _s1 = useState(''), email = _s1[0], setEmail = _s1[1];
-    var _s2 = useState(''), password = _s2[0], setPassword = _s2[1];
-    var _s3 = useState(false), isSignUp = _s3[0], setIsSignUp = _s3[1];
-    var _s4 = useState(false), loading = _s4[0], setLoading = _s4[1];
-    var _s5 = useState(''), error = _s5[0], setError = _s5[1];
-    var _s6 = useState(''), success = _s6[0], setSuccess = _s6[1];
-
-    var handleSubmit = function(e) {
-      e.preventDefault();
-      setLoading(true); setError(''); setSuccess('');
-      var promise = isSignUp ? supabase.auth.signUp({ email: email, password: password }) : supabase.auth.signInWithPassword({ email: email, password: password });
-      promise.then(function(result) {
-        if (result.error) {
-          setError(result.error.message);
-        } else if (isSignUp) {
-          setSuccess('Conta criada! Verifique seu e-mail.');
-          setEmail(''); setPassword('');
-        } else {
-          onLogin(result.data.user);
-        }
-        setLoading(false);
-      }).catch(function(err) { setError(err.message || 'Erro'); setLoading(false); });
-    };
+    var _s1 = useState(false), loading = _s1[0], setLoading = _s1[1];
+    var _s2 = useState(''), error = _s2[0], setError = _s2[1];
 
     var handleGoogle = function() {
       setLoading(true); setError('');
-      supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin + '/osiris-finance/' } })
-        .then(function(result) { if (result.error) { setError(result.error.message); setLoading(false); } })
-        .catch(function(err) { setError(err.message); setLoading(false); });
+      supabase.auth.signInWithOAuth({ 
+        provider: 'google', 
+        options: { redirectTo: window.location.origin } 
+      })
+      .then(function(result) { 
+        if (result.error) { 
+          setError(result.error.message); 
+          setLoading(false); 
+        } 
+      })
+      .catch(function(err) { setError(err.message); setLoading(false); });
     };
+
+    // Verifica se o usuário já voltou do Google
+    useEffect(function() {
+      supabase.auth.getSession().then(function(_ref) {
+        var session = _ref.data.session;
+        if (session && session.user) {
+          onLogin(session.user);
+        }
+      });
+    }, []);
 
     return createElement(
       'div',
@@ -511,56 +588,24 @@
           createElement('img', { src: 'logo.png', alt: 'Logo Osiris' })
         ),
         createElement('h1', { className: 'login-title-custom' }, 'OSIRIS'),
+        createElement('p', { className: 'text-[#94a3b8] text-sm mb-6 font-body' }, 'Controle Financeiro Inteligente'),
+        
+        error ? createElement('p', { className: 'login-error-msg mb-4' }, createElement('i', { className: 'fas fa-exclamation-circle' }), ' ' + error) : null,
+        
         createElement('button', {
           onClick: handleGoogle,
           disabled: loading,
           className: 'login-google-btn'
         },
           createElement('img', { src: 'https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg', alt: 'Google', style: { width: '20px', height: '20px' } }),
-          'Entrar com Google'
-        ),
-        createElement('div', { className: 'flex items-center gap-4 my-4' },
-          createElement('div', { className: 'flex-1 h-px bg-[#2d3a4a]' }),
-          createElement('span', { className: 'text-[#94a3b8] text-sm font-body' }, 'ou'),
-          createElement('div', { className: 'flex-1 h-px bg-[#2d3a4a]' })
-        ),
-        createElement(
-          'form',
-          { onSubmit: handleSubmit, className: 'space-y-4' },
-          createElement('input', {
-            type: 'email',
-            placeholder: 'E-mail',
-            value: email,
-            onChange: function(e) { setEmail(e.target.value); },
-            className: 'login-input-custom'
-          }),
-          createElement('input', {
-            type: 'password',
-            placeholder: 'Senha (6+)',
-            value: password,
-            onChange: function(e) { setPassword(e.target.value); },
-            className: 'login-input-custom',
-            minLength: 6
-          }),
-          error ? createElement('p', { className: 'login-error-msg' }, createElement('i', { className: 'fas fa-exclamation-circle' }), ' ' + error) : null,
-          success ? createElement('p', { className: 'login-success-msg' }, createElement('i', { className: 'fas fa-check-circle' }), ' ' + success) : null,
-          createElement('button', {
-            type: 'submit',
-            disabled: loading,
-            className: 'login-btn-custom'
-          }, loading ? 'Carregando...' : (isSignUp ? 'Criar Conta' : 'Entrar')),
-          createElement('button', {
-            type: 'button',
-            onClick: function() { setIsSignUp(!isSignUp); setError(''); setSuccess(''); },
-            className: 'login-toggle-text'
-          }, isSignUp ? '← Já tem conta? Entre' : '→ Não tem conta? Cadastre-se')
+          loading ? 'Entrando...' : 'Entrar com Google'
         )
       )
     );
   }
 
   // ============================================
-  // DASHBOARD (Painel, Extrato e GRÁFICO DE BARRAS)
+  // DASHBOARD (Painel, Extrato, Gráfico e Metas)
   // ============================================
   function Dashboard(props) {
     var setPage = props.setPage;
@@ -569,6 +614,8 @@
     var _d3 = useState(true), loading = _d3[0], setLoading = _d3[1];
     var _d4 = useState(null), userId = _d4[0], setUserId = _d4[1];
     var _d5 = useState('saude'), dashMode = _d5[0], setDashMode = _d5[1];
+    var _d6 = useState([]), objetivos = _d6[0], setObjetivos = _d6[1];
+    var _d7 = useState([]), economias = _d7[0], setEconomias = _d7[1];
 
     var chartRef = useRef(null);
     var chartInstance = useRef(null);
@@ -595,8 +642,22 @@
         }).catch(function() { setLoading(false); });
     };
 
+    var loadMetas = function() {
+      if (!userId) return;
+      Promise.all([
+        supabase.from('objetivos').select('*').eq('user_id', userId).order('created_at'),
+        supabase.from('economias').select('*').eq('user_id', userId).order('data', { ascending: false })
+      ]).then(function(results) {
+        if (!results[0].error) setObjetivos(results[0].data || []);
+        if (!results[1].error) setEconomias(results[1].data || []);
+      }).catch(function() {});
+    };
+
     useEffect(function() {
-      if (userId) loadTransactions();
+      if (userId) {
+        loadTransactions();
+        loadMetas();
+      }
     }, [currentDate, userId]);
 
     var summary = useMemo(function() {
@@ -605,11 +666,9 @@
       var totalReceitas = receitas.reduce(function(acc, t) { return acc + Number(t.valor); }, 0);
       var totalDespesas = despesas.reduce(function(acc, t) { return acc + Number(t.valor); }, 0);
       
-      // Apenas despesas NÃO pagas vão para o Extrato
       var despesasPendentes = despesas.filter(function(t) { return !t.pago; });
       var totalPendentes = despesasPendentes.reduce(function(acc, t) { return acc + Number(t.valor); }, 0);
 
-      // Mapa para o gráfico de barras
       var map = {};
       despesas.forEach(function(t) { 
         var nomeCat = t.categoria_nome || 'Sem categoria';
@@ -627,16 +686,15 @@
       };
     }, [transactions]);
 
-    // Efeito para desenhar o GRÁFICO DE BARRAS
+    // Efeito para desenhar o GRÁFICO DE BARRAS (Vertical)
     useEffect(function() {
       if (chartInstance.current) chartInstance.current.destroy();
       if (!chartRef.current || summary.categorias.length === 0) return;
 
       var ctx = chartRef.current.getContext('2d');
-      var labels = summary.categorias.slice(0, 10).map(function(c) { return c.nome; }); // Pega as 10 principais
+      var labels = summary.categorias.slice(0, 10).map(function(c) { return c.nome; });
       var data = summary.categorias.slice(0, 10).map(function(c) { return c.total; });
       
-      // Gerando cores gradientes de verde
       var colors = data.map(function(_, i) {
         var intensity = 0.7 + (i / data.length) * 0.3;
         return 'rgba(16, 185, 129, ' + intensity + ')';
@@ -655,7 +713,7 @@
           }] 
         },
         options: {
-          indexAxis: 'y', // Transforma em gráfico HORIZONTAL
+          indexAxis: 'x', // Barras em PÉ (Vertical)
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
@@ -669,11 +727,11 @@
             }
           },
           scales: {
-            x: {
-              grid: { color: 'rgba(255, 255, 255, 0.05)' },
-              ticks: { color: '#94a3b8', font: { size: 10 } }
-            },
             y: {
+              grid: { color: 'rgba(255, 255, 255, 0.05)' },
+              ticks: { color: '#94a3b8', font: { size: 10 }, callback: function(value) { return 'R$ ' + value; } }
+            },
+            x: {
               grid: { display: false },
               ticks: { color: '#94a3b8', font: { size: 11 } }
             }
@@ -700,6 +758,17 @@
       });
     };
 
+    // GAMIFICAÇÃO DAS METAS
+    var metasResumo = useMemo(function() {
+      return objetivos.map(function(o) {
+        var econsDoObjetivo = economias.filter(function(e) { return e.objetivo_id === o.id; });
+        var pred = predictGoal(o, econsDoObjetivo);
+        return { objetivo: o, pred: pred };
+      }).sort(function(a, b) { return b.pred.pct - a.pred.pct; });
+    }, [objetivos, economias]);
+
+    var globalStreak = useMemo(function() { return computeStreak(economias); }, [economias]);
+
     return createElement(
       'div',
       { className: 'pb-24 max-w-md mx-auto font-body' },
@@ -723,10 +792,19 @@
         ),
 
         // ============================================
-        // VISÃO GERAL (COM GRÁFICO)
+        // VISÃO GERAL (COM GRÁFICO E METAS GAMIFICADAS)
         // ============================================
         dashMode === 'saude' ? createElement(
           React.Fragment, null,
+
+          // Streak e Nível Global
+          globalStreak > 0 ? createElement(
+            'div',
+            { className: 'flex items-center justify-between' },
+            createElement('span', { className: 'streak-chip float-badge' }, createElement('i', { className: 'fas fa-fire mr-1' }), ' ' + globalStreak + (globalStreak === 1 ? ' mês' : ' meses') + ' de economia'),
+            createElement('span', { className: 'text-xs text-[var(--text-muted)]' }, economias.length + ' depósitos')
+          ) : null,
+
           createElement(
             'div',
             { className: 'grid grid-cols-3 gap-3' },
@@ -765,6 +843,62 @@
                 : createElement('canvas', { ref: chartRef })
             )
           ),
+
+          // METAS GAMIFICADAS
+          metasResumo.length > 0 ? createElement(
+            'div',
+            { className: 'card-modern' },
+            createElement(
+              'div',
+              { className: 'flex items-center justify-between mb-4' },
+              createElement('h3', { className: 'text-sm font-bold font-display' }, createElement('i', { className: 'fas fa-bullseye mr-2' }), 'Suas Metas'),
+              createElement('button', {
+                onClick: function() { setPage('metas'); },
+                className: 'text-[var(--accent)] text-xs font-bold hover:underline font-body'
+              }, 'Ver todas →')
+            ),
+            createElement(
+              'div',
+              { className: 'space-y-4' },
+              metasResumo.slice(0, 3).map(function(m) {
+                var lvl = levelInfo(m.pred.pct);
+                var previsaoTexto;
+                if (m.pred.pct >= 100) {
+                  previsaoTexto = '🏆 Meta alcançada! Parabéns!';
+                } else if (m.pred.mesesRestantes === null) {
+                  previsaoTexto = 'Deposite dinheiro para ver a previsão.';
+                } else {
+                  previsaoTexto = 'Faltam ' + m.pred.mesesRestantes + ' meses!';
+                }
+
+                return createElement(
+                  'div',
+                  { key: m.objetivo.id },
+                  createElement(
+                    'div',
+                    { className: 'flex items-center justify-between mb-1.5' },
+                    createElement('span', { className: 'text-sm font-bold font-body' }, createElement('i', { className: 'fas ' + (m.objetivo.icone || 'fa-flag') + ' mr-1' }), ' ' + m.objetivo.nome),
+                    createElement('span', { className: 'text-xs font-bold', style: { color: lvl.color } }, lvl.label + ' (' + m.pred.pct.toFixed(0) + '%)')
+                  ),
+                  createElement(
+                    'div',
+                    { className: 'progress-track' },
+                    createElement(
+                      'div',
+                      { className: 'progress-fill ' + (m.pred.pct >= 100 ? 'milestone-100' : ''), style: { width: m.pred.pct + '%' } },
+                      m.pred.pct >= 50 ? m.pred.pct.toFixed(0) + '%' : ''
+                    )
+                  ),
+                  createElement(
+                    'div',
+                    { className: 'flex items-center justify-between mt-1 text-xs text-[var(--text-muted)]' },
+                    createElement('span', null, 'Total: ' + formatCurrency(m.pred.total)),
+                    createElement('span', { style: { color: lvl.color } }, previsaoTexto)
+                  )
+                );
+              })
+            )
+          ) : null,
 
           createElement(
             'div', { className: 'card-modern' },
@@ -861,7 +995,7 @@
   }
 
   // ============================================
-  // TRANSAÇÕES (COM CAMPO "JÁ PAGO?" + PARCELAS CORRIGIDAS)
+  // TRANSAÇÕES (COM CAMPO DE ECONOMIA)
   // ============================================
   function Transacoes() {
     var _t1 = useState(false), showForm = _t1[0], setShowForm = _t1[1];
@@ -869,16 +1003,20 @@
     var _t3 = useState([]), transactions = _t3[0], setTransactions = _t3[1];
     var _t4 = useState(true), loading = _t4[0], setLoading = _t4[1];
     var _t5 = useState([]), categorias = _t5[0], setCategorias = _t5[1];
-    var _t6 = useState(''), nome = _t6[0], setNome = _t6[1];
-    var _t7 = useState(''), categoriaNome = _t7[0], setCategoriaNome = _t7[1];
-    var _t8 = useState(''), valor = _t8[0], setValor = _t8[1];
-    var _t9 = useState(''), data = _t9[0], setData = _t9[1];
-    var _t10 = useState(''), obs = _t10[0], setObs = _t10[1];
-    var _t11 = useState(null), userId = _t11[0], setUserId = _t11[1];
-    var _t12 = useState(false), isParcelado = _t12[0], setIsParcelado = _t12[1];
-    var _t13 = useState(1), totalParcelas = _t13[0], setTotalParcelas = _t13[1];
-    var _t14 = useState(''), primeiraData = _t14[0], setPrimeiraData = _t14[1];
-    var _t15 = useState(false), pago = _t15[0], setPago = _t15[1];
+    var _t6 = useState([]), objetivos = _t6[0], setObjetivos = _t6[1];
+    var _t7 = useState(''), nome = _t7[0], setNome = _t7[1];
+    var _t8 = useState(''), categoriaNome = _t8[0], setCategoriaNome = _t8[1];
+    var _t9 = useState(''), valor = _t9[0], setValor = _t9[1];
+    var _t10 = useState(''), data = _t10[0], setData = _t10[1];
+    var _t11 = useState(''), obs = _t11[0], setObs = _t11[1];
+    var _t12 = useState(null), userId = _t12[0], setUserId = _t12[1];
+    var _t13 = useState(false), isParcelado = _t13[0], setIsParcelado = _t13[1];
+    var _t14 = useState(1), totalParcelas = _t14[0], setTotalParcelas = _t14[1];
+    var _t15 = useState(''), primeiraData = _t15[0], setPrimeiraData = _t15[1];
+    var _t16 = useState(false), pago = _t16[0], setPago = _t16[1];
+    var _t17 = useState(false), isEconomia = _t17[0], setIsEconomia = _t17[1];
+    var _t18 = useState(''), economiaMetaId = _t18[0], setEconomiaMetaId = _t18[1];
+    var _t19 = useState(''), economiaValor = _t19[0], setEconomiaValor = _t19[1];
 
     useEffect(function() {
       supabase.auth.getUser().then(function(result) {
@@ -891,10 +1029,12 @@
       setLoading(true);
       Promise.all([
         supabase.from('categorias').select('*').eq('user_id', userId).order('nome'),
-        supabase.from('transacoes').select('*').eq('user_id', userId).order('data', { ascending: false }).limit(50)
+        supabase.from('transacoes').select('*').eq('user_id', userId).order('data', { ascending: false }).limit(50),
+        supabase.from('objetivos').select('*').eq('user_id', userId).order('created_at')
       ]).then(function(results) {
         if (!results[0].error) setCategorias(results[0].data || []);
         if (!results[1].error) setTransactions(results[1].data || []);
+        if (!results[2].error) setObjetivos(results[2].data || []);
         setLoading(false);
       }).catch(function() { setLoading(false); });
     };
@@ -904,6 +1044,7 @@
     var resetForm = function() {
       setNome(''); setCategoriaNome(''); setValor(''); setData(''); setObs('');
       setIsParcelado(false); setTotalParcelas(1); setPrimeiraData(''); setPago(false);
+      setIsEconomia(false); setEconomiaMetaId(''); setEconomiaValor('');
       setShowForm(false);
     };
 
@@ -911,6 +1052,24 @@
       e.preventDefault();
       if (!userId || !categoriaNome) return;
 
+      // Se for uma Economia (Receita vinculada a uma meta)
+      if (isEconomia && tipo === 'receita' && economiaMetaId && economiaValor) {
+        var eco = {
+          nome: nome.trim(),
+          valor: parseCurrency(economiaValor),
+          data: data || new Date().toISOString().split('T')[0],
+          objetivo_id: economiaMetaId,
+          obs: obs.trim() || null,
+          user_id: userId
+        };
+        supabase.from('economias').insert([eco]).then(function() {
+          load();
+          resetForm();
+        });
+        return;
+      }
+
+      // Transação normal (Despesa ou Receita sem economia)
       if (isParcelado && totalParcelas > 1 && primeiraData) {
         var parcelas = [];
         var dataBase = new Date(primeiraData + 'T00:00:00');
@@ -994,7 +1153,7 @@
         createElement('input', { type: 'date', value: data, onChange: function(e) { setData(e.target.value); }, className: 'input-modern' }),
         createElement('input', { type: 'text', placeholder: 'Observação (opcional)', value: obs, onChange: function(e) { setObs(e.target.value); }, className: 'input-modern' }),
         
-        // NOVO CAMPO: Já pago?
+        // CAMPO: Já pago?
         createElement(
           'div', { className: 'flex items-center gap-3' },
           createElement('input', {
@@ -1007,6 +1166,7 @@
           createElement('label', { htmlFor: 'pago', className: 'text-sm font-medium font-body' }, 'Já está pago? (Se não marcar, vai para o Extrato)')
         ),
 
+        // CAMPO: Compra parcelada
         createElement(
           'div', { className: 'flex items-center gap-3 mt-2' },
           createElement('input', {
@@ -1041,6 +1201,32 @@
             })
           )
         ) : null,
+
+        // CAMPO: Economia (Apenas para Receitas)
+        tipo === 'receita' ? createElement(
+          React.Fragment, null,
+          createElement(
+            'div', { className: 'flex items-center gap-3 mt-4 pt-4 border-t border-[var(--border-color)]' },
+            createElement('input', {
+              type: 'checkbox',
+              id: 'isEconomia',
+              checked: isEconomia,
+              onChange: function(e) { setIsEconomia(e.target.checked); },
+              className: 'checkbox-modern'
+            }),
+            createElement('label', { htmlFor: 'isEconomia', className: 'text-sm font-medium font-body' }, 'Quero guardar esse valor em uma Economia (Meta)')
+          ),
+          isEconomia ? createElement(
+            'div', { className: 'space-y-3 mt-2 p-3 bg-[var(--bg-card)] rounded-xl border border-[var(--border-color)]' },
+            createElement(
+              'select', { value: economiaMetaId, onChange: function(e) { setEconomiaMetaId(e.target.value); }, className: 'select-modern', required: isEconomia },
+              createElement('option', { value: '' }, 'Selecione uma meta para vincular'),
+              objetivos.map(function(o) { return createElement('option', { key: o.id, value: o.id }, o.nome); })
+            ),
+            createElement(CurrencyInput, { value: economiaValor, onChange: setEconomiaValor, placeholder: 'Valor a guardar (R$)', className: 'input-modern', required: isEconomia })
+          ) : null
+        ) : null,
+
         createElement('button', { type: 'submit', className: 'btn-primary w-full' }, 'Salvar')
       ) : null,
       createElement(
@@ -1078,12 +1264,23 @@
   }
 
   // ============================================
-  // METAS (Simplificado)
+  // METAS (Com Sistema Preditivo Gamificado)
   // ============================================
   function Metas() {
-    var _m1 = useState([]), objetivos = _m1[0], setObjetivos = _m1[1];
-    var _m2 = useState([], { nome: '', valor: '' }), novaMeta = _m2[0], setNovaMeta = _m2[1];
-    var _m3 = useState(null), userId = _m3[0], setUserId = _m3[1];
+    var _m1 = useState('objetivos'), subTab = _m1[0], setSubTab = _m1[1];
+    var _m2 = useState([]), objetivos = _m2[0], setObjetivos = _m2[1];
+    var _m3 = useState([]), economias = _m3[0], setEconomias = _m3[1];
+    var _m4 = useState(true), loading = _m4[0], setLoading = _m4[1];
+    var _m5 = useState(null), userId = _m5[0], setUserId = _m5[1];
+
+    var _o1 = useState(false), showObjForm = _o1[0], setShowObjForm = _o1[1];
+    var _o2 = useState(''), objNome = _o2[0], setObjNome = _o2[1];
+    var _o3 = useState(''), objValor = _o3[0], setObjValor = _o3[1];
+    var _o4 = useState(''), objPrazo = _o4[0], setObjPrazo = _o4[1];
+    var _o5 = useState('fa-flag'), objIcone = _o5[0], setObjIcone = _o5[1];
+    var _o6 = useState(null), objEditando = _o6[0], setObjEditando = _o6[1];
+
+    var ICONE_OPCOES = ['fa-flag', 'fa-home', 'fa-car', 'fa-plane', 'fa-graduation-cap', 'fa-ring', 'fa-mobile-screen', 'fa-umbrella-beach', 'fa-laptop', 'fa-suitcase'];
 
     useEffect(function() {
       supabase.auth.getUser().then(function(result) {
@@ -1093,46 +1290,211 @@
 
     var load = function() {
       if (!userId) return;
-      supabase.from('objetivos').select('*').eq('user_id', userId).order('created_at')
-        .then(function(result) { if (!result.error) setObjetivos(result.data || []); });
+      setLoading(true);
+      Promise.all([
+        supabase.from('objetivos').select('*').eq('user_id', userId).order('created_at'),
+        supabase.from('economias').select('*').eq('user_id', userId).order('data', { ascending: false })
+      ]).then(function(results) {
+        if (!results[0].error) setObjetivos(results[0].data || []);
+        if (!results[1].error) setEconomias(results[1].data || []);
+        setLoading(false);
+      }).catch(function() { setLoading(false); });
     };
 
     useEffect(function() { if (userId) load(); }, [userId]);
 
-    var submit = function(e) {
+    var resetObj = function() { setObjNome(''); setObjValor(''); setObjPrazo(''); setObjIcone('fa-flag'); setObjEditando(null); setShowObjForm(false); };
+
+    var submitObjetivo = function(e) {
       e.preventDefault();
-      if (!novaMeta.nome || !novaMeta.valor || !userId) return;
-      supabase.from('objetivos').insert([{
-        nome: novaMeta.nome,
-        valor_alvo: parseCurrency(novaMeta.valor),
-        user_id: userId
-      }]).then(function() { load(); setNovaMeta({ nome: '', valor: '' }); });
+      if (!objNome.trim() || !objValor || !userId) return;
+      var dados = { nome: objNome.trim(), valor_alvo: parseCurrency(objValor), prazo: objPrazo || null, icone: objIcone, user_id: userId };
+      var promise = objEditando
+        ? supabase.from('objetivos').update({ nome: dados.nome, valor_alvo: dados.valor_alvo, prazo: dados.prazo, icone: dados.icone }).eq('id', objEditando)
+        : supabase.from('objetivos').insert([dados]);
+      promise.then(function() { load(); resetObj(); });
     };
+
+    var delObjetivo = function(id) {
+      if (window.confirm('Excluir este objetivo?')) {
+        supabase.from('economias').update({ objetivo_id: null }).eq('objetivo_id', id).then(function() {
+          supabase.from('objetivos').delete().eq('id', id).then(function() { load(); });
+        });
+      }
+    };
+
+    var editObjetivo = function(o) {
+      setObjNome(o.nome); setObjValor(formatCurrency(o.valor_alvo)); setObjPrazo(o.prazo || ''); setObjIcone(o.icone || 'fa-flag'); setObjEditando(o.id); setShowObjForm(true);
+    };
+
+    var delEconomia = function(id) {
+      if (window.confirm('Excluir esta economia?')) {
+        supabase.from('economias').delete().eq('id', id).then(function() { load(); });
+      }
+    };
+
+    var streak = useMemo(function() { return computeStreak(economias); }, [economias]);
+    var totalGuardado = useMemo(function() { return economias.reduce(function(acc, e) { return acc + Number(e.valor); }, 0); }, [economias]);
 
     return createElement(
       'div',
       { className: 'pb-24 max-w-md mx-auto font-body' },
-      createElement(Header, null),
       createElement(
-        'div', { className: 'p-4 space-y-4' },
-        createElement('h1', { className: 'text-xl font-bold font-display mb-4' }, createElement('i', { className: 'fas fa-bullseye mr-2' }), 'Metas'),
+        'div',
+        { className: 'sticky top-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border-color)] p-4' },
         createElement(
-          'form', { onSubmit: submit, className: 'space-y-3 card-modern' },
-          createElement('input', { type: 'text', placeholder: 'Nome da meta', value: novaMeta.nome, onChange: function(e) { setNovaMeta({ ...novaMeta, nome: e.target.value }); }, className: 'input-modern', required: true }),
-          createElement(CurrencyInput, { value: novaMeta.valor, onChange: function(v) { setNovaMeta({ ...novaMeta, valor: v }); }, placeholder: 'Valor alvo', className: 'input-modern', required: true }),
-          createElement('button', { type: 'submit', className: 'btn-primary w-full' }, 'Adicionar Meta')
+          'div', { className: 'flex items-center justify-between mb-3' },
+          createElement('h1', { className: 'text-xl font-bold font-display' }, createElement('i', { className: 'fas fa-bullseye mr-2' }), 'Metas'),
+          streak > 0 ? createElement('span', { className: 'streak-chip float-badge' }, createElement('i', { className: 'fas fa-fire mr-1' }), ' ' + streak + (streak === 1 ? ' mês' : ' meses')) : null
         ),
-        objetivos.map(function(o) {
-          return createElement(
-            'div', { key: o.id, className: 'card-modern flex justify-between items-center' },
-            createElement('div', null,
-              createElement('p', { className: 'font-bold' }, o.nome),
-              createElement('p', { className: 'text-sm text-[var(--text-muted)]' }, 'Alvo: ' + formatCurrency(o.valor_alvo))
-            ),
-            createElement('span', { className: 'text-[var(--accent)] font-bold' }, formatCurrency(o.valor_alvo))
-          );
-        })
-      )
+        createElement(
+          'div', { className: 'flex gap-2' },
+          createElement('button', {
+            className: 'subtab-btn ' + (subTab === 'objetivos' ? 'active' : ''),
+            onClick: function() { setSubTab('objetivos'); }
+          }, createElement('i', { className: 'fas fa-flag mr-1' }), ' Objetivos'),
+          createElement('button', {
+            className: 'subtab-btn ' + (subTab === 'economias' ? 'active' : ''),
+            onClick: function() { setSubTab('economias'); }
+          }, createElement('i', { className: 'fas fa-coins mr-1' }), ' Economias')
+        )
+      ),
+      subTab === 'objetivos' ? createElement(
+        React.Fragment, null,
+        createElement(
+          'div', { className: 'p-4 pb-0' },
+          createElement('button', {
+            onClick: function() { showObjForm ? resetObj() : setShowObjForm(true); },
+            className: 'btn-secondary w-full mb-4'
+          }, showObjForm ? createElement('i', { className: 'fas fa-times mr-2' }) : createElement('i', { className: 'fas fa-plus mr-2' }), showObjForm ? 'Cancelar' : 'Novo Objetivo')
+        ),
+        showObjForm ? createElement(
+          'form', { onSubmit: submitObjetivo, className: 'mx-4 mb-4 p-4 space-y-4 card-modern' },
+          createElement(
+            'div', { className: 'flex flex-wrap gap-2' },
+            ICONE_OPCOES.map(function(ic) {
+              return createElement('button', {
+                key: ic, type: 'button', onClick: function() { setObjIcone(ic); },
+                className: 'emoji-pick ' + (objIcone === ic ? 'selected' : '')
+              }, createElement('i', { className: 'fas ' + ic }));
+            })
+          ),
+          createElement('input', { type: 'text', placeholder: 'Nome do objetivo', value: objNome, onChange: function(e) { setObjNome(e.target.value); }, className: 'input-modern', required: true }),
+          createElement(CurrencyInput, { value: objValor, onChange: setObjValor, placeholder: 'Valor alvo (R$)', className: 'input-modern', required: true }),
+          createElement('div', null,
+            createElement('label', { className: 'text-xs text-[var(--text-muted)] mb-1 block font-bold font-body' }, 'Prazo desejado (opcional)'),
+            createElement('input', { type: 'date', value: objPrazo, onChange: function(e) { setObjPrazo(e.target.value); }, className: 'input-modern' })
+          ),
+          createElement('div', { className: 'flex gap-2' },
+            createElement('button', { type: 'submit', className: 'btn-primary flex-1' }, objEditando ? 'Atualizar' : 'Criar Objetivo'),
+            createElement('button', { type: 'button', onClick: resetObj, className: 'btn-secondary flex-1' }, 'Cancelar')
+          )
+        ) : null,
+        createElement(
+          'div', { className: 'p-4 space-y-4' },
+          loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)] font-body' }, 'Carregando…') :
+          objetivos.length === 0 ? createElement(
+            'div', { className: 'text-center py-8 text-[var(--text-muted)] font-body' },
+            createElement('i', { className: 'fas fa-flag text-4xl mb-2 block' }),
+            createElement('p', null, 'Nenhum objetivo cadastrado'),
+            createElement('p', { className: 'text-sm' }, 'Crie um objetivo e vincule suas economias')
+          ) :
+          objetivos.map(function(o) {
+            var econsDoObjetivo = economias.filter(function(e) { return e.objetivo_id === o.id; });
+            var pred = predictGoal(o, econsDoObjetivo);
+            var lvl = levelInfo(pred.pct);
+            var prazoDate = o.prazo ? new Date(o.prazo + 'T00:00:00') : null;
+
+            var previsaoTexto;
+            if (pred.pct >= 100) {
+              previsaoTexto = '🏆 Objetivo alcançado! Parabéns pela conquista.';
+            } else if (pred.mesesRestantes === null) {
+              previsaoTexto = 'Registre economias vinculadas a este objetivo para calcular a previsão.';
+            } else {
+              var dp = pred.dataPrevista;
+              var mesAno = dp.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+              previsaoTexto = 'No ritmo atual (' + formatCurrency(pred.mediaMensal) + '/mês), você alcança esse objetivo em ' +
+                pred.mesesRestantes + (pred.mesesRestantes === 1 ? ' mês' : ' meses') + ' — por volta de ' + mesAno + '.';
+            }
+
+            return createElement(
+              'div', { key: o.id, className: 'card-modern fade-in-up pulse-glow' },
+              createElement(
+                'div', { className: 'flex items-start gap-3 mb-3' },
+                createElement('div', { className: 'goal-icon-circle' }, createElement('i', { className: 'fas ' + (o.icone || 'fa-flag') })),
+                createElement(
+                  'div', { className: 'flex-1 min-w-0' },
+                  createElement('p', { className: 'font-bold text-base font-body' }, o.nome),
+                  createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' },
+                    formatCurrency(pred.total) + ' de ' + formatCurrency(o.valor_alvo) +
+                    (prazoDate ? ' • prazo: ' + prazoDate.toLocaleDateString('pt-BR') : '')
+                  )
+                ),
+                createElement(
+                  'div', { className: 'flex items-center gap-1 flex-shrink-0' },
+                  createElement('button', { onClick: function() { editObjetivo(o); }, className: 'text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-1' }, createElement('i', { className: 'fas fa-pen' })),
+                  createElement('button', { onClick: function() { delObjetivo(o.id); }, className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1' }, createElement('i', { className: 'fas fa-trash' }))
+                )
+              ),
+              createElement(
+                'div', { className: 'flex items-center justify-between mb-2' },
+                createElement('span', { className: 'level-pill', style: { background: lvl.color + '22', color: lvl.color } }, createElement('i', { className: 'fas ' + lvl.icon + ' mr-1' }), ' ' + lvl.label),
+                createElement('span', { className: 'text-sm font-bold font-display' }, pred.pct.toFixed(0) + '%')
+              ),
+              createElement(
+                'div',
+                { className: 'progress-track' },
+                createElement(
+                  'div',
+                  { className: 'progress-fill ' + (pred.pct >= 100 ? 'milestone-100' : ''), style: { width: pred.pct + '%' } },
+                  pred.pct >= 50 ? pred.pct.toFixed(0) + '%' : ''
+                )
+              ),
+              createElement('p', { className: 'text-xs text-[var(--text-secondary)] mt-3 leading-relaxed font-body' }, createElement('i', { className: 'fas fa-rocket mr-1' }), ' ' + previsaoTexto)
+            );
+          })
+        )
+      ) : null,
+      subTab === 'economias' ? createElement(
+        React.Fragment, null,
+        createElement(
+          'div', { className: 'p-4 pb-0 space-y-3' },
+          createElement(
+            'div', { className: 'card-modern flex items-center justify-between' },
+            createElement('span', { className: 'text-sm text-[var(--text-muted)] font-body' }, 'Total guardado'),
+            createElement('span', { className: 'text-lg font-bold text-[var(--accent)] font-display' }, formatCurrency(totalGuardado))
+          )
+        ),
+        createElement(
+          'div', { className: 'p-4 space-y-2' },
+          loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)] font-body' }, 'Carregando…') :
+          economias.length === 0 ? createElement(
+            'div', { className: 'text-center py-8 text-[var(--text-muted)] font-body' },
+            createElement('i', { className: 'fas fa-coins text-4xl mb-2 block' }),
+            createElement('p', null, 'Nenhuma economia registrada'),
+            createElement('p', { className: 'text-sm' }, 'Cadastre uma Receita e marque "Quero guardar esse valor em uma Economia"')
+          ) :
+          economias.map(function(ec) {
+            var nomeObj = objetivos.filter(function(o) { return o.id === ec.objetivo_id; })[0];
+            var nomeObjStr = nomeObj ? nomeObj.nome : 'Sem vínculo';
+            return createElement(
+              'div', { key: ec.id, className: 'card-modern p-3 flex items-center justify-between' },
+              createElement(
+                'div', { className: 'flex-1 min-w-0' },
+                createElement('p', { className: 'font-bold text-sm truncate font-body' }, ec.nome),
+                createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' },
+                  formatDate(ec.data) + ' • ' + nomeObjStr
+                )
+              ),
+              createElement(
+                'div', { className: 'flex items-center gap-2 flex-shrink-0' },
+                createElement('span', { className: 'font-bold text-[var(--accent)]' }, '+ ' + formatCurrency(ec.valor)),
+                createElement('button', { onClick: function() { delEconomia(ec.id); }, className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1' }, createElement('i', { className: 'fas fa-trash' }))
+              )
+            );
+          })
+        )
+      ) : null
     );
   }
 
@@ -1167,7 +1529,7 @@
           createElement(
             'div', { className: 'flex-1' },
             createElement('p', { className: 'font-bold font-body' }, user ? user.email : 'Usuário'),
-            createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, 'Logado com ' + (user && user.app_metadata ? (user.app_metadata.provider || 'email').toUpperCase() : 'EMAIL'))
+            createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, 'Logado com Google')
           )
         ),
         createElement('button', {
