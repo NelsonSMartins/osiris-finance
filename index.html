@@ -373,24 +373,6 @@
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<!-- ========== SCRIPT PARA 404 (CORRIGE F5) ========== -->
-<script>
-  // Redireciona para o index.html em caso de erro 404 (GitHub Pages)
-  (function() {
-    var path = window.location.pathname;
-    if (path !== '/' && path !== '/osiris-finance/' && path !== '/osiris-finance/index.html') {
-      // Se a rota não for uma das principais, redireciona para o index
-      if (!path.startsWith('/osiris-finance/') || path.includes('.')) {
-        // Ignora arquivos com extensão
-        return;
-      }
-      // Redireciona para o index com a rota preservada
-      var newPath = '/osiris-finance/index.html' + path;
-      window.location.replace(newPath);
-    }
-  })();
-</script>
-
 <script>
 (function() {
   'use strict';
@@ -486,8 +468,17 @@
         setCurrentPath = _useState7[1];
 
     useEffect(function() {
-      var handleLocation = function() { setCurrentPath(window.location.pathname); };
+      var handleLocation = function() { 
+        var path = window.location.pathname;
+        // Remove o prefixo /osiris-finance e /index.html
+        var cleanPath = path.replace('/osiris-finance', '').replace('/index.html', '');
+        if (cleanPath === '' || cleanPath === '/') {
+          cleanPath = '/';
+        }
+        setCurrentPath(cleanPath);
+      };
       window.addEventListener('popstate', handleLocation);
+      handleLocation(); // Executa uma vez para sincronizar
       return function() { window.removeEventListener('popstate', handleLocation); };
     }, []);
 
@@ -499,15 +490,14 @@
     ];
 
     var navigate = function(path) {
-      // Usar replaceState para evitar múltiplos históricos
-      window.history.pushState({}, '', path);
+      var fullPath = '/osiris-finance' + path;
+      window.history.pushState({}, '', fullPath);
       setCurrentPath(path);
       if (onNavigate) onNavigate(path);
     };
 
     var isActive = function(path) {
-      var p = currentPath.replace('/osiris-finance', '') || '/';
-      // Remove trailing slash
+      var p = currentPath;
       if (p.endsWith('/') && p.length > 1) p = p.slice(0, -1);
       return p === path || (path === '/' && (p === '/' || p === ''));
     };
@@ -1246,7 +1236,7 @@
   }
 
   // ============================================
-  // APP
+  // APP (CORRIGIDO PARA RECONHECER ROTAS DO 404.HTML)
   // ============================================
   function App() {
     var _useState38 = useState(null),
@@ -1270,19 +1260,19 @@
         setUser(session && session.user ? session.user : null);
       });
 
-      var handleLocation = function() { 
-        // Corrige caminho para evitar duplicação
+      var handleLocation = function() {
         var path = window.location.pathname;
-        if (path.startsWith('/osiris-finance/') && path.endsWith('/index.html')) {
-          // Se for index.html, remove para ficar limpo
-          var newPath = path.replace('/index.html', '');
-          window.history.replaceState({}, '', newPath);
+        // Remove o prefixo '/osiris-finance' e também '/index.html' se estiver presente
+        var cleanPath = path.replace('/osiris-finance', '').replace('/index.html', '');
+        // Se a rota for vazia, assume '/'
+        if (cleanPath === '' || cleanPath === '/') {
+          cleanPath = '/';
         }
-        setCurrentPath(window.location.pathname);
+        setCurrentPath(cleanPath);
       };
       
       window.addEventListener('popstate', handleLocation);
-      // Executa uma vez para corrigir
+      // Executa uma vez para corrigir a rota atual
       handleLocation();
 
       return function() {
@@ -1301,14 +1291,12 @@
       return createElement(Login, { onLogin: setUser });
     }
 
-    // Remove o prefixo /osiris-finance para roteamento
-    var path = currentPath.replace('/osiris-finance', '') || '/';
-    // Remove trailing slash
+    // 'currentPath' já está limpo, sem o prefixo
+    var path = currentPath;
+    
+    // Remove barras duplicadas ou no final
     if (path.endsWith('/') && path.length > 1) path = path.slice(0, -1);
-    // Se estiver vazio ou for /, vai para dashboard
-    if (path === '' || path === '/') {
-      path = '/';
-    }
+    if (path === '') path = '/';
 
     var content;
     if (path === '/') {
