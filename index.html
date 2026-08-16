@@ -312,6 +312,7 @@
       accent-color: var(--accent);
       cursor: pointer;
       border-radius: 4px;
+      flex-shrink: 0;
     }
 
     .tab-btn {
@@ -341,16 +342,19 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 12px;
-      border-radius: 10px;
+      padding: 12px 14px;
+      border-radius: 12px;
       border: 1px solid var(--border-color);
       background: var(--bg-input);
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .pendencia-item:hover { border-color: var(--accent); }
     .pendencia-item.pago {
-      opacity: 0.5;
+      opacity: 0.55;
+    }
+    .pendencia-item.pago .pendencia-nome {
       text-decoration: line-through;
+      color: var(--text-muted);
     }
 
     .theme-option {
@@ -501,6 +505,24 @@
       width: 2px;
       background: rgba(255,255,255,0.2);
     }
+
+    .extrato-scroll {
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .extrato-scroll::-webkit-scrollbar { width: 4px; }
+    .extrato-scroll::-webkit-scrollbar-track { background: var(--bg-input); border-radius: 4px; }
+    .extrato-scroll::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+
+    .resumo-card {
+      padding: 12px 16px;
+      border-radius: 12px;
+      text-align: center;
+      border: 1px solid var(--border-color);
+    }
+    .resumo-card.pago { border-color: rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.05); }
+    .resumo-card.pendente { border-color: rgba(245, 158, 11, 0.3); background: rgba(245, 158, 11, 0.05); }
 
     @media (max-width: 640px) {
       .stat-card { padding: 12px 16px; }
@@ -941,7 +963,10 @@
         supabase.from('transacoes').select('*').eq('user_id', userId).gte('data', range.start).lte('data', range.end).order('data', { ascending: false }),
         supabase.from('transacoes').select('valor').eq('user_id', userId).eq('tipo', 'despesa').gte('data', prevRange.start).lte('data', prevRange.end)
       ]).then(function(results) {
-        if (!results[0].error) setTransactions(results[0].data || []);
+        if (!results[0].error) {
+          var data = results[0].data || [];
+          setTransactions(data);
+        }
         if (!results[1].error) {
           var soma = (results[1].data || []).reduce(function(acc, t) { return acc + Number(t.valor); }, 0);
           setPrevDespesas(soma);
@@ -1027,7 +1052,10 @@
     };
 
     var togglePago = function(id, status) {
-      supabase.from('transacoes').update({ pago: status, data_pagamento: status ? new Date().toISOString().split('T')[0] : null }).eq('id', id).then(function() {
+      supabase.from('transacoes').update({
+        pago: status,
+        data_pagamento: status ? new Date().toISOString().split('T')[0] : null
+      }).eq('id', id).then(function() {
         loadTransactions();
       });
     };
@@ -1062,7 +1090,7 @@
           createElement('button', {
             className: 'tab-btn ' + (dashMode === 'mes' ? 'active' : ''),
             onClick: function() { setDashMode('mes'); }
-          }, createElement('i', { className: 'fas fa-calendar-check mr-1' }), 'Gastos do Mês')
+          }, createElement('i', { className: 'fas fa-calendar-check mr-1' }), 'Extrato Mês')
         ),
 
         // ============================================
@@ -1220,11 +1248,12 @@
         ) : null,
 
         // ============================================
-        // DASHBOARD: GASTOS DO MÊS
+        // DASHBOARD: EXTRATO DO MÊS (GASTOS)
         // ============================================
         dashMode === 'mes' ? createElement(
           React.Fragment, null,
 
+          // Resumo financeiro do mês
           createElement(
             'div',
             { className: 'grid grid-cols-2 gap-3' },
@@ -1240,22 +1269,51 @@
             )
           ),
 
-          // Lista de despesas do mês com checkbox
+          // Barra de progresso
+          createElement(
+            'div',
+            { className: 'card-modern' },
+            createElement(
+              'div',
+              { className: 'flex items-center justify-between mb-2' },
+              createElement('span', { className: 'text-sm font-bold font-body' }, 'Progresso do Mês'),
+              createElement('span', { className: 'text-sm font-bold font-display' },
+                (summary.totalDespesas > 0 ? Math.round(((summary.totalDespesas - summary.totalPendentes) / summary.totalDespesas) * 100) : 0) + '% pago'
+              )
+            ),
+            createElement(ProgressBar, { pct: summary.totalDespesas > 0 ? ((summary.totalDespesas - summary.totalPendentes) / summary.totalDespesas) * 100 : 0 }),
+            createElement(
+              'div',
+              { className: 'flex items-center justify-between mt-2 text-xs text-[var(--text-muted)] font-body' },
+              createElement('span', null, createElement('i', { className: 'fas fa-check-circle text-[#10b981] mr-1' }), 'Pago: ' + formatCurrency(summary.totalDespesas - summary.totalPendentes)),
+              createElement('span', null, createElement('i', { className: 'fas fa-clock text-[#f59e0b] mr-1' }), 'Pendente: ' + formatCurrency(summary.totalPendentes))
+            )
+          ),
+
+          // Lista de despesas do mês (extrato)
           createElement(
             'div',
             { className: 'card-modern' },
             createElement(
               'div',
               { className: 'flex items-center justify-between mb-4' },
-              createElement('h3', { className: 'text-sm font-bold font-display' }, createElement('i', { className: 'fas fa-list-check mr-2' }), 'Baixar Pagamentos')
+              createElement('h3', { className: 'text-sm font-bold font-display' }, createElement('i', { className: 'fas fa-list-check mr-2' }), 'Extrato do Mês'),
+              createElement(
+                'span',
+                { className: 'text-xs font-bold text-[var(--text-muted)]' },
+                transactions.filter(function(t) { return t.tipo === 'despesa'; }).length + ' despesas'
+              )
             ),
             loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)] font-body' }, 'Carregando...') :
-            summary.despesasPendentes.length === 0 && transactions.filter(function(t) { return t.tipo === 'despesa'; }).length === 0 ?
+            transactions.filter(function(t) { return t.tipo === 'despesa'; }).length === 0 ?
               createElement('p', { className: 'text-[var(--text-muted)] text-center py-4 font-body' }, 'Nenhuma despesa este mês') :
               createElement(
                 'div',
-                { className: 'space-y-2' },
-                transactions.filter(function(t) { return t.tipo === 'despesa'; }).map(function(t) {
+                { className: 'extrato-scroll space-y-2' },
+                transactions.filter(function(t) { return t.tipo === 'despesa'; }).sort(function(a, b) {
+                  // Pendentes primeiro, depois pagos
+                  return (a.pago ? 1 : 0) - (b.pago ? 1 : 0);
+                }).map(function(t) {
                   return createElement(
                     'div',
                     { key: t.id, className: 'pendencia-item ' + (t.pago ? 'pago' : '') },
@@ -1265,40 +1323,36 @@
                       createElement('input', {
                         type: 'checkbox',
                         checked: t.pago || false,
-                        onChange: function(e) { togglePago(t.id, e.target.checked); },
+                        onChange: function(e) {
+                          e.stopPropagation();
+                          togglePago(t.id, e.target.checked);
+                        },
                         className: 'checkbox-modern'
                       }),
                       createElement('div', { className: 'flex-1 min-w-0' },
-                        createElement('p', { className: 'text-sm font-bold truncate ' + (t.pago ? 'line-through' : '') }, t.nome),
+                        createElement('p', { className: 'text-sm font-bold truncate pendencia-nome' }, t.nome),
                         createElement('p', { className: 'text-xs text-[var(--text-muted)]' }, t.categoria_nome + ' • ' + formatDate(t.data))
                       )
                     ),
-                    createElement('span', { className: 'font-bold ' + (t.pago ? 'text-[var(--text-muted)]' : 'text-[#ef4444]') + ' ml-2' }, formatCurrency(t.valor))
+                    createElement('span', { className: 'font-bold ' + (t.pago ? 'text-[var(--text-muted)]' : 'text-[#ef4444]') + ' ml-2 flex-shrink-0' }, formatCurrency(t.valor))
                   );
                 })
               )
           ),
 
-          // Resumo de pagamentos
+          // Resumo rápido
           createElement(
             'div',
-            { className: 'card-modern' },
+            { className: 'grid grid-cols-2 gap-3' },
             createElement(
-              'div',
-              { className: 'flex items-center justify-between' },
-              createElement('span', { className: 'text-sm font-bold font-body' }, 'Progresso do Mês'),
-              createElement('span', { className: 'text-sm font-bold font-display' },
-                (summary.totalDespesas > 0 ? Math.round(((summary.totalDespesas - summary.totalPendentes) / summary.totalDespesas) * 100) : 0) + '% pago'
-              )
-            ),
-            createElement('div', { className: 'mt-3' },
-              createElement(ProgressBar, { pct: summary.totalDespesas > 0 ? ((summary.totalDespesas - summary.totalPendentes) / summary.totalDespesas) * 100 : 0 })
+              'div', { className: 'resumo-card pago' },
+              createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, 'Pago'),
+              createElement('p', { className: 'text-lg font-bold text-[#10b981] font-display' }, formatCurrency(summary.totalDespesas - summary.totalPendentes))
             ),
             createElement(
-              'div',
-              { className: 'flex items-center justify-between mt-3 text-xs text-[var(--text-muted)] font-body' },
-              createElement('span', null, 'Pago: ' + formatCurrency(summary.totalDespesas - summary.totalPendentes)),
-              createElement('span', null, 'Pendente: ' + formatCurrency(summary.totalPendentes))
+              'div', { className: 'resumo-card pendente' },
+              createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, 'A Pagar'),
+              createElement('p', { className: 'text-lg font-bold text-[#f59e0b] font-display' }, formatCurrency(summary.totalPendentes))
             )
           )
         ) : null
@@ -1307,7 +1361,7 @@
   }
 
   // ============================================
-  // CATEGORIAS (SIMPLIFICADO)
+  // CATEGORIAS
   // ============================================
   function Categorias() {
     var _c1 = useState([]), categorias = _c1[0], setCategorias = _c1[1];
@@ -1657,7 +1711,7 @@
   }
 
   // ============================================
-  // METAS (SIMPLIFICADO)
+  // METAS
   // ============================================
   function Metas() {
     var _m1 = useState('objetivos'), subTab = _m1[0], setSubTab = _m1[1];
