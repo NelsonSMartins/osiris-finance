@@ -270,33 +270,38 @@
       font-family: var(--font-display);
     }
     
-    /* ===== BOTÃO DO GOOGLE REFEITO E ESTILIZADO ===== */
+    /* ===== BOTÃO DO GOOGLE ESTILIZADO ===== */
     .login-google-btn {
       width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 12px;
-      padding: 14px;
-      border-radius: 12px;
-      border: 2px solid #d4af37; /* Borda dourada combinando com a logo */
+      padding: 16px 24px;
+      border-radius: 14px;
+      border: 2px solid #d4af37; /* Borda dourada, combinando com a sua logo */
       background: transparent;
       color: #ffffff;
       font-weight: 700;
-      font-size: 16px;
+      font-size: 17px;
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       font-family: var(--font-body);
       margin-top: 10px;
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.1); /* Leve brilho dourado */
     }
     .login-google-btn:hover {
-      background: rgba(16, 185, 129, 0.1);
-      border-color: #10b981; /* Muda para o verde neon no hover */
-      box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+      background: rgba(16, 185, 129, 0.1); /* Fundo verde esmeralda transparente ao passar o mouse */
+      border-color: #10b981; /* Muda para o verde neon */
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.4); /* Brilho verde neon */
       transform: scale(1.02);
     }
     .login-google-btn:active {
       transform: scale(0.95);
+    }
+    .login-google-btn img {
+      width: 28px;
+      height: 28px;
     }
 
     /* ===== ANIMAÇÕES GAMIFICADAS ===== */
@@ -574,7 +579,7 @@
   }
 
   // ============================================
-  // LOGIN (APENAS GOOGLE) - BOTÃO ESTILIZADO
+  // LOGIN (APENAS GOOGLE)
   // ============================================
   function Login(props) {
     var onLogin = props.onLogin;
@@ -583,9 +588,10 @@
 
     var handleGoogle = function() {
       setLoading(true); setError('');
+      // CORREÇÃO DO 404: Usa o redirectTo automático do navegador, sem forçar origin fixo
       supabase.auth.signInWithOAuth({ 
         provider: 'google', 
-        options: { redirectTo: window.location.origin } 
+        options: { redirectTo: window.location.href }
       })
       .then(function(result) { 
         if (result.error) { 
@@ -627,7 +633,7 @@
           disabled: loading,
           className: 'login-google-btn'
         },
-          createElement('img', { src: 'https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg', alt: 'Google', style: { width: '24px', height: '24px' } }),
+          createElement('img', { src: 'https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg', alt: 'Google' }),
           loading ? 'Entrando...' : 'Entrar com Google'
         )
       )
