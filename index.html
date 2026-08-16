@@ -162,11 +162,14 @@
   'use strict';
 
   // ============================================
-  // SUPABASE
+  // SUPABASE - COM LOGS
   // ============================================
   var SUPABASE_URL = 'https://nzyqhqxfpvzljcunnnsq.supabase.co';
   var SUPABASE_ANON_KEY = 'sb_publishable_vSSbaS4QS-mp0pbFb4cr3g_0edR7d97';
   var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  console.log('🚀 OSIRIS iniciado!');
+  console.log('🔗 Conectado ao Supabase:', SUPABASE_URL);
 
   var React = window.React;
   var ReactDOM = window.ReactDOM;
@@ -239,7 +242,7 @@
     );
   }
 
-  // ----- BottomNavigation (SEM ROTAS) -----
+  // ----- BottomNavigation -----
   function BottomNavigation(props) {
     var currentPage = props.currentPage;
     var setPage = props.setPage;
@@ -297,6 +300,7 @@
           setSuccess('✅ CONTA CRIADA! VERIFIQUE SEU E-MAIL.');
           setEmail(''); setPassword('');
         } else {
+          console.log('✅ Login bem-sucedido!', result.data.user);
           onLogin(result.data.user);
         }
         setLoading(false);
@@ -363,19 +367,23 @@
       supabase.auth.getUser().then(function(result) {
         if (result.data && result.data.user) {
           setUserId(result.data.user.id);
+          console.log('✅ Dashboard - User ID:', result.data.user.id);
+        } else {
+          console.log('❌ Dashboard - Nenhum usuário logado!');
         }
       });
     }, []);
 
     var loadTransactions = function() {
-      if (!userId) return;
+      if (!userId) { console.log('⏳ Aguardando userId...'); return; }
       setLoading(true);
       var range = getMonthRange(currentDate);
+      console.log('🔄 Carregando transações para:', userId);
       supabase.from('transacoes').select('*').eq('user_id', userId).gte('data', range.start).lte('data', range.end).order('data', { ascending: false })
         .then(function(result) {
-          if (!result.error) setTransactions(result.data || []);
+          if (result.error) { console.error('❌ Erro:', result.error); } else { console.log('✅ Transações:', result.data); setTransactions(result.data || []); }
           setLoading(false);
-        }).catch(function() { setLoading(false); });
+        }).catch(function(err) { console.error('❌ Erro:', err); setLoading(false); });
     };
 
     useEffect(function() { if (userId) loadTransactions(); }, [currentDate, userId]);
@@ -465,7 +473,7 @@
   }
 
   // ============================================
-  // CATEGORIAS
+  // CATEGORIAS (COM LOGS)
   // ============================================
   function Categorias() {
     var _c1 = useState([]), categorias = _c1[0], setCategorias = _c1[1];
@@ -477,25 +485,47 @@
     var _c7 = useState(''), obs = _c7[0], setObs = _c7[1];
     var _c8 = useState(null), userId = _c8[0], setUserId = _c8[1];
 
+    // Pegar userId
     useEffect(function() {
       supabase.auth.getUser().then(function(result) {
         if (result.data && result.data.user) {
-          setUserId(result.data.user.id);
+          var uid = result.data.user.id;
+          setUserId(uid);
+          console.log('✅ Categorias - User ID obtido:', uid);
+        } else {
+          console.log('❌ Categorias - Nenhum usuário logado!');
         }
+      }).catch(function(err) {
+        console.error('❌ Erro ao pegar usuário:', err);
       });
     }, []);
 
+    // Carregar categorias
     var load = function() {
-      if (!userId) return;
+      if (!userId) {
+        console.log('⏳ Categorias - Aguardando userId...');
+        return;
+      }
       setLoading(true);
+      console.log('🔄 Categorias - Carregando para userId:', userId);
       supabase.from('categorias').select('*').eq('user_id', userId).order('nome')
         .then(function(result) {
-          if (!result.error) setCategorias(result.data || []);
+          if (result.error) {
+            console.error('❌ Categorias - Erro ao carregar:', result.error);
+          } else {
+            console.log('✅ Categorias - Carregadas:', result.data);
+            setCategorias(result.data || []);
+          }
           setLoading(false);
-        }).catch(function() { setLoading(false); });
+        }).catch(function(err) {
+          console.error('❌ Categorias - Erro:', err);
+          setLoading(false);
+        });
     };
 
-    useEffect(function() { if (userId) load(); }, [userId]);
+    useEffect(function() {
+      if (userId) load();
+    }, [userId]);
 
     var reset = function() {
       setNome(''); setTipo('despesa'); setObs(''); setEditando(null); setShowForm(false);
@@ -503,7 +533,20 @@
 
     var submit = function(e) {
       e.preventDefault();
-      if (!nome.trim() || !userId) return;
+      console.log('📝 Categorias - Submit iniciado');
+      console.log('   nome:', nome);
+      console.log('   tipo:', tipo);
+      console.log('   userId:', userId);
+
+      if (!nome.trim()) {
+        alert('Digite o nome da categoria!');
+        return;
+      }
+      if (!userId) {
+        alert('Usuário não identificado! Faça login novamente.');
+        console.error('❌ Categorias - userId é null!');
+        return;
+      }
 
       var dados = {
         nome: nome.trim(),
@@ -512,11 +555,25 @@
         user_id: userId
       };
 
+      console.log('📝 Categorias - Salvando:', dados);
+
       var promise = editando
         ? supabase.from('categorias').update({ nome: dados.nome, tipo: dados.tipo, obs: dados.obs }).eq('id', editando)
         : supabase.from('categorias').insert([dados]);
 
-      promise.then(function() { load(); reset(); });
+      promise.then(function(result) {
+        if (result.error) {
+          console.error('❌ Categorias - Erro ao salvar:', result.error);
+          alert('❌ Erro: ' + result.error.message);
+        } else {
+          console.log('✅ Categorias - Salva com sucesso!', result);
+          load();
+          reset();
+        }
+      }).catch(function(err) {
+        console.error('❌ Categorias - Erro:', err);
+        alert('❌ Erro ao salvar: ' + err.message);
+      });
     };
 
     var del = function(id) {
@@ -624,6 +681,7 @@
       supabase.auth.getUser().then(function(result) {
         if (result.data && result.data.user) {
           setUserId(result.data.user.id);
+          console.log('✅ Transações - User ID:', result.data.user.id);
         }
       });
     }, []);
@@ -655,10 +713,17 @@
         obs: obs.trim() || null,
         user_id: userId
       };
-      supabase.from('transacoes').insert([trans]).then(function() {
-        load();
-        setShowForm(false);
-        setNome(''); setCategoriaNome(''); setValor(''); setData(''); setObs('');
+      console.log('📝 Transação - Salvando:', trans);
+      supabase.from('transacoes').insert([trans]).then(function(result) {
+        if (result.error) {
+          console.error('❌ Transação - Erro:', result.error);
+          alert('❌ Erro: ' + result.error.message);
+        } else {
+          console.log('✅ Transação - Salva!');
+          load();
+          setShowForm(false);
+          setNome(''); setCategoriaNome(''); setValor(''); setData(''); setObs('');
+        }
       });
     };
 
@@ -815,7 +880,7 @@
   }
 
   // ============================================
-  // APP (SEM ROTAS)
+  // APP
   // ============================================
   function App() {
     var _a1 = useState(null), user = _a1[0], setUser = _a1[1];
@@ -825,12 +890,25 @@
     useEffect(function() {
       supabase.auth.getSession().then(function(_ref) {
         var session = _ref.data.session;
-        setUser(session && session.user ? session.user : null);
+        if (session && session.user) {
+          console.log('✅ App - Usuário logado:', session.user.email);
+          setUser(session.user);
+        } else {
+          console.log('❌ App - Nenhum usuário logado');
+        }
         setLoading(false);
-      }).catch(function() { setLoading(false); });
+      }).catch(function(err) {
+        console.error('❌ App - Erro ao buscar sessão:', err);
+        setLoading(false);
+      });
 
       var listener = supabase.auth.onAuthStateChange(function(event, session) {
-        setUser(session && session.user ? session.user : null);
+        console.log('🔄 App - Auth state changed:', event, session ? session.user.email : 'none');
+        if (session && session.user) {
+          setUser(session.user);
+        } else {
+          setUser(null);
+        }
       });
 
       return function() {
@@ -845,7 +923,7 @@
     }
 
     if (!user) {
-      return createElement(Login, { onLogin: setUser });
+      return createElement(Login, { onLogin: function(u) { console.log('✅ Login callback:', u); setUser(u); } });
     }
 
     var content;
@@ -876,6 +954,8 @@
   if (rootElement) {
     var root = ReactDOM.createRoot(rootElement);
     root.render(createElement(App));
+  } else {
+    console.error('❌ Elemento #root não encontrado!');
   }
 
 })();
