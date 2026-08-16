@@ -296,6 +296,23 @@
       font-family: var(--font-body);
     }
     .login-btn-custom:hover { background: #059669; box-shadow: 0 0 15px #10b981; transform: scale(1.02); }
+    .login-google-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #d4af37;
+      background: transparent;
+      color: #d4af37;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-bottom: 15px;
+    }
+    .login-google-btn:hover { background: #d4af37; color: #000; }
     .login-error-msg { color: #ef4444; font-size: 14px; margin-bottom: 10px; font-weight: bold; }
     .login-success-msg { color: #10b981; font-size: 14px; margin-bottom: 10px; font-weight: bold; }
     .login-toggle-text { color: #94a3b8; font-size: 14px; cursor: pointer; transition: 0.3s; background: transparent; border: none; margin-top: 10px; }
@@ -310,6 +327,7 @@
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 <script>
 (function() {
@@ -320,6 +338,7 @@
   var useState = React.useState;
   var useEffect = React.useEffect;
   var useMemo = React.useMemo;
+  var useRef = React.useRef;
   var createElement = React.createElement;
 
   // ============================================
@@ -445,7 +464,7 @@
   }
 
   // ============================================
-  // LOGIN
+  // LOGIN (COM GOOGLE DE VOLTA)
   // ============================================
   function Login(props) {
     var onLogin = props.onLogin;
@@ -473,6 +492,13 @@
       }).catch(function(err) { setError(err.message || 'Erro'); setLoading(false); });
     };
 
+    var handleGoogle = function() {
+      setLoading(true); setError('');
+      supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin + '/osiris-finance/' } })
+        .then(function(result) { if (result.error) { setError(result.error.message); setLoading(false); } })
+        .catch(function(err) { setError(err.message); setLoading(false); });
+    };
+
     return createElement(
       'div',
       { className: 'login-wrapper' },
@@ -485,6 +511,19 @@
           createElement('img', { src: 'logo.png', alt: 'Logo Osiris' })
         ),
         createElement('h1', { className: 'login-title-custom' }, 'OSIRIS'),
+        createElement('button', {
+          onClick: handleGoogle,
+          disabled: loading,
+          className: 'login-google-btn'
+        },
+          createElement('img', { src: 'https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg', alt: 'Google', style: { width: '20px', height: '20px' } }),
+          'Entrar com Google'
+        ),
+        createElement('div', { className: 'flex items-center gap-4 my-4' },
+          createElement('div', { className: 'flex-1 h-px bg-[#2d3a4a]' }),
+          createElement('span', { className: 'text-[#94a3b8] text-sm font-body' }, 'ou'),
+          createElement('div', { className: 'flex-1 h-px bg-[#2d3a4a]' })
+        ),
         createElement(
           'form',
           { onSubmit: handleSubmit, className: 'space-y-4' },
@@ -521,7 +560,7 @@
   }
 
   // ============================================
-  // DASHBOARD (Painel e Extrato)
+  // DASHBOARD (Painel, Extrato e GRÁFICO DE BARRAS)
   // ============================================
   function Dashboard(props) {
     var setPage = props.setPage;
@@ -530,6 +569,9 @@
     var _d3 = useState(true), loading = _d3[0], setLoading = _d3[1];
     var _d4 = useState(null), userId = _d4[0], setUserId = _d4[1];
     var _d5 = useState('saude'), dashMode = _d5[0], setDashMode = _d5[1];
+
+    var chartRef = useRef(null);
+    var chartInstance = useRef(null);
 
     useEffect(function() {
       supabase.auth.getUser().then(function(result) {
@@ -567,14 +609,80 @@
       var despesasPendentes = despesas.filter(function(t) { return !t.pago; });
       var totalPendentes = despesasPendentes.reduce(function(acc, t) { return acc + Number(t.valor); }, 0);
 
+      // Mapa para o gráfico de barras
+      var map = {};
+      despesas.forEach(function(t) { 
+        var nomeCat = t.categoria_nome || 'Sem categoria';
+        map[nomeCat] = (map[nomeCat] || 0) + Number(t.valor); 
+      });
+      var categorias = Object.keys(map).map(function(k) { return { nome: k, total: map[k] }; }).sort(function(a, b) { return b.total - a.total; });
+
       return { 
         totalReceitas: totalReceitas, 
         totalDespesas: totalDespesas, 
         saldo: totalReceitas - totalDespesas, 
         totalPendentes: totalPendentes, 
-        despesasPendentes: despesasPendentes 
+        despesasPendentes: despesasPendentes,
+        categorias: categorias
       };
     }, [transactions]);
+
+    // Efeito para desenhar o GRÁFICO DE BARRAS
+    useEffect(function() {
+      if (chartInstance.current) chartInstance.current.destroy();
+      if (!chartRef.current || summary.categorias.length === 0) return;
+
+      var ctx = chartRef.current.getContext('2d');
+      var labels = summary.categorias.slice(0, 10).map(function(c) { return c.nome; }); // Pega as 10 principais
+      var data = summary.categorias.slice(0, 10).map(function(c) { return c.total; });
+      
+      // Gerando cores gradientes de verde
+      var colors = data.map(function(_, i) {
+        var intensity = 0.7 + (i / data.length) * 0.3;
+        return 'rgba(16, 185, 129, ' + intensity + ')';
+      });
+
+      chartInstance.current = new window.Chart(ctx, {
+        type: 'bar',
+        data: { 
+          labels: labels, 
+          datasets: [{ 
+            data: data, 
+            backgroundColor: colors,
+            borderColor: '#10b981',
+            borderWidth: 1,
+            borderRadius: 4
+          }] 
+        },
+        options: {
+          indexAxis: 'y', // Transforma em gráfico HORIZONTAL
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return formatCurrency(context.raw);
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: 'rgba(255, 255, 255, 0.05)' },
+              ticks: { color: '#94a3b8', font: { size: 10 } }
+            },
+            y: {
+              grid: { display: false },
+              ticks: { color: '#94a3b8', font: { size: 11 } }
+            }
+          }
+        }
+      });
+
+      return function() { if (chartInstance.current) chartInstance.current.destroy(); };
+    }, [summary.categorias]);
 
     var changeDate = function(dir) {
       var d = new Date(currentDate);
@@ -615,7 +723,7 @@
         ),
 
         // ============================================
-        // VISÃO GERAL
+        // VISÃO GERAL (COM GRÁFICO)
         // ============================================
         dashMode === 'saude' ? createElement(
           React.Fragment, null,
@@ -638,6 +746,26 @@
               createElement('p', { className: 'text-lg font-bold text-[#8b5cf6] font-display' }, formatCurrency(summary.saldo))
             )
           ),
+
+          // GRÁFICO DE BARRAS
+          createElement(
+            'div',
+            { className: 'card-modern' },
+            createElement(
+              'div',
+              { className: 'flex items-center justify-between mb-4' },
+              createElement('h3', { className: 'text-sm font-bold font-display' }, createElement('i', { className: 'fas fa-chart-bar mr-2' }), 'Onde mais gasto'),
+              createElement('span', { className: 'text-xs text-[var(--text-muted)] font-body' }, summary.categorias.length + ' categorias')
+            ),
+            createElement(
+              'div',
+              { className: 'h-64' },
+              summary.categorias.length === 0
+                ? createElement('p', { className: 'text-center text-[var(--text-muted)] py-8 font-body' }, loading ? 'Carregando...' : 'Nenhum gasto registrado')
+                : createElement('canvas', { ref: chartRef })
+            )
+          ),
+
           createElement(
             'div', { className: 'card-modern' },
             createElement(
@@ -794,14 +922,13 @@
             nome: nome.trim() + ' (' + (i+1) + '/' + totalParcelas + ')',
             categoria_nome: categoriaNome,
             valor: valorParcela,
-            data: dataParcela.toISOString().split('T')[0], // CORRIGIDO: data, e não data_vencimento
-            tipo: 'despesa', // CORRIGIDO: Definir o tipo como despesa
+            data: dataParcela.toISOString().split('T')[0],
+            tipo: 'despesa',
             pago: false,
             obs: obs.trim() || null,
             user_id: userId
           });
         }
-        // CORRIGIDO: Inserir na tabela 'transacoes', e não 'parcelas'
         supabase.from('transacoes').insert(parcelas).then(function() {
           load();
           resetForm();
