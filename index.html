@@ -516,6 +516,7 @@
     var items = [
       { id: 'dashboard', label: 'Painel', icon: 'fa-chart-pie' },
       { id: 'transacoes', label: 'Transações', icon: 'fa-exchange-alt' },
+      { id: 'economias', label: '💰 Economias', icon: 'fa-coins' }, // NOVA ABA
       { id: 'metas', label: 'Metas', icon: 'fa-bullseye' },
       { id: 'perfil', label: 'Perfil', icon: 'fa-user' }
     ];
@@ -995,7 +996,7 @@
   }
 
   // ============================================
-  // TRANSAÇÕES (COM CAMPO DE VINCULAR ECONOMIA)
+  // TRANSAÇÕES
   // ============================================
   function Transacoes() {
     var _t1 = useState(false), showForm = _t1[0], setShowForm = _t1[1];
@@ -1271,6 +1272,146 @@
   }
 
   // ============================================
+  // ECONOMIAS (NOVA ABA DEDICADA)
+  // ============================================
+  function Economias() {
+    var _e1 = useState([]), economias = _e1[0], setEconomias = _e1[1];
+    var _e2 = useState([]), objetivos = _e2[0], setObjetivos = _e2[1];
+    var _e3 = useState(true), loading = _e3[0], setLoading = _e3[1];
+    var _e4 = useState(null), userId = _e4[0], setUserId = _e4[1];
+    var _e5 = useState(false), showForm = _e5[0], setShowForm = _e5[1];
+    var _e6 = useState(''), ecoNome = _e6[0], setEcoNome = _e6[1];
+    var _e7 = useState(''), ecoValor = _e7[0], setEcoValor = _e7[1];
+    var _e8 = useState(''), ecoData = _e8[0], setEcoData = _e8[1];
+    var _e9 = useState(''), ecoObjetivoId = _e9[0], setEcoObjetivoId = _e9[1];
+    var _e10 = useState(''), ecoObs = _e10[0], setEcoObs = _e10[1];
+
+    useEffect(function() {
+      supabase.auth.getUser().then(function(result) {
+        if (result.data && result.data.user) setUserId(result.data.user.id);
+      });
+    }, []);
+
+    var load = function() {
+      if (!userId) return;
+      setLoading(true);
+      Promise.all([
+        supabase.from('economias').select('*').eq('user_id', userId).order('data', { ascending: false }),
+        supabase.from('objetivos').select('*').eq('user_id', userId).order('created_at')
+      ]).then(function(results) {
+        if (!results[0].error) setEconomias(results[0].data || []);
+        if (!results[1].error) setObjetivos(results[1].data || []);
+        setLoading(false);
+      }).catch(function() { setLoading(false); });
+    };
+
+    useEffect(function() { if (userId) load(); }, [userId]);
+
+    var resetForm = function() {
+      setEcoNome(''); setEcoValor(''); setEcoData(''); setEcoObjetivoId(''); setEcoObs('');
+      setShowForm(false);
+    };
+
+    var submit = function(e) {
+      e.preventDefault();
+      if (!ecoNome.trim() || !ecoValor || !userId || !ecoObjetivoId) return;
+      
+      var dados = {
+        nome: ecoNome.trim(),
+        valor: parseCurrency(ecoValor),
+        data: ecoData || new Date().toISOString().split('T')[0],
+        objetivo_id: ecoObjetivoId,
+        obs: ecoObs.trim() || null,
+        user_id: userId
+      };
+      
+      supabase.from('economias').insert([dados]).then(function() {
+        load();
+        resetForm();
+      });
+    };
+
+    var del = function(id) {
+      if (window.confirm('Excluir esta economia?')) {
+        supabase.from('economias').delete().eq('id', id).then(function() { load(); });
+      }
+    };
+
+    var nomeObjetivo = function(id) {
+      var o = objetivos.filter(function(x) { return x.id === id; })[0];
+      return o ? o.nome : 'Sem vínculo';
+    };
+
+    var totalGuardado = useMemo(function() { return economias.reduce(function(acc, e) { return acc + Number(e.valor); }, 0); }, [economias]);
+
+    return createElement(
+      'div',
+      { className: 'pb-24 max-w-md mx-auto font-body' },
+      createElement(Header, null),
+      createElement(
+        'div', { className: 'p-4 space-y-4' },
+        createElement(
+          'div', { className: 'flex items-center justify-between mb-4' },
+          createElement('h1', { className: 'text-xl font-bold font-display' }, createElement('i', { className: 'fas fa-coins mr-2' }), 'Economias'),
+          createElement('button', {
+            onClick: function() { setShowForm(!showForm); },
+            className: 'btn-primary min-w-[48px] min-h-[48px] rounded-full w-12 h-12 flex items-center justify-center text-2xl'
+          }, showForm ? createElement('i', { className: 'fas fa-times' }) : createElement('i', { className: 'fas fa-plus' }))
+        ),
+        showForm ? createElement(
+          'form', { onSubmit: submit, className: 'p-4 space-y-4 border-b border-[var(--border-color)] bg-[var(--bg-secondary)]' },
+          createElement('input', { type: 'text', placeholder: 'Nome da economia (ex: Aporte mensal)', value: ecoNome, onChange: function(e) { setEcoNome(e.target.value); }, className: 'input-modern', required: true }),
+          createElement(CurrencyInput, { value: ecoValor, onChange: setEcoValor, placeholder: 'Valor guardado (R$)', className: 'input-modern', required: true }),
+          createElement('input', { type: 'date', value: ecoData, onChange: function(e) { setEcoData(e.target.value); }, className: 'input-modern' }),
+          createElement(
+            'select', { value: ecoObjetivoId, onChange: function(e) { setEcoObjetivoId(e.target.value); }, className: 'select-modern', required: true },
+            createElement('option', { value: '' }, 'Selecione uma meta para vincular'),
+            objetivos.map(function(o) { return createElement('option', { key: o.id, value: o.id }, o.nome); })
+          ),
+          createElement('input', { type: 'text', placeholder: 'Observação (opcional)', value: ecoObs, onChange: function(e) { setEcoObs(e.target.value); }, className: 'input-modern' }),
+          createElement('button', { type: 'submit', className: 'btn-primary w-full' }, 'Salvar Economia')
+        ) : null,
+        createElement(
+          'div', { className: 'card-modern flex items-center justify-between' },
+          createElement('span', { className: 'text-sm text-[var(--text-muted)] font-body' }, 'Total guardado em todas as metas'),
+          createElement('span', { className: 'text-lg font-bold text-[var(--accent)] font-display' }, formatCurrency(totalGuardado))
+        ),
+        loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)] font-body' }, 'Carregando…') :
+        economias.length === 0 ? createElement(
+          'div', { className: 'text-center py-8 text-[var(--text-muted)] font-body' },
+          createElement('i', { className: 'fas fa-coins text-4xl mb-2 block' }),
+          createElement('p', null, 'Nenhuma economia registrada'),
+          createElement('p', { className: 'text-sm' }, 'Cadastre uma economia e vincule a uma meta')
+        ) :
+        createElement(
+          'div', { className: 'space-y-2' },
+          economias.map(function(ec) {
+            return createElement(
+              'div', { key: ec.id, className: 'card-modern p-3 flex items-center justify-between' },
+              createElement(
+                'div', { className: 'flex-1 min-w-0' },
+                createElement('p', { className: 'font-bold text-sm truncate font-body' }, ec.nome),
+                createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' },
+                  formatDate(ec.data) + ' • ' + nomeObjetivo(ec.objetivo_id)
+                ),
+                ec.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)] font-body' }, createElement('i', { className: 'fas fa-pencil-alt mr-1' }), ec.obs) : null
+              ),
+              createElement(
+                'div', { className: 'flex items-center gap-2 flex-shrink-0' },
+                createElement('span', { className: 'font-bold text-[var(--accent)]' }, '+ ' + formatCurrency(ec.valor)),
+                createElement('button', {
+                  onClick: function() { del(ec.id); },
+                  className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1'
+                }, createElement('i', { className: 'fas fa-trash' }))
+              )
+            );
+          })
+        )
+      )
+    );
+  }
+
+  // ============================================
   // METAS (Com Sistema Preditivo Gamificado)
   // ============================================
   function Metas() {
@@ -1479,7 +1620,7 @@
             'div', { className: 'text-center py-8 text-[var(--text-muted)] font-body' },
             createElement('i', { className: 'fas fa-coins text-4xl mb-2 block' }),
             createElement('p', null, 'Nenhuma economia registrada'),
-            createElement('p', { className: 'text-sm' }, 'Cadastre uma Receita e marque "Vincular a uma Economia"')
+            createElement('p', { className: 'text-sm' }, 'Cadastre uma economia e vincule a uma meta')
           ) :
           economias.map(function(ec) {
             var nomeObj = objetivos.filter(function(o) { return o.id === ec.objetivo_id; })[0];
@@ -1583,6 +1724,7 @@
     var content;
     if (currentPage === 'dashboard') content = createElement(Dashboard, { setPage: setCurrentPage });
     else if (currentPage === 'transacoes') content = createElement(Transacoes, null);
+    else if (currentPage === 'economias') content = createElement(Economias, null);
     else if (currentPage === 'metas') content = createElement(Metas, null);
     else if (currentPage === 'perfil') content = createElement(Perfil, null);
     else content = createElement(Dashboard, { setPage: setCurrentPage });
