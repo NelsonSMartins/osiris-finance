@@ -269,6 +269,40 @@
       font-weight: 700;
       font-family: var(--font-display);
     }
+
+    /* ===== BOTÃO DO GOOGLE ESTILIZADO ===== */
+    .login-google-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 16px 24px;
+      border-radius: 14px;
+      border: 2px solid #d4af37; /* Borda dourada premium */
+      background: transparent;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 17px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: var(--font-body);
+      margin-top: 10px;
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
+    }
+    .login-google-btn:hover {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: #10b981;
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+      transform: scale(1.02);
+    }
+    .login-google-btn:active {
+      transform: scale(0.95);
+    }
+    .login-google-btn img {
+      width: 28px;
+      height: 28px;
+    }
     
     /* ===== ANIMAÇÕES GAMIFICADAS ===== */
     @keyframes pulse-glow {
@@ -598,7 +632,7 @@
           disabled: loading,
           className: 'login-google-btn'
         },
-          createElement('img', { src: 'https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg', alt: 'Google', style: { width: '20px', height: '20px' } }),
+          createElement('img', { src: 'https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg', alt: 'Google', style: { width: '28px', height: '28px' } }),
           loading ? 'Entrando...' : 'Entrar com Google'
         )
       )
