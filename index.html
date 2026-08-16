@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>OSIRIS · Controle Financeiro</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #0a0e1a; color: #e2e8f0; }
+    .bg-card { background: #1a2332; }
+    .bg-input { background: #0d1520; }
+    .border-custom { border-color: #2d3a4a; }
+    .text-gold { color: #d4a847; }
+    .bg-gold { background: #d4a847; }
+    .bg-gold:hover { background: #b8922f; }
+    .btn-google {
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      width: 100%; padding: 14px; border: 2px solid #2d3a4a; border-radius: 12px;
+      background: #1a2332; color: #e2e8f0; font-weight: 500; cursor: pointer;
+      transition: all 0.2s; min-height: 52px;
+    }
+    .btn-google:hover { background: #243044; border-color: #d4a847; }
+    .btn-google img { width: 20px; height: 20px; }
+    .divider { display: flex; align-items: center; gap: 16px; color: #64748b; font-size: 13px; margin: 12px 0; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #2d3a4a; }
+    input, select { outline: none; }
+    input:focus, select:focus { border-color: #d4a847 !important; }
+    .min-h-44 { min-height: 44px; }
+    .min-h-52 { min-height: 52px; }
+    .min-h-56 { min-height: 56px; }
+    .rounded-xl2 { border-radius: 1.25rem; }
+    .shadow-card { box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
+    .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #0a0e1a; }
+    ::-webkit-scrollbar-thumb { background: #d4a847; border-radius: 8px; }
+  </style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<!-- ========== CDN ========== -->
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+(function() {
+  'use strict';
+
+  // ============================================
+  // SUPABASE CONFIG
+  // ============================================
+  var SUPABASE_URL = 'https://nzyqhqxfpvzljcunnnsq.supabase.co';
+  var SUPABASE_ANON_KEY = 'sb_publishable_vSSbaS4QS-mp0pbFb4cr3g_0edR7d97';
+  var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  var React = window.React;
+  var ReactDOM = window.ReactDOM;
+  var useState = React.useState;
+  var useEffect = React.useEffect;
+  var useMemo = React.useMemo;
+  var createElement = React.createElement;
+
+  // ============================================
+  // UTILITÁRIOS
+  // ============================================
+  function formatCurrency(value) {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value || 0);
+  }
+
+  function getMonthRange(date) {
+    var start = new Date(date.getFullYear(), date.getMonth(), 1).toISOString().split('T')[0];
+    var end = new Date(date.getFullYear(), date.getMonth() + 1, 0).toISOString().split('T')[0];
+    return { start: start, end: end };
+  }
+
+  // ============================================
+  // COMPONENTES
+  // ============================================
+
+  // ----- Header -----
+  function Header(props) {
+    var currentDate = props.currentDate;
+    var onDateChange = props.onDateChange;
+    var title = props.title;
+    var showLogo = props.showLogo;
+
+    return createElement(
+      'header',
+      { className: 'sticky top-0 z-40 bg-[#0a0e1a]/95 backdrop-blur border-b border-[#2d3a4a] px-4 py-3' },
+      createElement(
+        'div',
+        { className: 'max-w-md mx-auto flex items-center justify-between' },
+        createElement(
+          'div',
+          null,
+          showLogo ? createElement('p', { className: 'text-[11px] tracking-[0.2em] text-gold uppercase mb-0.5' }, 'OSIRIS') : null,
+          createElement('h1', { className: 'text-xl font-bold text-white' }, title)
+        ),
+        onDateChange ? createElement(
+          'div',
+          { className: 'flex items-center gap-1' },
+          createElement('button', { onClick: function() { onDateChange('prev'); }, className: 'p-2 rounded-full hover:bg-[#1a2332] min-h-[44px] min-w-[44px] text-[#94a3b8]' }, '◀'),
+          createElement('span', { className: 'text-sm font-medium min-w-[80px] text-center text-white' }, currentDate ? currentDate.toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' }) : ''),
+          createElement('button', { onClick: function() { onDateChange('next'); }, className: 'p-2 rounded-full hover:bg-[#1a2332] min-h-[44px] min-w-[44px] text-[#94a3b8]' }, '▶')
+        ) : null
+      )
+    );
+  }
+
+  // ----- BottomNavigation -----
+  function BottomNavigation(props) {
+    var onNavigate = props.onNavigate;
+    var _useState7 = useState(window.location.pathname),
+        currentPath = _useState7[0],
+        setCurrentPath = _useState7[1];
+
+    useEffect(function() {
+      var handleLocation = function() { setCurrentPath(window.location.pathname); };
+      window.addEventListener('popstate', handleLocation);
+      return function() { window.removeEventListener('popstate', handleLocation); };
+    }, []);
+
+    var items = [
+      { path: '/', label: 'Painel', icon: '📊' },
+      { path: '/transacoes', label: 'Transações', icon: '🔄' },
+      { path: '/categorias', label: 'Categorias', icon: '📂' },
+      { path: '/perfil', label: 'Perfil', icon: '👤' }
+    ];
+
+    var navigate = function(path) {
+      window.history.pushState({}, '', path);
+      setCurrentPath(path);
+      if (onNavigate) onNavigate(path);
+    };
+
+    var isActive = function(path) {
+      var p = currentPath.replace('/osiris-finance', '') || '/';
+      return p === path || (path === '/' && p === '/');
+    };
+
+    return createElement(
+      'nav',
+      { className: 'fixed bottom-0 left-0 right-0 z-40 bg-[#0d1520]/95 backdrop-blur border-t border-[#2d3a4a] safe-bottom' },
+      createElement(
+        'div',
+        { className: 'flex justify-around items-center h-20 max-w-md mx-auto' },
+        items.map(function(item) {
+          var active = isActive(item.path);
+          return createElement(
+            'button',
+            {
+              key: item.path,
+              onClick: function() { navigate(item.path); },
+              className: 'flex flex-col items-center justify-center min-w-[56px] min-h-[56px] px-2 transition-colors'
+            },
+            createElement('span', { className: 'text-xl ' + (active ? 'scale-110' : '') }, item.icon),
+            createElement('span', { className: 'text-xs mt-1 ' + (active ? 'text-gold font-medium' : 'text-[#64748b]') }, item.label)
+          );
+        })
+      )
+    );
+  }
+
+  // ----- TouchableCard -----
+  function TouchableCard(props) {
+    var children = props.children;
+    var onClick = props.onClick;
+    var className = props.className || '';
+    var touchSize = props.touchSize || 'large';
+    var sizes = { large: 'min-h-[64px] p-4', medium: 'min-h-[48px] p-3', small: 'min-h-[44px] p-2' };
+    return createElement(
+      'div',
+      {
+        onClick: onClick,
+        className: sizes[touchSize] + ' bg-[#1a2332] border border-[#2d3a4a] rounded-xl2 shadow-card active:scale-[0.98] transition-transform flex items-center gap-3 ' + (onClick ? 'cursor-pointer' : '') + ' ' + className
+      },
+      children
+    );
+  }
+
+  // ============================================
+  // LOGIN
+  // ============================================
+  function Login(props) {
+    var onLogin = props.onLogin;
+    var _useState8 = useState(''),
+        email = _useState8[0],
+        setEmail = _useState8[1];
+    var _useState9 = useState(''),
+        password = _useState9[0],
+        setPassword = _useState9[1];
+    var _useState10 = useState(false),
+        isSignUp = _useState10[0],
+        setIsSignUp = _useState10[1];
+    var _useState11 = useState(false),
+        loading = _useState11[0],
+        setLoading = _useState11[1];
+    var _useState12 = useState(''),
+        error = _useState12[0],
+        setError = _useState12[1];
+    var _useState13 = useState(''),
+        success = _useState13[0],
+        setSuccess = _useState13[1];
+
+    var handleSubmit = function(e) {
+      e.preventDefault();
+      setLoading(true);
+      setError('');
+      setSuccess('');
+
+      var promise = isSignUp ? supabase.auth.signUp({ email: email, password: password }) : supabase.auth.signInWithPassword({ email: email, password: password });
+
+      promise.then(function(result) {
+        if (result.error) {
+          setError(result.error.message);
+        } else if (isSignUp) {
+          setSuccess('Conta criada! Verifique seu e-mail.');
+          setEmail('');
+          setPassword('');
+        } else {
+          onLogin(result.data.user);
+        }
+        setLoading(false);
+      }).catch(function(err) {
+        setError(err.message || 'Erro desconhecido');
+        setLoading(false);
+      });
+    };
+
+    var handleGoogle = function() {
+      setLoading(true);
+      setError('');
+      supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: window.location.origin + '/osiris-finance/' }
+      }).then(function(result) {
+        if (result.error) {
+          setError(result.error.message);
+          setLoading(false);
+        }
+      }).catch(function(err) {
+        setError(err.message || 'Erro ao conectar com Google');
+        setLoading(false);
+      });
+    };
+
+    return createElement(
+      'div',
+      { className: 'min-h-screen flex items-center justify-center p-4 bg-[#0a0e1a]' },
+      createElement(
+        'div',
+        { className: 'w-full max-w-sm bg-[#1a2332] rounded-xl2 p-6 shadow-card border border-[#2d3a4a]' },
+        createElement('div', { className: 'text-center mb-6' },
+          createElement('h1', { className: 'text-2xl font-bold text-gold' }, '🏛️ OSIRIS'),
+          createElement('p', { className: 'text-[#94a3b8] text-sm' }, 'Organização Sistêmica de Investimentos')
+        ),
+        createElement(
+          'button',
+          { onClick: handleGoogle, disabled: loading, className: 'btn-google' },
+          createElement('img', { src: 'https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg', alt: 'Google' }),
+          createElement('span', null, loading ? 'Carregando...' : 'Entrar com Google')
+        ),
+        createElement('div', { className: 'divider' }, 'ou'),
+        createElement(
+          'form',
+          { onSubmit: handleSubmit, className: 'space-y-4' },
+          createElement('input', {
+            type: 'email',
+            placeholder: 'Email',
+            value: email,
+            onChange: function(e) { setEmail(e.target.value); },
+            className: 'w-full px-4 py-3 bg-[#0d1520] border-2 border-[#2d3a4a] rounded-xl text-white min-h-[52px] placeholder:text-[#64748b]'
+          }),
+          createElement('input', {
+            type: 'password',
+            placeholder: 'Senha (6+ caracteres)',
+            value: password,
+            onChange: function(e) { setPassword(e.target.value); },
+            className: 'w-full px-4 py-3 bg-[#0d1520] border-2 border-[#2d3a4a] rounded-xl text-white min-h-[52px] placeholder:text-[#64748b]',
+            minLength: 6
+          }),
+          error ? createElement('p', { className: 'text-red-500 text-sm text-center' }, error) : null,
+          success ? createElement('p', { className: 'text-[#10b981] text-sm text-center' }, success) : null,
+          createElement('button', {
+            type: 'submit',
+            disabled: loading,
+            className: 'w-full py-3 bg-gold text-[#0a0e1a] rounded-xl font-bold min-h-[56px] hover:bg-[#b8922f] transition-colors'
+          }, loading ? 'Carregando...' : (isSignUp ? '📝 Criar Conta' : '🔑 Entrar')),
+          createElement('button', {
+            type: 'button',
+            onClick: function() { setIsSignUp(!isSignUp); setError(''); setSuccess(''); },
+            className: 'w-full text-sm text-[#94a3b8] hover:text-gold transition-colors'
+          }, isSignUp ? '← Já tem conta? Entre' : '→ Não tem conta? Cadastre-se')
+        )
+      )
+    );
+  }
+
+  // ============================================
+  // DASHBOARD
+  // ============================================
+  function Dashboard() {
+    var _useState14 = useState(new Date()),
+        currentDate = _useState14[0],
+        setCurrentDate = _useState14[1];
+    var _useState15 = useState([]),
+        transactions = _useState15[0],
+        setTransactions = _useState15[1];
+    var _useState16 = useState(true),
+        loading = _useState16[0],
+        setLoading = _useState16[1];
+
+    var loadTransactions = function() {
+      setLoading(true);
+      var range = getMonthRange(currentDate);
+      supabase.from('transacoes').select('*').gte('data', range.start).lte('data', range.end).order('data', { ascending: false }).then(function(result) {
+        if (!result.error && result.data) setTransactions(result.data);
+        setLoading(false);
+      }).catch(function() { setLoading(false); });
+    };
+
+    useEffect(function() { loadTransactions(); }, [currentDate]);
+
+    var summary = useMemo(function() {
+      var receitas = transactions.filter(function(t) { return t.tipo === 'receita'; });
+      var despesas = transactions.filter(function(t) { return t.tipo === 'despesa'; });
+      var totalReceitas = receitas.reduce(function(acc, t) { return acc + Number(t.valor); }, 0);
+      var totalDespesas = despesas.reduce(function(acc, t) { return acc + Number(t.valor); }, 0);
+      var map = {};
+      despesas.forEach(function(t) { map[t.categoria_nome] = (map[t.categoria_nome] || 0) + Number(t.valor); });
+      var categorias = Object.keys(map).map(function(k) { return { nome: k, total: map[k] }; }).sort(function(a, b) { return b.total - a.total; });
+      return { totalReceitas: totalReceitas, totalDespesas: totalDespesas, saldo: totalReceitas - totalDespesas, categorias: categorias };
+    }, [transactions]);
+
+    var changeDate = function(dir) {
+      var d = new Date(currentDate);
+      if (dir === 'prev') d.setMonth(d.getMonth() - 1);
+      else d.setMonth(d.getMonth() + 1);
+      setCurrentDate(d);
+    };
+
+    return createElement(
+      'div',
+      { className: 'pb-24 max-w-md mx-auto' },
+      createElement(Header, { currentDate: currentDate, onDateChange: changeDate, title: 'Painel', showLogo: true }),
+      createElement(
+        'div',
+        { className: 'p-4 space-y-4' },
+        createElement(
+          TouchableCard,
+          { className: 'border-2 border-[#d4a847]/30 relative overflow-hidden' },
+          createElement('div', { className: 'w-12 h-12 flex items-center justify-center shrink-0 bg-[#d4a847]/10 rounded-full' }, '💳'),
+          createElement('div', { className: 'flex-1' },
+            createElement('p', { className: 'text-xs text-[#94a3b8]' }, 'Saldo do mês'),
+            createElement('p', { className: 'text-2xl font-bold text-white' }, formatCurrency(summary.saldo))
+          )
+        ),
+        createElement(
+          'div',
+          { className: 'grid grid-cols-2 gap-3' },
+          createElement(
+            TouchableCard,
+            { touchSize: 'medium' },
+            createElement('span', { className: 'text-xl text-[#10b981]' }, '⬆️'),
+            createElement('div', null,
+              createElement('p', { className: 'text-xs text-[#94a3b8]' }, 'Receitas'),
+              createElement('p', { className: 'text-base font-bold text-white' }, formatCurrency(summary.totalReceitas))
+            )
+          ),
+          createElement(
+            TouchableCard,
+            { touchSize: 'medium' },
+            createElement('span', { className: 'text-xl text-[#ef4444]' }, '⬇️'),
+            createElement('div', null,
+              createElement('p', { className: 'text-xs text-[#94a3b8]' }, 'Despesas'),
+              createElement('p', { className: 'text-base font-bold text-white' }, formatCurrency(summary.totalDespesas))
+            )
+          )
+        ),
+        createElement(
+          'div',
+          { className: 'bg-[#1a2332] rounded-xl2 p-4 shadow-card border border-[#2d3a4a]' },
+          createElement('h3', { className: 'text-sm font-semibold text-white mb-3' }, 'Gastos por categoria'),
+          summary.categorias.length === 0 ? createElement('p', { className: 'text-[#64748b] text-center py-4 text-sm' }, loading ? 'Carregando…' : 'Nenhum gasto registrado') :
+          createElement(
+            'div',
+            { className: 'space-y-3' },
+            summary.categorias.slice(0, 5).map(function(cat) {
+              var pct = summary.totalDespesas > 0 ? (cat.total / summary.totalDespesas) * 100 : 0;
+              return createElement(
+                'div',
+                { key: cat.nome },
+                createElement('div', { className: 'flex justify-between text-sm mb-1' },
+                  createElement('span', { className: 'text-white' }, cat.nome),
+                  createElement('span', { className: 'font-medium text-gold' }, formatCurrency(cat.total))
+                ),
+                createElement('div', { className: 'w-full bg-[#0d1520] rounded-full h-1.5' },
+                  createElement('div', { className: 'bg-gold rounded-full h-1.5 transition-all', style: { width: Math.min(pct, 100) + '%' } })
+                )
+              );
+            })
+          )
+        )
+      )
+    );
+  }
+
+  // ============================================
+  // CATEGORIAS
+  // ============================================
+  function Categorias() {
+    var _useState17 = useState([]),
+        categorias = _useState17[0],
+        setCategorias = _useState17[1];
+    var _useState18 = useState(true),
+        loading = _useState18[0],
+        setLoading = _useState18[1];
+    var _useState19 = useState(false),
+        showForm = _useState19[0],
+        setShowForm = _useState19[1];
+    var _useState20 = useState(''),
+        nome = _useState20[0],
+        setNome = _useState20[1];
+    var _useState21 = useState('despesa'),
+        tipo = _useState21[0],
+        setTipo = _useState21[1];
+    var _useState22 = useState(null),
+        editando = _useState22[0],
+        setEditando = _useState22[1];
+
+    var load = function() {
+      setLoading(true);
+      supabase.from('categorias').select('*').order('nome').then(function(result) {
+        if (!result.error && result.data) setCategorias(result.data);
+        setLoading(false);
+      });
+    };
+
+    useEffect(function() { load(); }, []);
+
+    var reset = function() { setNome(''); setTipo('despesa'); setEditando(null); setShowForm(false); };
+
+    var submit = function(e) {
+      e.preventDefault();
+      if (!nome.trim()) return;
+      var promise = editando ? supabase.from('categorias').update({ nome: nome, tipo: tipo }).eq('id', editando) : supabase.from('categorias').insert([{ nome: nome, tipo: tipo }]);
+      promise.then(function() { load(); reset(); });
+    };
+
+    var del = function(id) {
+      if (window.confirm('Excluir esta categoria?')) {
+        supabase.from('categorias').delete().eq('id', id).then(function() { load(); });
+      }
+    };
+
+    var edit = function(cat) { setNome(cat.nome); setTipo(cat.tipo); setEditando(cat.id); setShowForm(true); };
+
+    return createElement(
+      'div',
+      { className: 'pb-24 max-w-md mx-auto' },
+      createElement(
+        'div',
+        { className: 'sticky top-0 z-40 bg-[#0a0e1a]/95 backdrop-blur border-b border-[#2d3a4a] p-4 flex items-center justify-between' },
+        createElement('h1', { className: 'text-xl font-bold text-white' }, 'Categorias'),
+        createElement('button', { onClick: function() { setShowForm(!showForm); }, className: 'min-w-[48px] min-h-[48px] bg-gold text-[#0a0e1a] rounded-full flex items-center justify-center hover:bg-[#b8922f] text-2xl' }, showForm ? '✕' : '＋')
+      ),
+      showForm ? createElement(
+        'form',
+        { onSubmit: submit, className: 'p-4 space-y-4 bg-[#0d1520]' },
+        createElement(
+          'div',
+          { className: 'flex gap-2' },
+          ['despesa', 'receita'].map(function(t) {
+            return createElement('button', {
+              key: t,
+              type: 'button',
+              onClick: function() { setTipo(t); },
+              className: 'flex-1 py-3 rounded-xl font-medium transition-colors min-h-[44px] ' + (tipo === t ? (t === 'despesa' ? 'bg-[#ef4444] text-white' : 'bg-[#10b981] text-white') : 'bg-[#1a2332] text-[#94a3b8] border-2 border-[#2d3a4a]')
+            }, t === 'despesa' ? '💸 Despesa' : '💰 Receita');
+          })
+        ),
+        createElement('input', { type: 'text', placeholder: 'Nome da categoria…', value: nome, onChange: function(e) { setNome(e.target.value); }, className: 'w-full px-4 py-3 bg-[#1a2332] border-2 border-[#2d3a4a] rounded-xl text-white min-h-[52px] placeholder:text-[#64748b]' }),
+        createElement('div', { className: 'flex gap-2' },
+          createElement('button', { type: 'submit', className: 'flex-1 py-3 bg-gold text-[#0a0e1a] rounded-xl font-bold hover:bg-[#b8922f] min-h-[44px]' }, editando ? 'Atualizar' : 'Salvar'),
+          createElement('button', { type: 'button', onClick: reset, className: 'py-3 px-4 bg-[#1a2332] border border-[#2d3a4a] rounded-xl text-[#94a3b8] hover:bg-[#243044] min-h-[44px]' }, 'Cancelar')
+        )
+      ) : null,
+      createElement(
+        'div',
+        { className: 'p-4 space-y-2' },
+        loading ? createElement('p', { className: 'text-center py-8 text-[#64748b]' }, 'Carregando…') :
+        categorias.length === 0 ? createElement('div', { className: 'text-center py-8 text-[#64748b]' }, '📂 Nenhuma categoria cadastrada') :
+        categorias.map(function(cat) {
+          return createElement(
+            TouchableCard,
+            { key: cat.id, className: cat.tipo === 'despesa' ? 'border-l-4 border-[#ef4444]' : 'border-l-4 border-[#10b981]' },
+            createElement('div', { className: 'flex-1' },
+              createElement('p', { className: 'font-medium text-white' }, cat.nome),
+              createElement('p', { className: 'text-xs text-[#94a3b8]' }, cat.tipo === 'despesa' ? '💸 Despesa' : '💰 Receita')
+            ),
+            createElement('button', { onClick: function(e) { e.stopPropagation(); edit(cat); }, className: 'p-2 hover:bg-[#243044] rounded-lg' }, '✏️'),
+            createElement('button', { onClick: function(e) { e.stopPropagation(); del(cat.id); }, className: 'p-2 hover:bg-[#243044] rounded-lg' }, '🗑️')
+          );
+        })
+      )
+    );
+  }
+
+  // ============================================
+  // TRANSAÇÕES
+  // ============================================
+  function Transacoes() {
+    var _useState23 = useState(false),
+        showForm = _useState23[0],
+        setShowForm = _useState23[1];
+    var _useState24 = useState('despesa'),
+        tipo = _useState24[0],
+        setTipo = _useState24[1];
+    var _useState25 = useState([]),
+        transactions = _useState25[0],
+        setTransactions = _useState25[1];
+    var _useState26 = useState(true),
+        loading = _useState26[0],
+        setLoading = _useState26[1];
+    var _useState27 = useState([]),
+        categorias = _useState27[0],
+        setCategorias = _useState27[1];
+    var _useState28 = useState(''),
+        nome = _useState28[0],
+        setNome = _useState28[1];
+    var _useState29 = useState(''),
+        categoriaNome = _useState29[0],
+        setCategoriaNome = _useState29[1];
+    var _useState30 = useState(''),
+        valor = _useState30[0],
+        setValor = _useState30[1];
+    var _useState31 = useState(''),
+        data = _useState31[0],
+        setData = _useState31[1];
+
+    var load = function() {
+      setLoading(true);
+      Promise.all([
+        supabase.from('categorias').select('*').order('nome'),
+        supabase.from('transacoes').select('*').order('data', { ascending: false }).limit(50)
+      ]).then(function(results) {
+        if (!results[0].error && results[0].data) setCategorias(results[0].data);
+        if (!results[1].error && results[1].data) setTransactions(results[1].data);
+        setLoading(false);
+      }).catch(function() { setLoading(false); });
+    };
+
+    useEffect(function() { load(); }, []);
+
+    var submit = function(e) {
+      e.preventDefault();
+      var trans = { nome: nome, categoria_nome: categoriaNome, valor: Number(valor), tipo: tipo, data: data || new Date().toISOString().split('T')[0] };
+      supabase.from('transacoes').insert([trans]).then(function() {
+        load();
+        setShowForm(false);
+        setNome(''); setCategoriaNome(''); setValor(''); setData('');
+      });
+    };
+
+    var del = function(id) {
+      if (window.confirm('Excluir esta transação?')) {
+        supabase.from('transacoes').delete().eq('id', id).then(function() { load(); });
+      }
+    };
+
+    var filtradas = categorias.filter(function(c) { return c.tipo === tipo; });
+
+    return createElement(
+      'div',
+      { className: 'pb-24 max-w-md mx-auto' },
+      createElement(
+        'div',
+        { className: 'sticky top-0 z-40 bg-[#0a0e1a]/95 backdrop-blur border-b border-[#2d3a4a] p-4 flex items-center justify-between' },
+        createElement('h1', { className: 'text-xl font-bold text-white' }, 'Transações'),
+        createElement('button', { onClick: function() { setShowForm(!showForm); }, className: 'min-w-[48px] min-h-[48px] bg-gold text-[#0a0e1a] rounded-full flex items-center justify-center hover:bg-[#b8922f] text-2xl' }, showForm ? '✕' : '＋')
+      ),
+      showForm ? createElement(
+        'form',
+        { onSubmit: submit, className: 'p-4 space-y-4 bg-[#0d1520]' },
+        createElement(
+          'div',
+          { className: 'flex gap-2' },
+          ['despesa', 'receita'].map(function(t) {
+            return createElement('button', {
+              key: t,
+              type: 'button',
+              onClick: function() { setTipo(t); },
+              className: 'flex-1 py-3 rounded-xl font-medium transition-colors min-h-[44px] ' + (tipo === t ? (t === 'despesa' ? 'bg-[#ef4444] text-white' : 'bg-[#10b981] text-white') : 'bg-[#1a2332] text-[#94a3b8] border-2 border-[#2d3a4a]')
+            }, t === 'despesa' ? '💸 Despesa' : '💰 Receita');
+          })
+        ),
+        createElement('input', { type: 'text', placeholder: 'Nome da transação…', value: nome, onChange: function(e) { setNome(e.target.value); }, className: 'w-full px-4 py-3 bg-[#1a2332] border-2 border-[#2d3a4a] rounded-xl text-white min-h-[52px] placeholder:text-[#64748b]' }),
+        createElement(
+          'select',
+          { value: categoriaNome, onChange: function(e) { setCategoriaNome(e.target.value); }, className: 'w-full px-4 py-3 bg-[#1a2332] border-2 border-[#2d3a4a] rounded-xl text-white min-h-[52px]' },
+          createElement('option', { value: '' }, 'Selecione uma categoria'),
+          filtradas.length === 0 ? createElement('option', { value: '', disabled: true }, '❗ Crie categorias primeiro') :
+          filtradas.map(function(c) { return createElement('option', { key: c.id, value: c.nome }, c.nome); })
+        ),
+        createElement('input', { type: 'number', step: '0.01', placeholder: 'Valor', value: valor, onChange: function(e) { setValor(e.target.value); }, className: 'w-full px-4 py-3 bg-[#1a2332] border-2 border-[#2d3a4a] rounded-xl text-white min-h-[52px] placeholder:text-[#64748b]' }),
+        createElement('input', { type: 'date', value: data, onChange: function(e) { setData(e.target.value); }, className: 'w-full px-4 py-3 bg-[#1a2332] border-2 border-[#2d3a4a] rounded-xl text-white min-h-[52px]' }),
+        createElement('button', { type: 'submit', className: 'w-full py-4 bg-gold text-[#0a0e1a] rounded-xl font-bold text-lg min-h-[56px] hover:bg-[#b8922f]' }, 'Salvar')
+      ) : null,
+      createElement(
+        'div',
+        { className: 'p-4 space-y-2' },
+        loading ? createElement('p', { className: 'text-center py-8 text-[#64748b]' }, 'Carregando…') :
+        transactions.length === 0 ? createElement('div', { className: 'text-center py-8 text-[#64748b]' }, '📭 Nenhuma transação registrada') :
+        transactions.map(function(t) {
+          return createElement(
+            TouchableCard,
+            { key: t.id, className: t.tipo === 'despesa' ? 'border-l-4 border-[#ef4444]' : 'border-l-4 border-[#10b981]', onClick: function() { del(t.id); } },
+            createElement('div', { className: 'flex-1 flex items-center justify-between' },
+              createElement('div', null,
+                createElement('p', { className: 'font-medium text-white' }, t.nome),
+                createElement('p', { className: 'text-xs text-[#94a3b8]' }, t.categoria_nome + ' • ' + new Date(t.data).toLocaleDateString('pt-BR'))
+              ),
+              createElement('p', { className: 'font-bold ' + (t.tipo === 'despesa' ? 'text-[#ef4444]' : 'text-[#10b981]') }, (t.tipo === 'despesa' ? '-' : '+') + ' ' + formatCurrency(t.valor))
+            ),
+            createElement('span', { className: 'text-[#64748b]' }, '🗑️')
+          );
+        })
+      )
+    );
+  }
+
+  // ============================================
+  // PERFIL
+  // ============================================
+  function Perfil() {
+    var _useState32 = useState(null),
+        user = _useState32[0],
+        setUser = _useState32[1];
+
+    useEffect(function() {
+      supabase.auth.getUser().then(function(result) {
+        if (result.data && result.data.user) setUser(result.data.user);
+      });
+    }, []);
+
+    var logout = function() {
+      supabase.auth.signOut().then(function() { window.location.reload(); });
+    };
+
+    return createElement(
+      'div',
+      { className: 'pb-24 max-w-md mx-auto' },
+      createElement(Header, { title: 'Perfil', showLogo: true }),
+      createElement(
+        'div',
+        { className: 'p-4 space-y-4' },
+        createElement(
+          TouchableCard,
+          { touchSize: 'medium' },
+          createElement('span', { className: 'text-2xl' }, '👤'),
+          createElement('div', { className: 'flex-1' },
+            createElement('p', { className: 'font-medium text-white' }, user ? user.email : 'Usuário'),
+            createElement('p', { className: 'text-xs text-[#94a3b8]' }, 'Logado com ' + (user && user.app_metadata ? (user.app_metadata.provider || 'email') : 'email'))
+          )
+        ),
+        createElement(
+          TouchableCard,
+          { touchSize: 'medium' },
+          createElement('span', { className: 'text-xl' }, '🎨'),
+          createElement('div', { className: 'flex-1' },
+            createElement('p', { className: 'font-medium text-white' }, 'Tema escuro'),
+            createElement('p', { className: 'text-xs text-[#94a3b8]' }, 'Modo noturno ativado')
+          )
+        ),
+        createElement('button', { onClick: logout, className: 'w-full py-3 bg-[#ef4444]/20 text-[#ef4444] rounded-xl font-medium border border-[#ef4444]/30 hover:bg-[#ef4444]/30 transition-colors min-h-[52px]' }, '🚪 Sair')
+      )
+    );
+  }
+
+  // ============================================
+  // APP
+  // ============================================
+  function App() {
+    var _useState33 = useState(null),
+        user = _useState33[0],
+        setUser = _useState33[1];
+    var _useState34 = useState(true),
+        loading = _useState34[0],
+        setLoading = _useState34[1];
+    var _useState35 = useState(window.location.pathname),
+        currentPath = _useState35[0],
+        setCurrentPath = _useState35[1];
+
+    useEffect(function() {
+      supabase.auth.getSession().then(function(_ref) {
+        var session = _ref.data.session;
+        setUser(session && session.user ? session.user : null);
+        setLoading(false);
+      }).catch(function() { setLoading(false); });
+
+      var listener = supabase.auth.onAuthStateChange(function(event, session) {
+        setUser(session && session.user ? session.user : null);
+      });
+
+      var handleLocation = function() { setCurrentPath(window.location.pathname); };
+      window.addEventListener('popstate', handleLocation);
+
+      return function() {
+        if (listener && listener.data && listener.data.subscription) {
+          listener.data.subscription.unsubscribe();
+        }
+        window.removeEventListener('popstate', handleLocation);
+      };
+    }, []);
+
+    if (loading) {
+      return createElement('div', { className: 'min-h-screen flex items-center justify-center text-[#94a3b8]' }, 'Carregando...');
+    }
+
+    if (!user) {
+      return createElement(Login, { onLogin: setUser });
+    }
+
+    var path = currentPath.replace('/osiris-finance', '') || '/';
+    var content;
+    if (path === '/' || path === '/osiris-finance/') {
+      content = createElement(Dashboard, null);
+    } else if (path === '/transacoes') {
+      content = createElement(Transacoes, null);
+    } else if (path === '/categorias') {
+      content = createElement(Categorias, null);
+    } else if (path === '/perfil') {
+      content = createElement(Perfil, null);
+    } else {
+      content = createElement(Dashboard, null);
+    }
+
+    return createElement(
+      React.Fragment,
+      null,
+      content,
+      createElement(BottomNavigation, { onNavigate: setCurrentPath })
+    );
+  }
+
+  // ============================================
+  // RENDER
+  // ============================================
+  var rootElement = document.getElementById('root');
+  if (rootElement) {
+    var root = ReactDOM.createRoot(rootElement);
+    root.render(createElement(App));
+  }
+
+})();
+</script>
+
+</body>
+</html>
