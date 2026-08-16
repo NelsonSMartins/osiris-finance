@@ -14,10 +14,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
-    /* ============================================
-       OSIRIS - 5 TEMAS
-       ============================================ */
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     [data-theme="dark"] {
@@ -149,10 +145,7 @@
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       box-shadow: var(--shadow);
     }
-    .card-modern:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    }
+    .card-modern:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); }
 
     .btn-primary {
       background: linear-gradient(135deg, var(--accent), var(--accent-dark));
@@ -171,10 +164,7 @@
       font-family: var(--font-body);
       font-size: 15px;
     }
-    .btn-primary:hover {
-      transform: scale(1.02);
-      box-shadow: 0 0 30px var(--accent-glow);
-    }
+    .btn-primary:hover { transform: scale(1.02); box-shadow: 0 0 30px var(--accent-glow); }
 
     .btn-secondary {
       background: var(--bg-secondary);
@@ -203,11 +193,7 @@
       font-family: var(--font-body);
       font-size: 16px;
     }
-    .input-modern:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 4px var(--accent-glow);
-    }
+    .input-modern:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); }
     .input-modern::placeholder { color: var(--text-muted); opacity: 0.8; }
 
     .select-modern {
@@ -224,11 +210,7 @@
       font-family: var(--font-body);
       font-size: 16px;
     }
-    .select-modern:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 4px var(--accent-glow);
-    }
+    .select-modern:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); }
     .select-modern option { background: var(--bg-card); color: var(--text-primary); }
 
     .nav-modern {
@@ -293,10 +275,7 @@
     .stat-card.expense::before { background: linear-gradient(90deg, #ef4444, #f87171); }
     .stat-card.balance::before { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
 
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     .fade-in-up { animation: fadeInUp 0.4s ease-out forwards; }
 
     @keyframes floatUp {
@@ -332,11 +311,7 @@
       justify-content: center;
       gap: 6px;
     }
-    .tab-btn.active {
-      background: var(--accent);
-      color: #ffffff;
-      border-color: var(--accent);
-    }
+    .tab-btn.active { background: var(--accent); color: #ffffff; border-color: var(--accent); }
 
     .pendencia-item {
       display: flex;
@@ -349,13 +324,8 @@
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .pendencia-item:hover { border-color: var(--accent); }
-    .pendencia-item.pago {
-      opacity: 0.55;
-    }
-    .pendencia-item.pago .pendencia-nome {
-      text-decoration: line-through;
-      color: var(--text-muted);
-    }
+    .pendencia-item.pago { opacity: 0.55; }
+    .pendencia-item.pago .pendencia-nome { text-decoration: line-through; color: var(--text-muted); }
 
     .theme-option {
       display: flex;
@@ -372,10 +342,7 @@
       color: var(--text-primary);
     }
     .theme-option:hover { border-color: var(--accent); }
-    .theme-option.active {
-      border-color: var(--accent);
-      background: var(--accent-glow);
-    }
+    .theme-option.active { border-color: var(--accent); background: var(--accent-glow); }
     .theme-dot {
       width: 24px;
       height: 24px;
@@ -426,11 +393,7 @@
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       font-family: var(--font-body);
     }
-    .subtab-btn.active {
-      background: var(--accent);
-      color: #ffffff;
-      border-color: var(--accent);
-    }
+    .subtab-btn.active { background: var(--accent); color: #ffffff; border-color: var(--accent); }
 
     .emoji-pick {
       width: 40px;
@@ -445,10 +408,7 @@
       justify-content: center;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .emoji-pick.selected {
-      border-color: var(--accent);
-      background: var(--accent-glow);
-    }
+    .emoji-pick.selected { border-color: var(--accent); background: var(--accent-glow); }
 
     .insight-card {
       background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(139,92,246,0.06));
@@ -931,7 +891,7 @@
   }
 
   // ============================================
-  // DASHBOARD COM DUAS VISÕES
+  // DASHBOARD
   // ============================================
   function Dashboard(props) {
     var setPage = props.setPage;
@@ -950,30 +910,51 @@
 
     useEffect(function() {
       supabase.auth.getUser().then(function(result) {
-        if (result.data && result.data.user) setUserId(result.data.user.id);
+        if (result.data && result.data.user) {
+          var uid = result.data.user.id;
+          setUserId(uid);
+          console.log('✅ Dashboard - User ID definido:', uid);
+        } else {
+          console.log('❌ Dashboard - Nenhum usuário logado!');
+        }
       });
     }, []);
 
     var loadTransactions = function() {
-      if (!userId) return;
+      if (!userId) {
+        console.log('⏳ Aguardando userId para carregar transações...');
+        return;
+      }
       setLoading(true);
       var range = getMonthRange(currentDate);
-      var prevRange = getMonthRange(getPrevMonthDate(currentDate));
-      Promise.all([
-        supabase.from('transacoes').select('*').eq('user_id', userId).gte('data', range.start).lte('data', range.end).order('data', { ascending: false }),
-        supabase.from('transacoes').select('valor').eq('user_id', userId).eq('tipo', 'despesa').gte('data', prevRange.start).lte('data', prevRange.end)
-      ]).then(function(results) {
-        if (!results[0].error) {
-          var data = results[0].data || [];
-          setTransactions(data);
-        }
-        if (!results[1].error) {
-          var soma = (results[1].data || []).reduce(function(acc, t) { return acc + Number(t.valor); }, 0);
-          setPrevDespesas(soma);
-        }
-        setLoading(false);
-      }).catch(function() { setLoading(false); });
+      console.log('🔄 Carregando transações para:', userId, 'Mês:', range);
+
+      supabase.from('transacoes')
+        .select('*')
+        .eq('user_id', userId)
+        .gte('data', range.start)
+        .lte('data', range.end)
+        .order('data', { ascending: false })
+        .then(function(result) {
+          if (result.error) {
+            console.error('❌ Erro ao carregar transações:', result.error);
+          } else {
+            console.log('✅ Transações carregadas:', result.data);
+            setTransactions(result.data || []);
+          }
+          setLoading(false);
+        }).catch(function(err) {
+          console.error('❌ Erro:', err);
+          setLoading(false);
+        });
     };
+
+    // Carregar transações quando userId mudar ou data mudar
+    useEffect(function() {
+      if (userId) {
+        loadTransactions();
+      }
+    }, [currentDate, userId]);
 
     var loadMetas = function() {
       if (!userId) return;
@@ -986,9 +967,10 @@
       }).catch(function() {});
     };
 
-    useEffect(function() { if (userId) { loadTransactions(); loadMetas(); } }, [currentDate, userId]);
+    useEffect(function() { if (userId) loadMetas(); }, [userId]);
 
     var summary = useMemo(function() {
+      console.log('📊 Calculando summary com', transactions.length, 'transações');
       var receitas = transactions.filter(function(t) { return t.tipo === 'receita'; });
       var despesas = transactions.filter(function(t) { return t.tipo === 'despesa'; });
       var totalReceitas = receitas.reduce(function(acc, t) { return acc + Number(t.valor); }, 0);
@@ -1052,11 +1034,15 @@
     };
 
     var togglePago = function(id, status) {
+      console.log('🔄 Toggle pago:', id, 'novo status:', status);
       supabase.from('transacoes').update({
         pago: status,
         data_pagamento: status ? new Date().toISOString().split('T')[0] : null
       }).eq('id', id).then(function() {
+        console.log('✅ Status atualizado!');
         loadTransactions();
+      }).catch(function(err) {
+        console.error('❌ Erro ao atualizar:', err);
       });
     };
 
@@ -1253,6 +1239,15 @@
         dashMode === 'mes' ? createElement(
           React.Fragment, null,
 
+          // Forçar recarregamento ao ativar a aba
+          (function() {
+            console.log('🔄 Aba "Extrato Mês" ativada, recarregando transações...');
+            if (userId) {
+              loadTransactions();
+            }
+            return null;
+          })(),
+
           // Resumo financeiro do mês
           createElement(
             'div',
@@ -1267,6 +1262,13 @@
               createElement('p', { className: 'text-[var(--text-muted)] text-xs font-bold uppercase tracking-wider font-body' }, 'Pendente'),
               createElement('p', { className: 'text-lg font-bold text-[#f59e0b] font-display' }, formatCurrency(summary.totalPendentes))
             )
+          ),
+
+          // Debug: mostrar quantas transações foram carregadas
+          createElement(
+            'div',
+            { className: 'text-xs text-[var(--text-muted)] text-center font-body p-2' },
+            transactions.length + ' transações carregadas (' + transactions.filter(function(t) { return t.tipo === 'despesa'; }).length + ' despesas)'
           ),
 
           // Barra de progresso
