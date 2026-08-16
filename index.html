@@ -221,6 +221,52 @@
     }
     .tab-btn.active { background: var(--accent); color: #ffffff; border-color: var(--accent); }
 
+    .subtab-btn {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 12px;
+      border: 2px solid var(--border-color);
+      background: var(--bg-input);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: var(--font-body);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .subtab-btn.active { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+
+    .emoji-pick {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 2px solid var(--border-color);
+      background: var(--bg-input);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .emoji-pick:hover { border-color: var(--accent); }
+    .emoji-pick.selected { border-color: var(--accent); background: var(--accent-glow); }
+
+    .checkbox-modern {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      border: 2px solid var(--border-color);
+      background: var(--bg-input);
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
+
     .extrato-scroll {
       max-height: 400px;
       overflow-y: auto;
@@ -269,6 +315,15 @@
       font-weight: 700;
       font-family: var(--font-display);
     }
+    .login-error-msg {
+      color: #ef4444;
+      font-size: 14px;
+      margin-bottom: 16px;
+      padding: 8px 12px;
+      background: rgba(239, 68, 68, 0.1);
+      border-radius: 8px;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
 
     /* ===== BOTÃO DO GOOGLE ESTILIZADO ===== */
     .login-google-btn {
@@ -279,7 +334,7 @@
       gap: 12px;
       padding: 16px 24px;
       border-radius: 14px;
-      border: 2px solid #d4af37; /* Borda dourada premium */
+      border: 2px solid #d4af37;
       background: transparent;
       color: #ffffff;
       font-weight: 700;
@@ -298,6 +353,11 @@
     }
     .login-google-btn:active {
       transform: scale(0.95);
+    }
+    .login-google-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
     }
     .login-google-btn img {
       width: 28px;
@@ -335,6 +395,7 @@
       font-weight: bold;
       color: #000;
     }
+    .milestone-100 { background: linear-gradient(90deg, #f59e0b, #ef4444) !important; }
 
     .streak-chip {
       display: inline-flex;
@@ -370,6 +431,21 @@
       background: var(--bg-input);
       border: 1px solid var(--border-color);
       flex-shrink: 0;
+    }
+
+    .float-badge {
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 480px) {
+      .login-card-custom { padding: 30px 20px; }
+      .login-logo-box img { max-width: 180px; }
+      .stat-card .text-lg { font-size: 18px; }
     }
   </style>
 </head>
@@ -550,7 +626,7 @@
     var items = [
       { id: 'dashboard', label: 'Painel', icon: 'fa-chart-pie' },
       { id: 'transacoes', label: 'Transações', icon: 'fa-exchange-alt' },
-      { id: 'economias', label: '💰 Economias', icon: 'fa-coins' }, // NOVA ABA
+      { id: 'economias', label: '💰 Economias', icon: 'fa-coins' },
       { id: 'metas', label: 'Metas', icon: 'fa-bullseye' },
       { id: 'perfil', label: 'Perfil', icon: 'fa-user' }
     ];
@@ -579,7 +655,7 @@
   }
 
   // ============================================
-  // LOGIN (APENAS GOOGLE)
+  // LOGIN (APENAS GOOGLE) - CORRIGIDO
   // ============================================
   function Login(props) {
     var onLogin = props.onLogin;
@@ -587,10 +663,17 @@
     var _s2 = useState(''), error = _s2[0], setError = _s2[1];
 
     var handleGoogle = function() {
-      setLoading(true); setError('');
+      setLoading(true);
+      setError('');
+      
+      // IMPORTANTE: Redirecionar para a página atual (com hash)
+      var redirectTo = window.location.href.split('#')[0] + '#';
+      
       supabase.auth.signInWithOAuth({ 
         provider: 'google', 
-        options: { redirectTo: window.location.origin } 
+        options: { 
+          redirectTo: redirectTo
+        } 
       })
       .then(function(result) { 
         if (result.error) { 
@@ -598,17 +681,37 @@
           setLoading(false); 
         } 
       })
-      .catch(function(err) { setError(err.message); setLoading(false); });
+      .catch(function(err) { 
+        setError(err.message); 
+        setLoading(false); 
+      });
     };
 
-    // Verifica se o usuário já voltou do Google
+    // Verifica se o usuário já voltou do Google (usando hash)
     useEffect(function() {
-      supabase.auth.getSession().then(function(_ref) {
-        var session = _ref.data.session;
-        if (session && session.user) {
-          onLogin(session.user);
-        }
-      });
+      // Verifica se há parâmetros na hash (token do OAuth)
+      var hashParams = new URLSearchParams(window.location.hash.substring(1));
+      var accessToken = hashParams.get('access_token');
+      
+      if (accessToken) {
+        // Se temos um token na URL, tentamos fazer a sessão
+        supabase.auth.getSession().then(function(_ref) {
+          var session = _ref.data.session;
+          if (session && session.user) {
+            onLogin(session.user);
+            // Limpa a hash para não ficar poluída
+            window.history.replaceState(null, '', window.location.pathname + '#');
+          }
+        });
+      } else {
+        // Verifica sessão existente
+        supabase.auth.getSession().then(function(_ref) {
+          var session = _ref.data.session;
+          if (session && session.user) {
+            onLogin(session.user);
+          }
+        });
+      }
     }, []);
 
     return createElement(
@@ -620,12 +723,12 @@
         createElement(
           'div',
           { className: 'login-logo-box' },
-          createElement('img', { src: 'logo.png', alt: 'Logo Osiris' })
+          createElement('img', { src: 'logo.png', alt: 'Logo Osiris', onError: function(e) { e.target.style.display = 'none'; } })
         ),
         createElement('h1', { className: 'login-title-custom' }, 'OSIRIS'),
         createElement('p', { className: 'text-[#94a3b8] text-sm mb-6 font-body' }, 'Controle Financeiro Inteligente'),
         
-        error ? createElement('p', { className: 'login-error-msg mb-4' }, createElement('i', { className: 'fas fa-exclamation-circle' }), ' ' + error) : null,
+        error ? createElement('p', { className: 'login-error-msg' }, createElement('i', { className: 'fas fa-exclamation-circle' }), ' ' + error) : null,
         
         createElement('button', {
           onClick: handleGoogle,
@@ -748,7 +851,7 @@
           }] 
         },
         options: {
-          indexAxis: 'x', // Barras em PÉ (Vertical)
+          indexAxis: 'x',
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
@@ -1130,7 +1233,7 @@
           // 2. Insere o depósito na tabela de Economias vinculado à Meta
           supabase.from('economias').insert([{
             nome: 'Transferência para: ' + nome.trim(),
-            valor: parseCurrency(valor), // Usa o mesmo valor da transação
+            valor: parseCurrency(valor),
             data: data || new Date().toISOString().split('T')[0],
             objetivo_id: economiaMetaId,
             obs: 'Vinculado à transação',
@@ -1693,7 +1796,9 @@
     }, []);
 
     var logout = function() {
-      supabase.auth.signOut().then(function() { window.location.reload(); });
+      supabase.auth.signOut().then(function() { 
+        window.location.href = window.location.pathname + '#';
+      });
     };
 
     return createElement(
