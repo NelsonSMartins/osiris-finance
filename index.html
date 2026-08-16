@@ -8,16 +8,16 @@
   <!-- Google Fonts Modernas -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+
   <script src="https://cdn.tailwindcss.com"></script>
-  
+
   <!-- Font Awesome para ícones -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
     /* ============================================
-       OSIRIS MODERNO - TEMA DARK/LIGHT
+       OSIRIS MODERNO - TEMA DARK/LIGHT/PIXEL
        ============================================ */
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -37,9 +37,12 @@
       --accent-glow: rgba(16, 185, 129, 0.3);
       --danger: #ef4444;
       --warning: #f59e0b;
+      --purple: #8b5cf6;
+      --blue: #3b82f6;
       --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
       --radius: 16px;
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --font-display: 'Space Grotesk', 'Inter', sans-serif;
     }
 
     [data-theme="light"] {
@@ -94,12 +97,6 @@
       box-shadow: var(--shadow);
     }
 
-    .glass-light {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
     /* ===== CARDS ===== */
     .card-modern {
       background: var(--bg-card);
@@ -134,6 +131,7 @@
       transform: scale(1.02);
       box-shadow: 0 0 30px var(--accent-glow);
     }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
     .btn-secondary {
       background: var(--bg-secondary);
@@ -203,19 +201,19 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 64px;
-      min-width: 64px;
-      padding: 8px 12px;
+      min-height: 60px;
+      flex: 1;
+      padding: 8px 4px;
       color: var(--text-muted);
       transition: var(--transition);
       cursor: pointer;
       border: none;
       background: transparent;
       font-family: 'Inter', sans-serif;
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
       position: relative;
     }
     .nav-item.active {
@@ -227,7 +225,7 @@
       top: -1px;
       left: 50%;
       transform: translateX(-50%);
-      width: 24px;
+      width: 22px;
       height: 3px;
       background: var(--accent);
       border-radius: 0 0 4px 4px;
@@ -236,7 +234,7 @@
       color: var(--text-primary);
     }
     .nav-item .icon {
-      font-size: 20px;
+      font-size: 18px;
       margin-bottom: 2px;
     }
 
@@ -268,17 +266,23 @@
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .fade-in-up {
-      animation: fadeInUp 0.4s ease-out forwards;
-    }
+    .fade-in-up { animation: fadeInUp 0.4s ease-out forwards; }
 
     @keyframes pulse-glow {
       0%, 100% { box-shadow: 0 0 20px var(--accent-glow); }
       50% { box-shadow: 0 0 40px var(--accent-glow), 0 0 60px rgba(16, 185, 129, 0.1); }
     }
-    .pulse-glow {
-      animation: pulse-glow 2s ease-in-out infinite;
+    .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+
+    @keyframes fillBar {
+      from { width: 0%; }
     }
+    @keyframes floatUp {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+      100% { transform: translateY(0); }
+    }
+    .float-badge { animation: floatUp 2.4s ease-in-out infinite; }
 
     /* ===== CATEGORY BADGE ===== */
     .badge-income {
@@ -298,6 +302,116 @@
       font-weight: 600;
     }
 
+    /* ===== METAS / GAMIFICAÇÃO ===== */
+    .progress-track {
+      width: 100%;
+      height: 14px;
+      background: var(--bg-input);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--border-color);
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 20px;
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: fillBar 1s ease-out;
+      background: linear-gradient(90deg, var(--accent), #34d399);
+      position: relative;
+    }
+    .progress-fill.milestone-100 {
+      background: linear-gradient(90deg, #f59e0b, #fbbf24);
+    }
+    .progress-ticks {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      pointer-events: none;
+    }
+    .progress-tick {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: rgba(255,255,255,0.25);
+    }
+    .level-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    .streak-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(239,68,68,0.1));
+      border: 1px solid rgba(245,158,11,0.35);
+      color: var(--warning);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .goal-icon-circle {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+    .subtab-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 13px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-input);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .subtab-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    .emoji-pick {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-input);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+    .emoji-pick.selected {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+    .insight-card {
+      background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(139,92,246,0.06));
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+    }
+    .font-display { font-family: var(--font-display); }
+
     /* ===== RESPONSIVO ===== */
     @media (max-width: 640px) {
       .stat-card { padding: 12px 16px; }
@@ -305,9 +419,7 @@
       .nav-item { font-size: 9px; min-height: 56px; }
     }
 
-    .safe-bottom {
-      padding-bottom: env(safe-area-inset-bottom);
-    }
+    .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
   </style>
 </head>
 <body>
@@ -352,6 +464,12 @@
     return { start: start, end: end };
   }
 
+  function getPrevMonthDate(date) {
+    var d = new Date(date);
+    d.setMonth(d.getMonth() - 1);
+    return d;
+  }
+
   function getTheme() {
     return document.documentElement.getAttribute('data-theme') || 'dark';
   }
@@ -361,13 +479,95 @@
     localStorage.setItem('osiris-theme', theme);
   }
 
+  function monthKey(dateStr) {
+    var d = new Date(dateStr + 'T00:00:00');
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+  }
+
+  // Média mensal de aportes (soma / nº de meses distintos com registro)
+  function computeMonthlyAverage(economias) {
+    var map = {};
+    economias.forEach(function(e) {
+      var k = monthKey(e.data);
+      map[k] = (map[k] || 0) + Number(e.valor);
+    });
+    var keys = Object.keys(map);
+    if (keys.length === 0) return 0;
+    var total = keys.reduce(function(acc, k) { return acc + map[k]; }, 0);
+    return total / keys.length;
+  }
+
+  // Sequência de meses consecutivos (até o mês atual) com pelo menos uma economia
+  function computeStreak(economias) {
+    var map = {};
+    economias.forEach(function(e) { map[monthKey(e.data)] = true; });
+    var streak = 0;
+    var cursor = new Date();
+    while (true) {
+      var k = cursor.getFullYear() + '-' + String(cursor.getMonth() + 1).padStart(2, '0');
+      if (map[k]) { streak++; cursor.setMonth(cursor.getMonth() - 1); }
+      else break;
+    }
+    return streak;
+  }
+
+  function levelInfo(pct) {
+    if (pct >= 100) return { label: 'Conquistado', emoji: '🏆', color: '#f59e0b' };
+    if (pct >= 75) return { label: 'Reta Final', emoji: '💪', color: '#8b5cf6' };
+    if (pct >= 50) return { label: 'Quase Lá', emoji: '🔥', color: '#10b981' };
+    if (pct >= 25) return { label: 'Em Progresso', emoji: '🚀', color: '#3b82f6' };
+    return { label: 'Iniciante', emoji: '🌱', color: '#64748b' };
+  }
+
+  // Análise preditiva: quanto tempo falta para bater o objetivo,
+  // com base no ritmo médio mensal de economias vinculadas a ele.
+  function predictGoal(objetivo, economiasDoObjetivo) {
+    var total = economiasDoObjetivo.reduce(function(acc, e) { return acc + Number(e.valor); }, 0);
+    var alvo = Number(objetivo.valor_alvo) || 0;
+    var restante = Math.max(alvo - total, 0);
+    var mediaMensal = computeMonthlyAverage(economiasDoObjetivo);
+    var pct = alvo > 0 ? Math.min((total / alvo) * 100, 100) : 0;
+    var mesesRestantes = null;
+    var dataPrevista = null;
+    if (restante <= 0) {
+      mesesRestantes = 0;
+    } else if (mediaMensal > 0) {
+      mesesRestantes = Math.ceil(restante / mediaMensal);
+      var d = new Date();
+      d.setMonth(d.getMonth() + mesesRestantes);
+      dataPrevista = d;
+    }
+    return { total: total, restante: restante, mediaMensal: mediaMensal, pct: pct, mesesRestantes: mesesRestantes, dataPrevista: dataPrevista };
+  }
+
+  var EMOJI_OPTIONS = ['🎯', '🏠', '🚗', '✈️', '🎓', '💍', '📱', '🏖️', '💻', '🧳'];
+
   // ============================================
-  // COMPONENTES
+  // COMPONENTES DE UI PARTILHADOS
   // ============================================
+
+  function ProgressBar(props) {
+    var pct = Math.max(0, Math.min(props.pct || 0, 100));
+    return createElement(
+      'div',
+      { className: 'progress-track' },
+      createElement('div', {
+        className: 'progress-fill' + (pct >= 100 ? ' milestone-100' : ''),
+        style: { width: pct + '%' }
+      }),
+      createElement(
+        'div',
+        { className: 'progress-ticks' },
+        [25, 50, 75].map(function(t) {
+          return createElement('div', { key: t, className: 'progress-tick', style: { left: t + '%' } });
+        })
+      )
+    );
+  }
 
   // ----- Header Moderno -----
   function Header(props) {
-    var currentDate = props.currentDate, onDateChange = props.onDateChange, title = props.title;
+    var currentDate = props.currentDate, onDateChange = props.onDateChange;
     return createElement(
       'header',
       { className: 'sticky top-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border-color)] px-4 py-3' },
@@ -379,14 +579,10 @@
           { className: 'flex items-center gap-3' },
           createElement(
             'div',
-            { className: 'w-8 h-8 rounded-xl bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center text-white font-bold text-sm' },
+            { className: 'w-8 h-8 rounded-xl bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center text-white font-bold text-sm font-display' },
             'O'
           ),
-          createElement(
-            'span',
-            { className: 'text-lg font-bold tracking-tight' },
-            'OSIRIS'
-          )
+          createElement('span', { className: 'text-lg font-bold tracking-tight font-display' }, 'OSIRIS')
         ),
         onDateChange ? createElement(
           'div',
@@ -415,6 +611,7 @@
     var items = [
       { id: 'dashboard', label: 'Painel', icon: 'fa-chart-pie' },
       { id: 'transacoes', label: 'Transações', icon: 'fa-exchange-alt' },
+      { id: 'metas', label: 'Metas', icon: 'fa-bullseye' },
       { id: 'categorias', label: 'Categorias', icon: 'fa-tags' },
       { id: 'perfil', label: 'Perfil', icon: 'fa-user' }
     ];
@@ -489,10 +686,10 @@
           { className: 'text-center mb-8' },
           createElement(
             'div',
-            { className: 'w-16 h-16 rounded-2xl bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4' },
+            { className: 'w-16 h-16 rounded-2xl bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4 font-display' },
             'O'
           ),
-          createElement('h1', { className: 'text-2xl font-bold' }, 'OSIRIS'),
+          createElement('h1', { className: 'text-2xl font-bold font-display' }, 'OSIRIS'),
           createElement('p', { className: 'text-[var(--text-secondary)] text-sm' }, 'Controle Financeiro Inteligente')
         ),
         createElement('button', {
@@ -544,13 +741,17 @@
   }
 
   // ============================================
-  // DASHBOARD MODERNO
+  // DASHBOARD MODERNO (com storytelling + metas)
   // ============================================
-  function Dashboard() {
+  function Dashboard(props) {
+    var setPage = props.setPage;
     var _d1 = useState(new Date()), currentDate = _d1[0], setCurrentDate = _d1[1];
     var _d2 = useState([]), transactions = _d2[0], setTransactions = _d2[1];
     var _d3 = useState(true), loading = _d3[0], setLoading = _d3[1];
     var _d4 = useState(null), userId = _d4[0], setUserId = _d4[1];
+    var _d5 = useState(0), prevDespesas = _d5[0], setPrevDespesas = _d5[1];
+    var _d6 = useState([]), objetivos = _d6[0], setObjetivos = _d6[1];
+    var _d7 = useState([]), economias = _d7[0], setEconomias = _d7[1];
     var chartRef = useRef(null);
     var chartInstance = useRef(null);
 
@@ -564,14 +765,32 @@
       if (!userId) return;
       setLoading(true);
       var range = getMonthRange(currentDate);
-      supabase.from('transacoes').select('*').eq('user_id', userId).gte('data', range.start).lte('data', range.end).order('data', { ascending: false })
-        .then(function(result) {
-          if (!result.error) setTransactions(result.data || []);
-          setLoading(false);
-        }).catch(function() { setLoading(false); });
+      var prevRange = getMonthRange(getPrevMonthDate(currentDate));
+      Promise.all([
+        supabase.from('transacoes').select('*').eq('user_id', userId).gte('data', range.start).lte('data', range.end).order('data', { ascending: false }),
+        supabase.from('transacoes').select('valor').eq('user_id', userId).eq('tipo', 'despesa').gte('data', prevRange.start).lte('data', prevRange.end)
+      ]).then(function(results) {
+        if (!results[0].error) setTransactions(results[0].data || []);
+        if (!results[1].error) {
+          var soma = (results[1].data || []).reduce(function(acc, t) { return acc + Number(t.valor); }, 0);
+          setPrevDespesas(soma);
+        }
+        setLoading(false);
+      }).catch(function() { setLoading(false); });
     };
 
-    useEffect(function() { if (userId) loadTransactions(); }, [currentDate, userId]);
+    var loadMetas = function() {
+      if (!userId) return;
+      Promise.all([
+        supabase.from('objetivos').select('*').eq('user_id', userId).order('created_at'),
+        supabase.from('economias').select('*').eq('user_id', userId)
+      ]).then(function(results) {
+        if (!results[0].error) setObjetivos(results[0].data || []);
+        if (!results[1].error) setEconomias(results[1].data || []);
+      }).catch(function() {});
+    };
+
+    useEffect(function() { if (userId) { loadTransactions(); loadMetas(); } }, [currentDate, userId]);
 
     var summary = useMemo(function() {
       var receitas = transactions.filter(function(t) { return t.tipo === 'receita'; });
@@ -581,14 +800,21 @@
       var map = {};
       despesas.forEach(function(t) { map[t.categoria_nome] = (map[t.categoria_nome] || 0) + Number(t.valor); });
       var categorias = Object.keys(map).map(function(k) { return { nome: k, total: map[k] }; }).sort(function(a, b) { return b.total - a.total; });
-      return { totalReceitas: totalReceitas, totalDespesas: totalDespesas, saldo: totalReceitas - totalDespesas, categorias: categorias };
-    }, [transactions]);
+      var variacao = prevDespesas > 0 ? ((totalDespesas - prevDespesas) / prevDespesas) * 100 : null;
+      return { totalReceitas: totalReceitas, totalDespesas: totalDespesas, saldo: totalReceitas - totalDespesas, categorias: categorias, variacao: variacao };
+    }, [transactions, prevDespesas]);
+
+    var metasResumo = useMemo(function() {
+      return objetivos.map(function(o) {
+        var econsDoObjetivo = economias.filter(function(e) { return e.objetivo_id === o.id; });
+        var pred = predictGoal(o, econsDoObjetivo);
+        return { objetivo: o, pred: pred };
+      }).sort(function(a, b) { return b.pred.pct - a.pred.pct; }).slice(0, 2);
+    }, [objetivos, economias]);
 
     // Renderizar gráfico com Chart.js
     useEffect(function() {
-      if (chartInstance.current) {
-        chartInstance.current.destroy();
-      }
+      if (chartInstance.current) chartInstance.current.destroy();
       if (!chartRef.current || summary.categorias.length === 0) return;
 
       var ctx = chartRef.current.getContext('2d');
@@ -598,39 +824,21 @@
 
       chartInstance.current = new window.Chart(ctx, {
         type: 'doughnut',
-        data: {
-          labels: labels,
-          datasets: [{
-            data: data,
-            backgroundColor: colors,
-            borderWidth: 2,
-            borderColor: 'var(--bg-card)'
-          }]
-        },
+        data: { labels: labels, datasets: [{ data: data, backgroundColor: colors, borderWidth: 2, borderColor: 'var(--bg-card)' }] },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
             legend: {
               position: 'bottom',
-              labels: {
-                color: 'var(--text-secondary)',
-                font: { size: 11, family: 'Inter' },
-                padding: 12,
-                usePointStyle: true,
-                pointStyle: 'circle'
-              }
+              labels: { color: 'var(--text-secondary)', font: { size: 11, family: 'Inter' }, padding: 12, usePointStyle: true, pointStyle: 'circle' }
             }
           },
           cutout: '65%'
         }
       });
 
-      return function() {
-        if (chartInstance.current) {
-          chartInstance.current.destroy();
-        }
-      };
+      return function() { if (chartInstance.current) chartInstance.current.destroy(); };
     }, [summary.categorias]);
 
     var changeDate = function(dir) {
@@ -640,36 +848,87 @@
       setCurrentDate(d);
     };
 
+    var storyText = null;
+    if (summary.variacao !== null && !loading) {
+      if (summary.variacao <= -1) {
+        storyText = { icon: '📉', text: 'Você gastou ' + Math.abs(summary.variacao).toFixed(0) + '% a menos que no mês anterior. Continue assim!', color: '#10b981' };
+      } else if (summary.variacao >= 1) {
+        storyText = { icon: '📈', text: 'Seus gastos subiram ' + summary.variacao.toFixed(0) + '% em relação ao mês anterior. Vale revisar as categorias.', color: '#ef4444' };
+      } else {
+        storyText = { icon: '➖', text: 'Seus gastos ficaram estáveis em relação ao mês anterior.', color: '#94a3b8' };
+      }
+    }
+
     return createElement(
       'div',
       { className: 'pb-24 max-w-md mx-auto' },
-      createElement(Header, { currentDate: currentDate, onDateChange: changeDate, title: 'Dashboard' }),
+      createElement(Header, { currentDate: currentDate, onDateChange: changeDate }),
       createElement(
         'div',
         { className: 'p-4 space-y-4' },
+        // Storytelling insight
+        storyText ? createElement(
+          'div',
+          { className: 'insight-card fade-in-up' },
+          createElement(
+            'div',
+            { className: 'flex items-start gap-3' },
+            createElement('span', { className: 'text-2xl' }, storyText.icon),
+            createElement('p', { className: 'text-sm leading-relaxed', style: { color: 'var(--text-primary)' } }, storyText.text)
+          )
+        ) : null,
         // Stats Row
         createElement(
           'div',
           { className: 'grid grid-cols-3 gap-3' },
           createElement(
-            'div',
-            { className: 'stat-card revenue' },
+            'div', { className: 'stat-card revenue' },
             createElement('p', { className: 'text-[var(--text-muted)] text-xs font-medium uppercase tracking-wider' }, 'Receitas'),
-            createElement('p', { className: 'text-lg font-bold text-[#10b981]' }, formatCurrency(summary.totalReceitas))
+            createElement('p', { className: 'text-lg font-bold text-[#10b981] font-display' }, formatCurrency(summary.totalReceitas))
           ),
           createElement(
-            'div',
-            { className: 'stat-card expense' },
+            'div', { className: 'stat-card expense' },
             createElement('p', { className: 'text-[var(--text-muted)] text-xs font-medium uppercase tracking-wider' }, 'Despesas'),
-            createElement('p', { className: 'text-lg font-bold text-[#ef4444]' }, formatCurrency(summary.totalDespesas))
+            createElement('p', { className: 'text-lg font-bold text-[#ef4444] font-display' }, formatCurrency(summary.totalDespesas))
           ),
           createElement(
-            'div',
-            { className: 'stat-card balance' },
+            'div', { className: 'stat-card balance' },
             createElement('p', { className: 'text-[var(--text-muted)] text-xs font-medium uppercase tracking-wider' }, 'Saldo'),
-            createElement('p', { className: 'text-lg font-bold text-[#8b5cf6]' }, formatCurrency(summary.saldo))
+            createElement('p', { className: 'text-lg font-bold text-[#8b5cf6] font-display' }, formatCurrency(summary.saldo))
           )
         ),
+        // Metas resumo
+        metasResumo.length > 0 ? createElement(
+          'div',
+          { className: 'card-modern' },
+          createElement(
+            'div',
+            { className: 'flex items-center justify-between mb-4' },
+            createElement('h3', { className: 'text-sm font-semibold' }, '🎯 Suas Metas'),
+            createElement('button', {
+              onClick: function() { setPage('metas'); },
+              className: 'text-[var(--accent)] text-xs font-medium hover:underline'
+            }, 'Ver todas →')
+          ),
+          createElement(
+            'div',
+            { className: 'space-y-4' },
+            metasResumo.map(function(m) {
+              var lvl = levelInfo(m.pred.pct);
+              return createElement(
+                'div',
+                { key: m.objetivo.id },
+                createElement(
+                  'div',
+                  { className: 'flex items-center justify-between mb-1.5' },
+                  createElement('span', { className: 'text-sm font-medium' }, (m.objetivo.icone || '🎯') + ' ' + m.objetivo.nome),
+                  createElement('span', { className: 'text-xs font-bold', style: { color: lvl.color } }, m.pred.pct.toFixed(0) + '%')
+                ),
+                createElement(ProgressBar, { pct: m.pred.pct })
+              );
+            })
+          )
+        ) : null,
         // Gráfico
         createElement(
           'div',
@@ -703,8 +962,7 @@
                   'div',
                   { key: t.id, className: 'flex items-center justify-between py-2 border-b border-[var(--border-color)] last:border-0' },
                   createElement(
-                    'div',
-                    null,
+                    'div', null,
                     createElement('p', { className: 'text-sm font-medium' }, t.nome),
                     createElement('p', { className: 'text-xs text-[var(--text-muted)]' }, t.categoria_nome + ' • ' + new Date(t.data).toLocaleDateString('pt-BR'))
                   ),
@@ -743,17 +1001,13 @@
       if (!userId) return;
       setLoading(true);
       supabase.from('categorias').select('*').eq('user_id', userId).order('nome')
-        .then(function(result) {
-          if (!result.error) setCategorias(result.data || []);
-          setLoading(false);
-        }).catch(function() { setLoading(false); });
+        .then(function(result) { if (!result.error) setCategorias(result.data || []); setLoading(false); })
+        .catch(function() { setLoading(false); });
     };
 
     useEffect(function() { if (userId) load(); }, [userId]);
 
-    var reset = function() {
-      setNome(''); setTipo('despesa'); setObs(''); setEditando(null); setShowForm(false);
-    };
+    var reset = function() { setNome(''); setTipo('despesa'); setObs(''); setEditando(null); setShowForm(false); };
 
     var submit = function(e) {
       e.preventDefault();
@@ -784,7 +1038,7 @@
       createElement(
         'div',
         { className: 'sticky top-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border-color)] p-4 flex items-center justify-between' },
-        createElement('h1', { className: 'text-xl font-bold' }, 'Categorias'),
+        createElement('h1', { className: 'text-xl font-bold font-display' }, 'Categorias'),
         createElement('button', {
           onClick: function() { setShowForm(!showForm); },
           className: 'btn-primary min-w-[48px] min-h-[48px] rounded-full w-12 h-12 flex items-center justify-center text-2xl'
@@ -794,122 +1048,73 @@
         'form',
         { onSubmit: submit, className: 'p-4 space-y-4 border-b border-[var(--border-color)] bg-[var(--bg-secondary)]' },
         createElement(
-          'div',
-          { className: 'flex gap-2' },
+          'div', { className: 'flex gap-2' },
           ['despesa', 'receita'].map(function(t) {
             return createElement('button', {
-              key: t,
-              type: 'button',
-              onClick: function() { setTipo(t); },
+              key: t, type: 'button', onClick: function() { setTipo(t); },
               className: 'flex-1 py-2 rounded-xl font-medium transition-colors ' + (tipo === t ? (t === 'despesa' ? 'bg-[#ef4444] text-white' : 'bg-[#10b981] text-white') : 'bg-[var(--bg-input)] text-[var(--text-muted)] border border-[var(--border-color)]')
             }, t === 'despesa' ? 'Despesa' : 'Receita');
           })
         ),
-        createElement('input', {
-          type: 'text',
-          placeholder: 'Nome da categoria…',
-          value: nome,
-          onChange: function(e) { setNome(e.target.value); },
-          className: 'input-modern',
-          required: true
-        }),
-        createElement('input', {
-          type: 'text',
-          placeholder: 'Observação (opcional)',
-          value: obs,
-          onChange: function(e) { setObs(e.target.value); },
-          className: 'input-modern'
-        }),
+        createElement('input', { type: 'text', placeholder: 'Nome da categoria…', value: nome, onChange: function(e) { setNome(e.target.value); }, className: 'input-modern', required: true }),
+        createElement('input', { type: 'text', placeholder: 'Observação (opcional)', value: obs, onChange: function(e) { setObs(e.target.value); }, className: 'input-modern' }),
         createElement('div', { className: 'flex gap-2' },
           createElement('button', { type: 'submit', className: 'btn-primary flex-1' }, editando ? 'Atualizar' : 'Salvar'),
           createElement('button', { type: 'button', onClick: reset, className: 'btn-secondary flex-1' }, 'Cancelar')
         )
       ) : null,
       createElement(
-        'div',
-        { className: 'p-4' },
+        'div', { className: 'p-4' },
         loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)]' }, 'Carregando…') :
         categorias.length === 0 ? createElement(
-          'div',
-          { className: 'text-center py-8 text-[var(--text-muted)]' },
+          'div', { className: 'text-center py-8 text-[var(--text-muted)]' },
           createElement('p', { className: 'text-4xl mb-2' }, '📂'),
           createElement('p', null, 'Nenhuma categoria cadastrada'),
           createElement('p', { className: 'text-sm' }, 'Clique no + para criar')
         ) :
         createElement(
-          'div',
-          { className: 'grid grid-cols-2 gap-3' },
-          // Despesas
+          'div', { className: 'grid grid-cols-2 gap-3' },
           createElement(
-            'div',
-            null,
+            'div', null,
             createElement('p', { className: 'text-xs font-medium uppercase tracking-wider text-[var(--text-muted)] mb-2 border-b border-[var(--border-color)] pb-1' }, 'Despesas'),
             despesas.length === 0 ? createElement('p', { className: 'text-[var(--text-muted)] text-xs py-2' }, 'Nenhuma') :
             despesas.map(function(cat) {
               return createElement(
-                'div',
-                {
-                  key: cat.id,
-                  className: 'card-modern p-3 mb-2 hover:border-[#ef4444] transition-all cursor-pointer group'
-                },
+                'div', { key: cat.id, className: 'card-modern p-3 mb-2 hover:border-[#ef4444] transition-all cursor-pointer group' },
                 createElement(
-                  'div',
-                  { className: 'flex items-start justify-between' },
+                  'div', { className: 'flex items-start justify-between' },
                   createElement(
-                    'div',
-                    { className: 'flex-1 min-w-0' },
+                    'div', { className: 'flex-1 min-w-0' },
                     createElement('p', { className: 'text-sm font-medium truncate' }, cat.nome),
                     cat.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)] truncate' }, cat.obs) : null
                   ),
                   createElement(
-                    'div',
-                    { className: 'flex items-center gap-1 flex-shrink-0 ml-2' },
-                    createElement('button', {
-                      onClick: function(e) { e.stopPropagation(); edit(cat); },
-                      className: 'text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-1 opacity-0 group-hover:opacity-100'
-                    }, '✏️'),
-                    createElement('button', {
-                      onClick: function(e) { e.stopPropagation(); del(cat.id); },
-                      className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1 opacity-0 group-hover:opacity-100'
-                    }, '🗑️')
+                    'div', { className: 'flex items-center gap-1 flex-shrink-0 ml-2' },
+                    createElement('button', { onClick: function(e) { e.stopPropagation(); edit(cat); }, className: 'text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-1 opacity-0 group-hover:opacity-100' }, '✏️'),
+                    createElement('button', { onClick: function(e) { e.stopPropagation(); del(cat.id); }, className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1 opacity-0 group-hover:opacity-100' }, '🗑️')
                   )
                 )
               );
             })
           ),
-          // Receitas
           createElement(
-            'div',
-            null,
+            'div', null,
             createElement('p', { className: 'text-xs font-medium uppercase tracking-wider text-[var(--text-muted)] mb-2 border-b border-[var(--border-color)] pb-1' }, 'Receitas'),
             receitas.length === 0 ? createElement('p', { className: 'text-[var(--text-muted)] text-xs py-2' }, 'Nenhuma') :
             receitas.map(function(cat) {
               return createElement(
-                'div',
-                {
-                  key: cat.id,
-                  className: 'card-modern p-3 mb-2 hover:border-[#10b981] transition-all cursor-pointer group'
-                },
+                'div', { key: cat.id, className: 'card-modern p-3 mb-2 hover:border-[#10b981] transition-all cursor-pointer group' },
                 createElement(
-                  'div',
-                  { className: 'flex items-start justify-between' },
+                  'div', { className: 'flex items-start justify-between' },
                   createElement(
-                    'div',
-                    { className: 'flex-1 min-w-0' },
+                    'div', { className: 'flex-1 min-w-0' },
                     createElement('p', { className: 'text-sm font-medium truncate' }, cat.nome),
                     cat.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)] truncate' }, cat.obs) : null
                   ),
                   createElement(
-                    'div',
-                    { className: 'flex items-center gap-1 flex-shrink-0 ml-2' },
-                    createElement('button', {
-                      onClick: function(e) { e.stopPropagation(); edit(cat); },
-                      className: 'text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-1 opacity-0 group-hover:opacity-100'
-                    }, '✏️'),
-                    createElement('button', {
-                      onClick: function(e) { e.stopPropagation(); del(cat.id); },
-                      className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1 opacity-0 group-hover:opacity-100'
-                    }, '🗑️')
+                    'div', { className: 'flex items-center gap-1 flex-shrink-0 ml-2' },
+                    createElement('button', { onClick: function(e) { e.stopPropagation(); edit(cat); }, className: 'text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-1 opacity-0 group-hover:opacity-100' }, '✏️'),
+                    createElement('button', { onClick: function(e) { e.stopPropagation(); del(cat.id); }, className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1 opacity-0 group-hover:opacity-100' }, '🗑️')
                   )
                 )
               );
@@ -961,17 +1166,11 @@
       e.preventDefault();
       if (!userId || !categoriaNome) return;
       var trans = {
-        nome: nome.trim(),
-        categoria_nome: categoriaNome,
-        valor: Number(valor),
-        tipo: tipo,
-        data: data || new Date().toISOString().split('T')[0],
-        obs: obs.trim() || null,
-        user_id: userId
+        nome: nome.trim(), categoria_nome: categoriaNome, valor: Number(valor), tipo: tipo,
+        data: data || new Date().toISOString().split('T')[0], obs: obs.trim() || null, user_id: userId
       };
       supabase.from('transacoes').insert([trans]).then(function() {
-        load();
-        setShowForm(false);
+        load(); setShowForm(false);
         setNome(''); setCategoriaNome(''); setValor(''); setData(''); setObs('');
       });
     };
@@ -990,7 +1189,7 @@
       createElement(
         'div',
         { className: 'sticky top-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border-color)] p-4 flex items-center justify-between' },
-        createElement('h1', { className: 'text-xl font-bold' }, 'Transações'),
+        createElement('h1', { className: 'text-xl font-bold font-display' }, 'Transações'),
         createElement('button', {
           onClick: function() { setShowForm(!showForm); },
           className: 'btn-primary min-w-[48px] min-h-[48px] rounded-full w-12 h-12 flex items-center justify-center text-2xl'
@@ -1000,98 +1199,338 @@
         'form',
         { onSubmit: submit, className: 'p-4 space-y-4 border-b border-[var(--border-color)] bg-[var(--bg-secondary)]' },
         createElement(
-          'div',
-          { className: 'flex gap-2' },
+          'div', { className: 'flex gap-2' },
           ['despesa', 'receita'].map(function(t) {
             return createElement('button', {
-              key: t,
-              type: 'button',
-              onClick: function() { setTipo(t); },
+              key: t, type: 'button', onClick: function() { setTipo(t); },
               className: 'flex-1 py-2 rounded-xl font-medium transition-colors ' + (tipo === t ? (t === 'despesa' ? 'bg-[#ef4444] text-white' : 'bg-[#10b981] text-white') : 'bg-[var(--bg-input)] text-[var(--text-muted)] border border-[var(--border-color)]')
             }, t === 'despesa' ? 'Despesa' : 'Receita');
           })
         ),
-        createElement('input', {
-          type: 'text',
-          placeholder: 'Nome da transação…',
-          value: nome,
-          onChange: function(e) { setNome(e.target.value); },
-          className: 'input-modern',
-          required: true
-        }),
+        createElement('input', { type: 'text', placeholder: 'Nome da transação…', value: nome, onChange: function(e) { setNome(e.target.value); }, className: 'input-modern', required: true }),
         createElement(
-          'select',
-          {
-            value: categoriaNome,
-            onChange: function(e) { setCategoriaNome(e.target.value); },
-            className: 'select-modern',
-            required: true
-          },
+          'select', { value: categoriaNome, onChange: function(e) { setCategoriaNome(e.target.value); }, className: 'select-modern', required: true },
           createElement('option', { value: '' }, 'Selecione uma categoria'),
           filtradas.length === 0 ? createElement('option', { value: '', disabled: true }, '❗ Crie categorias primeiro') :
           filtradas.map(function(c) { return createElement('option', { key: c.id, value: c.nome }, c.nome); })
         ),
-        createElement('input', {
-          type: 'number',
-          step: '0.01',
-          placeholder: 'Valor',
-          value: valor,
-          onChange: function(e) { setValor(e.target.value); },
-          className: 'input-modern',
-          required: true
-        }),
-        createElement('input', {
-          type: 'date',
-          value: data,
-          onChange: function(e) { setData(e.target.value); },
-          className: 'input-modern'
-        }),
-        createElement('input', {
-          type: 'text',
-          placeholder: 'Observação (opcional)',
-          value: obs,
-          onChange: function(e) { setObs(e.target.value); },
-          className: 'input-modern'
-        }),
+        createElement('input', { type: 'number', step: '0.01', placeholder: 'Valor', value: valor, onChange: function(e) { setValor(e.target.value); }, className: 'input-modern', required: true }),
+        createElement('input', { type: 'date', value: data, onChange: function(e) { setData(e.target.value); }, className: 'input-modern' }),
+        createElement('input', { type: 'text', placeholder: 'Observação (opcional)', value: obs, onChange: function(e) { setObs(e.target.value); }, className: 'input-modern' }),
         createElement('button', { type: 'submit', className: 'btn-primary w-full' }, 'Salvar')
       ) : null,
       createElement(
-        'div',
-        { className: 'p-4 space-y-2' },
+        'div', { className: 'p-4 space-y-2' },
         loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)]' }, 'Carregando…') :
         transactions.length === 0 ? createElement(
-          'div',
-          { className: 'text-center py-8 text-[var(--text-muted)]' },
+          'div', { className: 'text-center py-8 text-[var(--text-muted)]' },
           createElement('p', { className: 'text-4xl mb-2' }, '📭'),
           createElement('p', null, 'Nenhuma transação registrada'),
           createElement('p', { className: 'text-sm' }, 'Clique no + para adicionar')
         ) :
         transactions.map(function(t) {
           return createElement(
-            'div',
-            {
-              key: t.id,
-              className: 'card-modern p-3 flex items-center justify-between hover:border-[var(--accent)] transition-all cursor-pointer'
-            },
+            'div', { key: t.id, className: 'card-modern p-3 flex items-center justify-between hover:border-[var(--accent)] transition-all cursor-pointer' },
             createElement(
-              'div',
-              { className: 'flex-1' },
+              'div', { className: 'flex-1' },
               createElement('p', { className: 'font-medium text-sm' }, t.nome),
               createElement('p', { className: 'text-xs text-[var(--text-muted)]' }, t.categoria_nome + ' • ' + new Date(t.data).toLocaleDateString('pt-BR')),
               t.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)]' }, '📝 ' + t.obs) : null
             ),
             createElement(
-              'div',
-              { className: 'flex items-center gap-2' },
+              'div', { className: 'flex items-center gap-2' },
               createElement('span', { className: 'font-semibold ' + (t.tipo === 'despesa' ? 'text-[#ef4444]' : 'text-[#10b981]') }, (t.tipo === 'despesa' ? '-' : '+') + ' ' + formatCurrency(t.valor)),
-              createElement('button', {
-                onClick: function(e) { e.stopPropagation(); del(t.id); },
-                className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1'
-              }, '🗑️')
+              createElement('button', { onClick: function(e) { e.stopPropagation(); del(t.id); }, className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1' }, '🗑️')
             )
           );
         })
       )
+    );
+  }
+
+  // ============================================
+  // METAS: OBJETIVOS + ECONOMIAS + PREVISÃO + GAMIFICAÇÃO
+  // ============================================
+  function Metas() {
+    var _m1 = useState('objetivos'), subTab = _m1[0], setSubTab = _m1[1];
+    var _m2 = useState([]), objetivos = _m2[0], setObjetivos = _m2[1];
+    var _m3 = useState([]), economias = _m3[0], setEconomias = _m3[1];
+    var _m4 = useState(true), loading = _m4[0], setLoading = _m4[1];
+    var _m5 = useState(null), userId = _m5[0], setUserId = _m5[1];
+
+    // form objetivo
+    var _o1 = useState(false), showObjForm = _o1[0], setShowObjForm = _o1[1];
+    var _o2 = useState(''), objNome = _o2[0], setObjNome = _o2[1];
+    var _o3 = useState(''), objValor = _o3[0], setObjValor = _o3[1];
+    var _o4 = useState(''), objPrazo = _o4[0], setObjPrazo = _o4[1];
+    var _o5 = useState('🎯'), objIcone = _o5[0], setObjIcone = _o5[1];
+    var _o6 = useState(null), objEditando = _o6[0], setObjEditando = _o6[1];
+
+    // form economia
+    var _e1 = useState(false), showEcoForm = _e1[0], setShowEcoForm = _e1[1];
+    var _e2 = useState(''), ecoNome = _e2[0], setEcoNome = _e2[1];
+    var _e3 = useState(''), ecoValor = _e3[0], setEcoValor = _e3[1];
+    var _e4 = useState(''), ecoData = _e4[0], setEcoData = _e4[1];
+    var _e5 = useState(''), ecoObjetivoId = _e5[0], setEcoObjetivoId = _e5[1];
+    var _e6 = useState(''), ecoObs = _e6[0], setEcoObs = _e6[1];
+    var _e7 = useState(null), ecoEditando = _e7[0], setEcoEditando = _e7[1];
+
+    useEffect(function() {
+      supabase.auth.getUser().then(function(result) {
+        if (result.data && result.data.user) setUserId(result.data.user.id);
+      });
+    }, []);
+
+    var load = function() {
+      if (!userId) return;
+      setLoading(true);
+      Promise.all([
+        supabase.from('objetivos').select('*').eq('user_id', userId).order('created_at'),
+        supabase.from('economias').select('*').eq('user_id', userId).order('data', { ascending: false })
+      ]).then(function(results) {
+        if (!results[0].error) setObjetivos(results[0].data || []);
+        if (!results[1].error) setEconomias(results[1].data || []);
+        setLoading(false);
+      }).catch(function() { setLoading(false); });
+    };
+
+    useEffect(function() { if (userId) load(); }, [userId]);
+
+    // ---- Objetivo CRUD ----
+    var resetObj = function() { setObjNome(''); setObjValor(''); setObjPrazo(''); setObjIcone('🎯'); setObjEditando(null); setShowObjForm(false); };
+
+    var submitObjetivo = function(e) {
+      e.preventDefault();
+      if (!objNome.trim() || !objValor || !userId) return;
+      var dados = { nome: objNome.trim(), valor_alvo: Number(objValor), prazo: objPrazo || null, icone: objIcone, user_id: userId };
+      var promise = objEditando
+        ? supabase.from('objetivos').update({ nome: dados.nome, valor_alvo: dados.valor_alvo, prazo: dados.prazo, icone: dados.icone }).eq('id', objEditando)
+        : supabase.from('objetivos').insert([dados]);
+      promise.then(function() { load(); resetObj(); });
+    };
+
+    var delObjetivo = function(id) {
+      if (window.confirm('Excluir este objetivo? As economias vinculadas continuarão salvas, mas sem vínculo.')) {
+        supabase.from('economias').update({ objetivo_id: null }).eq('objetivo_id', id).then(function() {
+          supabase.from('objetivos').delete().eq('id', id).then(function() { load(); });
+        });
+      }
+    };
+
+    var editObjetivo = function(o) {
+      setObjNome(o.nome); setObjValor(String(o.valor_alvo)); setObjPrazo(o.prazo || ''); setObjIcone(o.icone || '🎯'); setObjEditando(o.id); setShowObjForm(true);
+    };
+
+    // ---- Economia CRUD ----
+    var resetEco = function() { setEcoNome(''); setEcoValor(''); setEcoData(''); setEcoObjetivoId(''); setEcoObs(''); setEcoEditando(null); setShowEcoForm(false); };
+
+    var submitEconomia = function(e) {
+      e.preventDefault();
+      if (!ecoNome.trim() || !ecoValor || !userId) return;
+      var dados = {
+        nome: ecoNome.trim(), valor: Number(ecoValor), data: ecoData || new Date().toISOString().split('T')[0],
+        objetivo_id: ecoObjetivoId || null, obs: ecoObs.trim() || null, user_id: userId
+      };
+      var promise = ecoEditando
+        ? supabase.from('economias').update(dados).eq('id', ecoEditando)
+        : supabase.from('economias').insert([dados]);
+      promise.then(function() { load(); resetEco(); });
+    };
+
+    var delEconomia = function(id) {
+      if (window.confirm('Excluir esta economia?')) {
+        supabase.from('economias').delete().eq('id', id).then(function() { load(); });
+      }
+    };
+
+    var editEconomia = function(ec) {
+      setEcoNome(ec.nome); setEcoValor(String(ec.valor)); setEcoData(ec.data); setEcoObjetivoId(ec.objetivo_id || ''); setEcoObs(ec.obs || ''); setEcoEditando(ec.id); setShowEcoForm(true);
+    };
+
+    var streak = useMemo(function() { return computeStreak(economias); }, [economias]);
+    var totalGuardado = useMemo(function() { return economias.reduce(function(acc, e) { return acc + Number(e.valor); }, 0); }, [economias]);
+
+    var nomeObjetivo = function(id) {
+      var o = objetivos.filter(function(x) { return x.id === id; })[0];
+      return o ? (o.icone || '🎯') + ' ' + o.nome : null;
+    };
+
+    return createElement(
+      'div',
+      { className: 'pb-24 max-w-md mx-auto' },
+      createElement(
+        'div',
+        { className: 'sticky top-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border-color)] p-4' },
+        createElement(
+          'div', { className: 'flex items-center justify-between mb-3' },
+          createElement('h1', { className: 'text-xl font-bold font-display' }, 'Metas'),
+          streak > 0 ? createElement('span', { className: 'streak-chip float-badge' }, '🔥 ' + streak + (streak === 1 ? ' mês' : ' meses')) : null
+        ),
+        createElement(
+          'div', { className: 'flex gap-2' },
+          createElement('button', {
+            className: 'subtab-btn ' + (subTab === 'objetivos' ? 'active' : ''),
+            onClick: function() { setSubTab('objetivos'); }
+          }, '🎯 Objetivos'),
+          createElement('button', {
+            className: 'subtab-btn ' + (subTab === 'economias' ? 'active' : ''),
+            onClick: function() { setSubTab('economias'); }
+          }, '💰 Economias')
+        )
+      ),
+
+      // ===== ABA OBJETIVOS =====
+      subTab === 'objetivos' ? createElement(
+        React.Fragment, null,
+        createElement(
+          'div', { className: 'p-4 pb-0' },
+          createElement('button', {
+            onClick: function() { showObjForm ? resetObj() : setShowObjForm(true); },
+            className: 'btn-secondary w-full mb-4'
+          }, showObjForm ? '✕ Cancelar' : '＋ Novo Objetivo')
+        ),
+        showObjForm ? createElement(
+          'form', { onSubmit: submitObjetivo, className: 'mx-4 mb-4 p-4 space-y-4 card-modern' },
+          createElement(
+            'div', { className: 'flex flex-wrap gap-2' },
+            EMOJI_OPTIONS.map(function(em) {
+              return createElement('button', {
+                key: em, type: 'button', onClick: function() { setObjIcone(em); },
+                className: 'emoji-pick ' + (objIcone === em ? 'selected' : '')
+              }, em);
+            })
+          ),
+          createElement('input', { type: 'text', placeholder: 'Nome do objetivo (ex: Viagem para o Japão)', value: objNome, onChange: function(e) { setObjNome(e.target.value); }, className: 'input-modern', required: true }),
+          createElement('input', { type: 'number', step: '0.01', placeholder: 'Valor alvo (R$)', value: objValor, onChange: function(e) { setObjValor(e.target.value); }, className: 'input-modern', required: true }),
+          createElement('div', null,
+            createElement('label', { className: 'text-xs text-[var(--text-muted)] mb-1 block' }, 'Prazo desejado (opcional)'),
+            createElement('input', { type: 'date', value: objPrazo, onChange: function(e) { setObjPrazo(e.target.value); }, className: 'input-modern' })
+          ),
+          createElement('div', { className: 'flex gap-2' },
+            createElement('button', { type: 'submit', className: 'btn-primary flex-1' }, objEditando ? 'Atualizar' : 'Criar Objetivo'),
+            createElement('button', { type: 'button', onClick: resetObj, className: 'btn-secondary flex-1' }, 'Cancelar')
+          )
+        ) : null,
+        createElement(
+          'div', { className: 'p-4 space-y-4' },
+          loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)]' }, 'Carregando…') :
+          objetivos.length === 0 ? createElement(
+            'div', { className: 'text-center py-8 text-[var(--text-muted)]' },
+            createElement('p', { className: 'text-4xl mb-2' }, '🎯'),
+            createElement('p', null, 'Nenhum objetivo cadastrado'),
+            createElement('p', { className: 'text-sm' }, 'Crie um objetivo e vincule suas economias a ele')
+          ) :
+          objetivos.map(function(o) {
+            var econsDoObjetivo = economias.filter(function(e) { return e.objetivo_id === o.id; });
+            var pred = predictGoal(o, econsDoObjetivo);
+            var lvl = levelInfo(pred.pct);
+            var prazoDate = o.prazo ? new Date(o.prazo + 'T00:00:00') : null;
+
+            var previsaoTexto;
+            if (pred.pct >= 100) {
+              previsaoTexto = '🎉 Objetivo alcançado! Parabéns pela conquista.';
+            } else if (pred.mesesRestantes === null) {
+              previsaoTexto = 'Registre economias vinculadas a este objetivo para calcular a previsão de tempo.';
+            } else {
+              var dp = pred.dataPrevista;
+              var mesAno = dp.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+              previsaoTexto = 'No ritmo atual (' + formatCurrency(pred.mediaMensal) + '/mês), você alcança esse objetivo em ' +
+                pred.mesesRestantes + (pred.mesesRestantes === 1 ? ' mês' : ' meses') + ' — por volta de ' + mesAno + '.';
+            }
+
+            return createElement(
+              'div', { key: o.id, className: 'card-modern fade-in-up' },
+              createElement(
+                'div', { className: 'flex items-start gap-3 mb-3' },
+                createElement('div', { className: 'goal-icon-circle' }, o.icone || '🎯'),
+                createElement(
+                  'div', { className: 'flex-1 min-w-0' },
+                  createElement('p', { className: 'font-semibold text-base' }, o.nome),
+                  createElement('p', { className: 'text-xs text-[var(--text-muted)]' },
+                    formatCurrency(pred.total) + ' de ' + formatCurrency(o.valor_alvo) +
+                    (prazoDate ? ' • prazo: ' + prazoDate.toLocaleDateString('pt-BR') : '')
+                  )
+                ),
+                createElement(
+                  'div', { className: 'flex items-center gap-1 flex-shrink-0' },
+                  createElement('button', { onClick: function() { editObjetivo(o); }, className: 'text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-1' }, '✏️'),
+                  createElement('button', { onClick: function() { delObjetivo(o.id); }, className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1' }, '🗑️')
+                )
+              ),
+              createElement(
+                'div', { className: 'flex items-center justify-between mb-2' },
+                createElement('span', { className: 'level-pill', style: { background: lvl.color + '22', color: lvl.color } }, lvl.emoji + ' ' + lvl.label),
+                createElement('span', { className: 'text-sm font-bold font-display' }, pred.pct.toFixed(0) + '%')
+              ),
+              createElement(ProgressBar, { pct: pred.pct }),
+              createElement('p', { className: 'text-xs text-[var(--text-secondary)] mt-3 leading-relaxed' }, '🔮 ' + previsaoTexto)
+            );
+          })
+        )
+      ) : null,
+
+      // ===== ABA ECONOMIAS =====
+      subTab === 'economias' ? createElement(
+        React.Fragment, null,
+        createElement(
+          'div', { className: 'p-4 pb-0 space-y-3' },
+          createElement(
+            'div', { className: 'card-modern flex items-center justify-between' },
+            createElement('span', { className: 'text-sm text-[var(--text-muted)]' }, 'Total guardado'),
+            createElement('span', { className: 'text-lg font-bold text-[var(--accent)] font-display' }, formatCurrency(totalGuardado))
+          ),
+          createElement('button', {
+            onClick: function() { showEcoForm ? resetEco() : setShowEcoForm(true); },
+            className: 'btn-secondary w-full'
+          }, showEcoForm ? '✕ Cancelar' : '＋ Nova Economia')
+        ),
+        showEcoForm ? createElement(
+          'form', { onSubmit: submitEconomia, className: 'mx-4 mt-4 mb-4 p-4 space-y-4 card-modern' },
+          createElement('input', { type: 'text', placeholder: 'Nome (ex: Aporte mensal)', value: ecoNome, onChange: function(e) { setEcoNome(e.target.value); }, className: 'input-modern', required: true }),
+          createElement('input', { type: 'number', step: '0.01', placeholder: 'Valor guardado (R$)', value: ecoValor, onChange: function(e) { setEcoValor(e.target.value); }, className: 'input-modern', required: true }),
+          createElement('input', { type: 'date', value: ecoData, onChange: function(e) { setEcoData(e.target.value); }, className: 'input-modern' }),
+          createElement(
+            'select', { value: ecoObjetivoId, onChange: function(e) { setEcoObjetivoId(e.target.value); }, className: 'select-modern' },
+            createElement('option', { value: '' }, 'Sem vínculo com objetivo'),
+            objetivos.map(function(o) { return createElement('option', { key: o.id, value: o.id }, (o.icone || '🎯') + ' ' + o.nome); })
+          ),
+          createElement('input', { type: 'text', placeholder: 'Observação (opcional)', value: ecoObs, onChange: function(e) { setEcoObs(e.target.value); }, className: 'input-modern' }),
+          createElement('div', { className: 'flex gap-2' },
+            createElement('button', { type: 'submit', className: 'btn-primary flex-1' }, ecoEditando ? 'Atualizar' : 'Salvar'),
+            createElement('button', { type: 'button', onClick: resetEco, className: 'btn-secondary flex-1' }, 'Cancelar')
+          )
+        ) : null,
+        createElement(
+          'div', { className: 'p-4 space-y-2' },
+          loading ? createElement('p', { className: 'text-center py-8 text-[var(--text-muted)]' }, 'Carregando…') :
+          economias.length === 0 ? createElement(
+            'div', { className: 'text-center py-8 text-[var(--text-muted)]' },
+            createElement('p', { className: 'text-4xl mb-2' }, '💰'),
+            createElement('p', null, 'Nenhuma economia registrada'),
+            createElement('p', { className: 'text-sm' }, 'Toda vez que guardar dinheiro, registre aqui')
+          ) :
+          economias.map(function(ec) {
+            var vinculo = nomeObjetivo(ec.objetivo_id);
+            return createElement(
+              'div', { key: ec.id, className: 'card-modern p-3 flex items-center justify-between' },
+              createElement(
+                'div', { className: 'flex-1 min-w-0' },
+                createElement('p', { className: 'font-medium text-sm truncate' }, ec.nome),
+                createElement('p', { className: 'text-xs text-[var(--text-muted)]' },
+                  new Date(ec.data).toLocaleDateString('pt-BR') + (vinculo ? ' • ' + vinculo : ' • sem vínculo')
+                ),
+                ec.obs ? createElement('p', { className: 'text-xs text-[var(--text-muted)]' }, '📝 ' + ec.obs) : null
+              ),
+              createElement(
+                'div', { className: 'flex items-center gap-2 flex-shrink-0' },
+                createElement('span', { className: 'font-semibold text-[var(--accent)]' }, '+ ' + formatCurrency(ec.valor)),
+                createElement('button', { onClick: function() { editEconomia(ec); }, className: 'text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-1' }, '✏️'),
+                createElement('button', { onClick: function() { delEconomia(ec.id); }, className: 'text-[var(--text-muted)] hover:text-[#ef4444] transition-colors p-1' }, '🗑️')
+              )
+            );
+          })
+        )
+      ) : null
     );
   }
 
@@ -1108,14 +1547,8 @@
       });
     }, []);
 
-    var changeTheme = function(theme) {
-      setTheme(theme);
-      setCurrentTheme(theme);
-    };
-
-    var logout = function() {
-      supabase.auth.signOut().then(function() { window.location.reload(); });
-    };
+    var changeTheme = function(theme) { setTheme(theme); setCurrentTheme(theme); };
+    var logout = function() { supabase.auth.signOut().then(function() { window.location.reload(); }); };
 
     var themes = [
       { id: 'dark', label: 'Dark Modern', icon: 'fa-moon' },
@@ -1129,41 +1562,31 @@
       createElement(
         'div',
         { className: 'sticky top-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border-color)] p-4' },
-        createElement('h1', { className: 'text-xl font-bold' }, 'Perfil')
+        createElement('h1', { className: 'text-xl font-bold font-display' }, 'Perfil')
       ),
       createElement(
-        'div',
-        { className: 'p-4 space-y-4' },
-        // Info do usuário
+        'div', { className: 'p-4 space-y-4' },
         createElement(
-          'div',
-          { className: 'card-modern flex items-center gap-4' },
-          createElement(
-            'div',
-            { className: 'w-14 h-14 rounded-2xl bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center text-white text-xl font-bold' },
+          'div', { className: 'card-modern flex items-center gap-4' },
+          createElement('div', { className: 'w-14 h-14 rounded-2xl bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center text-white text-xl font-bold font-display' },
             user ? user.email.charAt(0).toUpperCase() : 'U'
           ),
           createElement(
-            'div',
-            { className: 'flex-1' },
+            'div', { className: 'flex-1' },
             createElement('p', { className: 'font-medium' }, user ? user.email : 'Usuário'),
             createElement('p', { className: 'text-xs text-[var(--text-muted)]' }, 'Logado com ' + (user && user.app_metadata ? (user.app_metadata.provider || 'email').toUpperCase() : 'EMAIL'))
           )
         ),
-        // Temas
         createElement(
-          'div',
-          { className: 'card-modern' },
+          'div', { className: 'card-modern' },
           createElement('p', { className: 'text-sm font-medium mb-3' }, '🎨 Tema'),
           createElement(
-            'div',
-            { className: 'space-y-2' },
+            'div', { className: 'space-y-2' },
             themes.map(function(theme) {
               var active = currentTheme === theme.id;
               return createElement(
                 'button', {
-                  key: theme.id,
-                  onClick: function() { changeTheme(theme.id); },
+                  key: theme.id, onClick: function() { changeTheme(theme.id); },
                   className: 'w-full flex items-center gap-3 p-3 rounded-xl border transition-all ' + (active ? 'border-[var(--accent)] bg-[var(--accent-glow)]' : 'border-[var(--border-color)] hover:border-[var(--accent)]')
                 },
                 createElement('i', { className: 'fas ' + theme.icon + ' w-5 text-center' }),
@@ -1173,7 +1596,6 @@
             })
           )
         ),
-        // Logout
         createElement('button', {
           onClick: logout,
           className: 'w-full p-3 rounded-xl border border-[#ef4444] text-[#ef4444] hover:bg-[#ef4444] hover:text-white transition-colors font-medium'
@@ -1190,7 +1612,6 @@
     var _a2 = useState(true), loading = _a2[0], setLoading = _a2[1];
     var _a3 = useState('dashboard'), currentPage = _a3[0], setCurrentPage = _a3[1];
 
-    // Inicializar tema
     useEffect(function() {
       var saved = localStorage.getItem('osiris-theme') || 'dark';
       document.documentElement.setAttribute('data-theme', saved);
@@ -1209,9 +1630,7 @@
       });
 
       return function() {
-        if (listener && listener.data && listener.data.subscription) {
-          listener.data.subscription.unsubscribe();
-        }
+        if (listener && listener.data && listener.data.subscription) listener.data.subscription.unsubscribe();
       };
     }, []);
 
@@ -1224,21 +1643,15 @@
     }
 
     var content;
-    if (currentPage === 'dashboard') {
-      content = createElement(Dashboard, null);
-    } else if (currentPage === 'transacoes') {
-      content = createElement(Transacoes, null);
-    } else if (currentPage === 'categorias') {
-      content = createElement(Categorias, null);
-    } else if (currentPage === 'perfil') {
-      content = createElement(Perfil, null);
-    } else {
-      content = createElement(Dashboard, null);
-    }
+    if (currentPage === 'dashboard') content = createElement(Dashboard, { setPage: setCurrentPage });
+    else if (currentPage === 'transacoes') content = createElement(Transacoes, null);
+    else if (currentPage === 'metas') content = createElement(Metas, null);
+    else if (currentPage === 'categorias') content = createElement(Categorias, null);
+    else if (currentPage === 'perfil') content = createElement(Perfil, null);
+    else content = createElement(Dashboard, { setPage: setCurrentPage });
 
     return createElement(
-      React.Fragment,
-      null,
+      React.Fragment, null,
       content,
       createElement(BottomNavigation, { currentPage: currentPage, setPage: setCurrentPage })
     );
