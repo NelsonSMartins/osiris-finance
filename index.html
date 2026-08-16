@@ -5,47 +5,308 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>OSIRIS · Controle Financeiro</title>
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts - Pixel Style -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 
-  <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
+    /* ============================================
+       OSIRIS RETRÔ 90s - ULTRA HD
+       Preto + Verde Esmeralda + Dourado
+       ============================================ */
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #0a0e1a; color: #e2e8f0; }
-    .bg-card { background: #1a2332; }
-    .bg-input { background: #0d1520; }
-    .border-custom { border-color: #2d3a4a; }
-    .text-gold { color: #d4a847; }
-    .bg-gold { background: #d4a847; }
-    .bg-gold:hover { background: #b8922f; }
-    .btn-google {
-      display: flex; align-items: center; justify-content: center; gap: 12px;
-      width: 100%; padding: 14px; border: 2px solid #2d3a4a; border-radius: 12px;
-      background: #1a2332; color: #e2e8f0; font-weight: 500; cursor: pointer;
-      transition: all 0.2s; min-height: 52px;
+
+    body {
+      font-family: 'Press Start 2P', 'VT323', monospace;
+      background: #0a0e0a;
+      color: #00ff88;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
     }
-    .btn-google:hover { background: #243044; border-color: #d4a847; }
-    .btn-google img { width: 20px; height: 20px; }
-    .divider { display: flex; align-items: center; gap: 16px; color: #64748b; font-size: 13px; margin: 12px 0; }
-    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #2d3a4a; }
-    input, select { outline: none; }
-    input:focus, select:focus { border-color: #d4a847 !important; }
-    .min-h-44 { min-height: 44px; }
-    .min-h-52 { min-height: 52px; }
-    .min-h-56 { min-height: 56px; }
-    .rounded-xl2 { border-radius: 1.25rem; }
-    .shadow-card { box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
-    .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: #0a0e1a; }
-    ::-webkit-scrollbar-thumb { background: #d4a847; border-radius: 8px; }
+
+    /* ===== EFEITO CRT (TELA DE TUBO) ===== */
+    .crt-effect {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 9999;
+    }
+    .crt-effect::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        repeating-linear-gradient(
+          0deg,
+          rgba(0, 0, 0, 0.1) 0px,
+          rgba(0, 0, 0, 0.1) 2px,
+          transparent 2px,
+          transparent 4px
+        );
+    }
+    .crt-effect::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(ellipse at center, transparent 60%, rgba(0, 0, 0, 0.6) 100%);
+    }
+
+    /* ===== SCROLLBAR PIXEL ===== */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0a0e0a; border: 2px solid #00ff88; }
+    ::-webkit-scrollbar-thumb { background: #d4a847; border: 2px solid #0a0e0a; }
+
+    /* ===== PIXEL BORDERS ===== */
+    .pixel-border {
+      border: 4px solid #00ff88;
+      box-shadow: 
+        inset 0 0 0 2px #0a0e0a,
+        0 0 0 2px #00ff88,
+        4px 4px 0 0 rgba(0, 255, 136, 0.2);
+    }
+
+    .pixel-border-gold {
+      border: 4px solid #d4a847;
+      box-shadow: 
+        inset 0 0 0 2px #0a0e0a,
+        0 0 0 2px #d4a847,
+        4px 4px 0 0 rgba(212, 168, 71, 0.2);
+    }
+
+    .pixel-border-glow {
+      border: 4px solid #00ff88;
+      box-shadow: 
+        inset 0 0 0 2px #0a0e0a,
+        0 0 20px rgba(0, 255, 136, 0.3),
+        0 0 60px rgba(0, 255, 136, 0.1);
+    }
+
+    /* ===== PIXEL BUTTON ===== */
+    .pixel-btn {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 11px;
+      background: transparent;
+      color: #00ff88;
+      border: 4px solid #00ff88;
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      image-rendering: pixelated;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      position: relative;
+      min-height: 48px;
+    }
+    .pixel-btn:hover {
+      background: #00ff88;
+      color: #0a0e0a;
+      box-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
+      transform: scale(1.02);
+    }
+    .pixel-btn:active { transform: scale(0.95); }
+    .pixel-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    .pixel-btn-gold {
+      border-color: #d4a847;
+      color: #d4a847;
+    }
+    .pixel-btn-gold:hover {
+      background: #d4a847;
+      color: #0a0e0a;
+      box-shadow: 0 0 30px rgba(212, 168, 71, 0.4);
+    }
+
+    /* ===== PIXEL INPUT ===== */
+    .pixel-input {
+      font-family: 'VT323', monospace;
+      font-size: 20px;
+      background: #0a0e0a;
+      color: #00ff88;
+      border: 4px solid #00ff88;
+      padding: 12px 16px;
+      outline: none;
+      image-rendering: pixelated;
+      width: 100%;
+      letter-spacing: 1px;
+      min-height: 52px;
+    }
+    .pixel-input:focus {
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+    }
+    .pixel-input::placeholder {
+      color: #006644;
+      font-size: 16px;
+    }
+
+    .pixel-input-gold {
+      border-color: #d4a847;
+    }
+    .pixel-input-gold:focus {
+      box-shadow: 0 0 20px rgba(212, 168, 71, 0.3);
+    }
+
+    /* ===== PIXEL SELECT ===== */
+    .pixel-select {
+      font-family: 'VT323', monospace;
+      font-size: 20px;
+      background: #0a0e0a;
+      color: #00ff88;
+      border: 4px solid #00ff88;
+      padding: 12px 16px;
+      outline: none;
+      image-rendering: pixelated;
+      width: 100%;
+      appearance: none;
+      cursor: pointer;
+      min-height: 52px;
+    }
+    .pixel-select:focus {
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+    }
+    .pixel-select option {
+      background: #0a0e0a;
+      color: #00ff88;
+      padding: 8px;
+    }
+
+    /* ===== PIXEL CARD ===== */
+    .pixel-card {
+      background: #0a0e0a;
+      border: 4px solid #00ff88;
+      box-shadow: 
+        inset 0 0 0 2px #0a0e0a,
+        0 0 0 2px #00ff88,
+        4px 4px 0 0 rgba(0, 255, 136, 0.15);
+      padding: 20px;
+      image-rendering: pixelated;
+      transition: all 0.2s ease;
+    }
+    .pixel-card:hover {
+      box-shadow: 
+        inset 0 0 0 2px #0a0e0a,
+        0 0 0 2px #00ff88,
+        8px 8px 0 0 rgba(0, 255, 136, 0.1);
+    }
+
+    .pixel-card-gold {
+      border-color: #d4a847;
+      box-shadow: 
+        inset 0 0 0 2px #0a0e0a,
+        0 0 0 2px #d4a847,
+        4px 4px 0 0 rgba(212, 168, 71, 0.15);
+    }
+
+    /* ===== PIXEL TEXT ===== */
+    .pixel-text {
+      font-family: 'Press Start 2P', monospace;
+      color: #00ff88;
+      text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+      letter-spacing: 2px;
+    }
+
+    .pixel-text-gold {
+      color: #d4a847;
+      text-shadow: 0 0 10px rgba(212, 168, 71, 0.3);
+    }
+
+    .pixel-text-muted {
+      font-family: 'VT323', monospace;
+      color: #008855;
+      font-size: 18px;
+    }
+
+    .pixel-text-glow {
+      font-family: 'Press Start 2P', monospace;
+      color: #00ff88;
+      text-shadow: 
+        0 0 20px rgba(0, 255, 136, 0.5),
+        0 0 40px rgba(0, 255, 136, 0.2);
+      letter-spacing: 2px;
+    }
+
+    /* ===== PIXEL DIVIDER ===== */
+    .pixel-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: #006644;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px;
+      margin: 16px 0;
+    }
+    .pixel-divider::before,
+    .pixel-divider::after {
+      content: '';
+      flex: 1;
+      height: 2px;
+      background: repeating-linear-gradient(90deg, #00ff88 0px, #00ff88 4px, transparent 4px, transparent 8px);
+    }
+
+    /* ===== PIXEL NAV ===== */
+    .pixel-nav {
+      border-top: 4px solid #00ff88;
+      background: #0a0e0a;
+    }
+    .pixel-nav-item {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #006644;
+      transition: all 0.15s ease;
+      min-height: 56px;
+      min-width: 56px;
+    }
+    .pixel-nav-item.active {
+      color: #00ff88;
+      text-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+    }
+    .pixel-nav-item:hover {
+      color: #d4a847;
+    }
+
+    /* ===== PIXEL HALO ===== */
+    @keyframes pixel-pulse {
+      0% { opacity: 0.7; transform: scale(0.95); }
+      50% { opacity: 1; transform: scale(1.05); }
+      100% { opacity: 0.7; transform: scale(0.95); }
+    }
+    .pixel-halo {
+      animation: pixel-pulse 2s ease-in-out infinite;
+    }
+
+    /* ===== RESPONSIVO ===== */
+    @media (max-width: 640px) {
+      .pixel-btn { font-size: 9px; padding: 10px 16px; }
+      .pixel-text { font-size: 13px; }
+      .pixel-text-glow { font-size: 15px; }
+      .pixel-input { font-size: 16px; }
+      .pixel-select { font-size: 16px; }
+    }
+
+    /* ===== SAFE AREA ===== */
+    .safe-bottom {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
   </style>
 </head>
 <body>
+
+<!-- EFEITOS RETRÔ -->
+<div class="crt-effect"></div>
 
 <div id="root"></div>
 
@@ -86,7 +347,7 @@
   }
 
   // ============================================
-  // COMPONENTES
+  // COMPONENTES PIXEL
   // ============================================
 
   // ----- Header -----
@@ -94,26 +355,48 @@
     var currentDate = props.currentDate;
     var onDateChange = props.onDateChange;
     var title = props.title;
-    var showLogo = props.showLogo;
 
     return createElement(
       'header',
-      { className: 'sticky top-0 z-40 bg-[#0a0e1a]/95 backdrop-blur border-b border-[#2d3a4a] px-4 py-3' },
+      { className: 'sticky top-0 z-40 bg-[#0a0e0a] border-b-4 border-[#00ff88] px-4 py-3' },
       createElement(
         'div',
         { className: 'max-w-md mx-auto flex items-center justify-between' },
         createElement(
           'div',
-          null,
-          showLogo ? createElement('p', { className: 'text-[11px] tracking-[0.2em] text-gold uppercase mb-0.5' }, 'OSIRIS') : null,
-          createElement('h1', { className: 'text-xl font-bold text-white' }, title)
+          { className: 'flex items-center gap-3' },
+          createElement(
+            'svg',
+            {
+              width: '32',
+              height: '32',
+              viewBox: '0 0 100 100',
+              className: 'pixel-halo'
+            },
+            createElement('circle', { cx: '50', cy: '50', r: '48', fill: '#0a0e0a', stroke: '#00ff88', strokeWidth: '4' }),
+            createElement('path', { d: 'M50 15 L65 40 L60 40 L50 25 L40 40 L35 40 L50 15Z', fill: '#00ff88' }),
+            createElement('path', { d: 'M50 85 L35 60 L40 60 L50 75 L60 60 L65 60 L50 85Z', fill: '#00ff88' }),
+            createElement('path', { d: 'M20 40 L45 40 L45 60 L20 60 L20 40Z', fill: '#00ff88', opacity: '0.6' }),
+            createElement('path', { d: 'M80 40 L55 40 L55 60 L80 60 L80 40Z', fill: '#00ff88', opacity: '0.6' }),
+            createElement('circle', { cx: '50', cy: '50', r: '6', fill: '#d4a847' }),
+            createElement('circle', { cx: '50', cy: '50', r: '3', fill: '#0a0e0a' })
+          ),
+          createElement('span', { className: 'pixel-text text-lg pixel-text-gold' }, 'OSIRIS')
         ),
         onDateChange ? createElement(
           'div',
           { className: 'flex items-center gap-1' },
-          createElement('button', { onClick: function() { onDateChange('prev'); }, className: 'p-2 rounded-full hover:bg-[#1a2332] min-h-[44px] min-w-[44px] text-[#94a3b8]' }, '◀'),
-          createElement('span', { className: 'text-sm font-medium min-w-[80px] text-center text-white' }, currentDate ? currentDate.toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' }) : ''),
-          createElement('button', { onClick: function() { onDateChange('next'); }, className: 'p-2 rounded-full hover:bg-[#1a2332] min-h-[44px] min-w-[44px] text-[#94a3b8]' }, '▶')
+          createElement('button', { 
+            onClick: function() { onDateChange('prev'); }, 
+            className: 'pixel-btn text-xs px-3 py-2 min-h-[44px] min-w-[44px] border-2' 
+          }, '◀'),
+          createElement('span', { className: 'pixel-text-muted text-sm min-w-[80px] text-center' }, 
+            currentDate ? currentDate.toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' }) : ''
+          ),
+          createElement('button', { 
+            onClick: function() { onDateChange('next'); }, 
+            className: 'pixel-btn text-xs px-3 py-2 min-h-[44px] min-w-[44px] border-2' 
+          }, '▶')
         ) : null
       )
     );
@@ -133,10 +416,10 @@
     }, []);
 
     var items = [
-      { path: '/', label: 'Painel', icon: '📊' },
-      { path: '/transacoes', label: 'Transações', icon: '🔄' },
-      { path: '/categorias', label: 'Categorias', icon: '📂' },
-      { path: '/perfil', label: 'Perfil', icon: '👤' }
+      { path: '/', label: 'PAINEL', icon: '📊' },
+      { path: '/transacoes', label: 'TRANS.', icon: '🔄' },
+      { path: '/categorias', label: 'CATEG.', icon: '📂' },
+      { path: '/perfil', label: 'PERFIL', icon: '👤' }
     ];
 
     var navigate = function(path) {
@@ -152,7 +435,7 @@
 
     return createElement(
       'nav',
-      { className: 'fixed bottom-0 left-0 right-0 z-40 bg-[#0d1520]/95 backdrop-blur border-t border-[#2d3a4a] safe-bottom' },
+      { className: 'fixed bottom-0 left-0 right-0 z-40 bg-[#0a0e0a] border-t-4 border-[#00ff88] safe-bottom pixel-nav' },
       createElement(
         'div',
         { className: 'flex justify-around items-center h-20 max-w-md mx-auto' },
@@ -163,10 +446,10 @@
             {
               key: item.path,
               onClick: function() { navigate(item.path); },
-              className: 'flex flex-col items-center justify-center min-w-[56px] min-h-[56px] px-2 transition-colors'
+              className: 'flex flex-col items-center justify-center min-w-[56px] min-h-[56px] px-2 transition-colors pixel-nav-item ' + (active ? 'active' : '')
             },
             createElement('span', { className: 'text-xl ' + (active ? 'scale-110' : '') }, item.icon),
-            createElement('span', { className: 'text-xs mt-1 ' + (active ? 'text-gold font-medium' : 'text-[#64748b]') }, item.label)
+            createElement('span', { className: 'text-xs mt-1 ' + (active ? 'text-[#00ff88]' : 'text-[#006644]') }, item.label)
           );
         })
       )
@@ -178,13 +461,19 @@
     var children = props.children;
     var onClick = props.onClick;
     var className = props.className || '';
+    var gold = props.gold || false;
     var touchSize = props.touchSize || 'large';
-    var sizes = { large: 'min-h-[64px] p-4', medium: 'min-h-[48px] p-3', small: 'min-h-[44px] p-2' };
+    var sizes = { 
+      large: 'min-h-[64px] p-4', 
+      medium: 'min-h-[48px] p-3', 
+      small: 'min-h-[44px] p-2' 
+    };
+    var cardClass = 'pixel-card ' + (gold ? 'pixel-card-gold' : '') + ' ' + (onClick ? 'cursor-pointer' : '');
     return createElement(
       'div',
       {
         onClick: onClick,
-        className: sizes[touchSize] + ' bg-[#1a2332] border border-[#2d3a4a] rounded-xl2 shadow-card active:scale-[0.98] transition-transform flex items-center gap-3 ' + (onClick ? 'cursor-pointer' : '') + ' ' + className
+        className: sizes[touchSize] + ' ' + cardClass + ' ' + className
       },
       children
     );
@@ -226,7 +515,7 @@
         if (result.error) {
           setError(result.error.message);
         } else if (isSignUp) {
-          setSuccess('Conta criada! Verifique seu e-mail.');
+          setSuccess('✅ CONTA CRIADA! VERIFIQUE SEU E-MAIL.');
           setEmail('');
           setPassword('');
         } else {
@@ -234,7 +523,7 @@
         }
         setLoading(false);
       }).catch(function(err) {
-        setError(err.message || 'Erro desconhecido');
+        setError(err.message || 'ERRO DESCONHECIDO');
         setLoading(false);
       });
     };
@@ -251,58 +540,76 @@
           setLoading(false);
         }
       }).catch(function(err) {
-        setError(err.message || 'Erro ao conectar com Google');
+        setError(err.message || 'ERRO AO CONECTAR COM GOOGLE');
         setLoading(false);
       });
     };
 
     return createElement(
       'div',
-      { className: 'min-h-screen flex items-center justify-center p-4 bg-[#0a0e1a]' },
+      { className: 'min-h-screen flex items-center justify-center p-4 bg-[#0a0e0a]' },
       createElement(
         'div',
-        { className: 'w-full max-w-sm bg-[#1a2332] rounded-xl2 p-6 shadow-card border border-[#2d3a4a]' },
-        createElement('div', { className: 'text-center mb-6' },
-          createElement('h1', { className: 'text-2xl font-bold text-gold' }, '🏛️ OSIRIS'),
-          createElement('p', { className: 'text-[#94a3b8] text-sm' }, 'Organização Sistêmica de Investimentos')
+        { className: 'w-full max-w-sm pixel-card pixel-card-gold' },
+        createElement(
+          'div',
+          { className: 'text-center mb-6' },
+          createElement(
+            'svg',
+            {
+              width: '64',
+              height: '64',
+              viewBox: '0 0 100 100',
+              className: 'mx-auto mb-3 pixel-halo'
+            },
+            createElement('circle', { cx: '50', cy: '50', r: '48', fill: '#0a0e0a', stroke: '#d4a847', strokeWidth: '4' }),
+            createElement('path', { d: 'M50 15 L65 40 L60 40 L50 25 L40 40 L35 40 L50 15Z', fill: '#d4a847' }),
+            createElement('path', { d: 'M50 85 L35 60 L40 60 L50 75 L60 60 L65 60 L50 85Z', fill: '#d4a847' }),
+            createElement('path', { d: 'M20 40 L45 40 L45 60 L20 60 L20 40Z', fill: '#d4a847', opacity: '0.6' }),
+            createElement('path', { d: 'M80 40 L55 40 L55 60 L80 60 L80 40Z', fill: '#d4a847', opacity: '0.6' }),
+            createElement('circle', { cx: '50', cy: '50', r: '6', fill: '#00ff88' }),
+            createElement('circle', { cx: '50', cy: '50', r: '3', fill: '#0a0e0a' })
+          ),
+          createElement('h1', { className: 'pixel-text text-2xl pixel-text-gold' }, 'OSIRIS'),
+          createElement('p', { className: 'pixel-text-muted text-sm' }, 'CONTROLE FINANCEIRO')
         ),
         createElement(
           'button',
-          { onClick: handleGoogle, disabled: loading, className: 'btn-google' },
-          createElement('img', { src: 'https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg', alt: 'Google' }),
-          createElement('span', null, loading ? 'Carregando...' : 'Entrar com Google')
+          { onClick: handleGoogle, disabled: loading, className: 'pixel-btn pixel-btn-gold w-full flex items-center justify-center gap-3' },
+          createElement('img', { src: 'https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg', alt: 'Google', style: { width: '24px', height: '24px' } }),
+          createElement('span', null, loading ? 'CARREGANDO...' : 'ENTRAR COM GOOGLE')
         ),
-        createElement('div', { className: 'divider' }, 'ou'),
+        createElement('div', { className: 'pixel-divider' }, 'OU'),
         createElement(
           'form',
           { onSubmit: handleSubmit, className: 'space-y-4' },
           createElement('input', {
             type: 'email',
-            placeholder: 'Email',
+            placeholder: 'EMAIL',
             value: email,
             onChange: function(e) { setEmail(e.target.value); },
-            className: 'w-full px-4 py-3 bg-[#0d1520] border-2 border-[#2d3a4a] rounded-xl text-white min-h-[52px] placeholder:text-[#64748b]'
+            className: 'pixel-input pixel-input-gold'
           }),
           createElement('input', {
             type: 'password',
-            placeholder: 'Senha (6+ caracteres)',
+            placeholder: 'SENHA (6+)',
             value: password,
             onChange: function(e) { setPassword(e.target.value); },
-            className: 'w-full px-4 py-3 bg-[#0d1520] border-2 border-[#2d3a4a] rounded-xl text-white min-h-[52px] placeholder:text-[#64748b]',
+            className: 'pixel-input pixel-input-gold',
             minLength: 6
           }),
-          error ? createElement('p', { className: 'text-red-500 text-sm text-center' }, error) : null,
-          success ? createElement('p', { className: 'text-[#10b981] text-sm text-center' }, success) : null,
+          error ? createElement('p', { className: 'text-[#ff4444] text-xs text-center pixel-text-muted' }, '❌ ' + error) : null,
+          success ? createElement('p', { className: 'text-[#00ff88] text-xs text-center pixel-text-muted' }, success) : null,
           createElement('button', {
             type: 'submit',
             disabled: loading,
-            className: 'w-full py-3 bg-gold text-[#0a0e1a] rounded-xl font-bold min-h-[56px] hover:bg-[#b8922f] transition-colors'
-          }, loading ? 'Carregando...' : (isSignUp ? '📝 Criar Conta' : '🔑 Entrar')),
+            className: 'pixel-btn pixel-btn-gold w-full'
+          }, loading ? 'CARREGANDO...' : (isSignUp ? '📝 CRIAR CONTA' : '🔑 ENTRAR')),
           createElement('button', {
             type: 'button',
             onClick: function() { setIsSignUp(!isSignUp); setError(''); setSuccess(''); },
-            className: 'w-full text-sm text-[#94a3b8] hover:text-gold transition-colors'
-          }, isSignUp ? '← Já tem conta? Entre' : '→ Não tem conta? Cadastre-se')
+            className: 'pixel-text-muted text-xs w-full text-center hover:text-[#d4a847] transition-colors'
+          }, isSignUp ? '← JÁ TEM CONTA? ENTRE' : '→ NÃO TEM CONTA? CADASTRE-SE')
         )
       )
     );
@@ -354,46 +661,49 @@
     return createElement(
       'div',
       { className: 'pb-24 max-w-md mx-auto' },
-      createElement(Header, { currentDate: currentDate, onDateChange: changeDate, title: 'Painel', showLogo: true }),
+      createElement(Header, { currentDate: currentDate, onDateChange: changeDate, title: 'PAINEL' }),
       createElement(
         'div',
         { className: 'p-4 space-y-4' },
+        // Saldo
         createElement(
           TouchableCard,
-          { className: 'border-2 border-[#d4a847]/30 relative overflow-hidden' },
-          createElement('div', { className: 'w-12 h-12 flex items-center justify-center shrink-0 bg-[#d4a847]/10 rounded-full' }, '💳'),
+          { gold: true, className: 'relative overflow-hidden' },
+          createElement('div', { className: 'w-12 h-12 flex items-center justify-center shrink-0 border-2 border-[#d4a847]' }, '💳'),
           createElement('div', { className: 'flex-1' },
-            createElement('p', { className: 'text-xs text-[#94a3b8]' }, 'Saldo do mês'),
-            createElement('p', { className: 'text-2xl font-bold text-white' }, formatCurrency(summary.saldo))
+            createElement('p', { className: 'pixel-text-muted text-xs' }, 'SALDO DO MÊS'),
+            createElement('p', { className: 'pixel-text pixel-text-gold text-2xl' }, formatCurrency(summary.saldo))
           )
         ),
+        // Receitas / Despesas
         createElement(
           'div',
           { className: 'grid grid-cols-2 gap-3' },
           createElement(
             TouchableCard,
             { touchSize: 'medium' },
-            createElement('span', { className: 'text-xl text-[#10b981]' }, '⬆️'),
+            createElement('span', { className: 'text-xl' }, '⬆️'),
             createElement('div', null,
-              createElement('p', { className: 'text-xs text-[#94a3b8]' }, 'Receitas'),
-              createElement('p', { className: 'text-base font-bold text-white' }, formatCurrency(summary.totalReceitas))
+              createElement('p', { className: 'pixel-text-muted text-xs' }, 'RECEITAS'),
+              createElement('p', { className: 'pixel-text text-base' }, formatCurrency(summary.totalReceitas))
             )
           ),
           createElement(
             TouchableCard,
             { touchSize: 'medium' },
-            createElement('span', { className: 'text-xl text-[#ef4444]' }, '⬇️'),
+            createElement('span', { className: 'text-xl' }, '⬇️'),
             createElement('div', null,
-              createElement('p', { className: 'text-xs text-[#94a3b8]' }, 'Despesas'),
-              createElement('p', { className: 'text-base font-bold text-white' }, formatCurrency(summary.totalDespesas))
+              createElement('p', { className: 'pixel-text-muted text-xs' }, 'DESPESAS'),
+              createElement('p', { className: 'pixel-text text-base' }, formatCurrency(summary.totalDespesas))
             )
           )
         ),
+        // Categorias
         createElement(
           'div',
-          { className: 'bg-[#1a2332] rounded-xl2 p-4 shadow-card border border-[#2d3a4a]' },
-          createElement('h3', { className: 'text-sm font-semibold text-white mb-3' }, 'Gastos por categoria'),
-          summary.categorias.length === 0 ? createElement('p', { className: 'text-[#64748b] text-center py-4 text-sm' }, loading ? 'Carregando…' : 'Nenhum gasto registrado') :
+          { className: 'pixel-card' },
+          createElement('h3', { className: 'pixel-text text-sm mb-3' }, 'GASTOS POR CATEGORIA'),
+          summary.categorias.length === 0 ? createElement('p', { className: 'pixel-text-muted text-center py-4 text-sm' }, loading ? 'CARREGANDO…' : 'NENHUM GASTO REGISTRADO') :
           createElement(
             'div',
             { className: 'space-y-3' },
@@ -403,11 +713,11 @@
                 'div',
                 { key: cat.nome },
                 createElement('div', { className: 'flex justify-between text-sm mb-1' },
-                  createElement('span', { className: 'text-white' }, cat.nome),
-                  createElement('span', { className: 'font-medium text-gold' }, formatCurrency(cat.total))
+                  createElement('span', { className: 'pixel-text-muted' }, cat.nome),
+                  createElement('span', { className: 'pixel-text pixel-text-gold text-sm' }, formatCurrency(cat.total))
                 ),
-                createElement('div', { className: 'w-full bg-[#0d1520] rounded-full h-1.5' },
-                  createElement('div', { className: 'bg-gold rounded-full h-1.5 transition-all', style: { width: Math.min(pct, 100) + '%' } })
+                createElement('div', { className: 'w-full bg-[#0a0e0a] border-2 border-[#00ff88] h-4' },
+                  createElement('div', { className: 'bg-[#00ff88] h-full transition-all', style: { width: Math.min(pct, 100) + '%' } })
                 )
               );
             })
@@ -418,7 +728,7 @@
   }
 
   // ============================================
-  // CATEGORIAS
+  // CATEGORIAS (CORRIGIDO - COM USER_ID)
   // ============================================
   function Categorias() {
     var _useState17 = useState([]),
@@ -439,46 +749,96 @@
     var _useState22 = useState(null),
         editando = _useState22[0],
         setEditando = _useState22[1];
+    var _useState23 = useState(''),
+        obs = _useState23[0],
+        setObs = _useState23[1];
+    var _useState24 = useState(null),
+        userId = _useState24[0],
+        setUserId = _useState24[1];
+
+    // Pegar o usuário logado
+    useEffect(function() {
+      supabase.auth.getUser().then(function(result) {
+        if (result.data && result.data.user) {
+          setUserId(result.data.user.id);
+        }
+      });
+    }, []);
 
     var load = function() {
+      if (!userId) return;
       setLoading(true);
-      supabase.from('categorias').select('*').order('nome').then(function(result) {
+      supabase.from('categorias').select('*').eq('user_id', userId).order('nome').then(function(result) {
         if (!result.error && result.data) setCategorias(result.data);
         setLoading(false);
-      });
+      }).catch(function() { setLoading(false); });
     };
 
-    useEffect(function() { load(); }, []);
+    useEffect(function() {
+      if (userId) load();
+    }, [userId]);
 
-    var reset = function() { setNome(''); setTipo('despesa'); setEditando(null); setShowForm(false); };
+    var reset = function() { 
+      setNome(''); 
+      setTipo('despesa'); 
+      setObs('');
+      setEditando(null); 
+      setShowForm(false); 
+    };
 
     var submit = function(e) {
       e.preventDefault();
-      if (!nome.trim()) return;
-      var promise = editando ? supabase.from('categorias').update({ nome: nome, tipo: tipo }).eq('id', editando) : supabase.from('categorias').insert([{ nome: nome, tipo: tipo }]);
-      promise.then(function() { load(); reset(); });
+      if (!nome.trim() || !userId) return;
+      
+      var dados = { 
+        nome: nome, 
+        tipo: tipo, 
+        obs: obs,
+        user_id: userId 
+      };
+      
+      var promise = editando 
+        ? supabase.from('categorias').update(dados).eq('id', editando)
+        : supabase.from('categorias').insert([dados]);
+      
+      promise.then(function() { 
+        load(); 
+        reset(); 
+      }).catch(function(err) {
+        console.error('Erro ao salvar:', err);
+        alert('Erro ao salvar categoria. Verifique o console.');
+      });
     };
 
     var del = function(id) {
-      if (window.confirm('Excluir esta categoria?')) {
+      if (window.confirm('EXCLUIR ESTA CATEGORIA?')) {
         supabase.from('categorias').delete().eq('id', id).then(function() { load(); });
       }
     };
 
-    var edit = function(cat) { setNome(cat.nome); setTipo(cat.tipo); setEditando(cat.id); setShowForm(true); };
+    var edit = function(cat) { 
+      setNome(cat.nome); 
+      setTipo(cat.tipo); 
+      setObs(cat.obs || '');
+      setEditando(cat.id); 
+      setShowForm(true); 
+    };
 
     return createElement(
       'div',
       { className: 'pb-24 max-w-md mx-auto' },
       createElement(
         'div',
-        { className: 'sticky top-0 z-40 bg-[#0a0e1a]/95 backdrop-blur border-b border-[#2d3a4a] p-4 flex items-center justify-between' },
-        createElement('h1', { className: 'text-xl font-bold text-white' }, 'Categorias'),
-        createElement('button', { onClick: function() { setShowForm(!showForm); }, className: 'min-w-[48px] min-h-[48px] bg-gold text-[#0a0e1a] rounded-full flex items-center justify-center hover:bg-[#b8922f] text-2xl' }, showForm ? '✕' : '＋')
+        { className: 'sticky top-0 z-40 bg-[#0a0e0a] border-b-4 border-[#00ff88] p-4 flex items-center justify-between' },
+        createElement('h1', { className: 'pixel-text text-lg' }, 'CATEGORIAS'),
+        createElement('button', { 
+          onClick: function() { setShowForm(!showForm); }, 
+          className: 'min-w-[48px] min-h-[48px] bg-[#00ff88] text-[#0a0e0a] text-2xl font-bold flex items-center justify-center hover:bg-[#d4a847] transition-colors' 
+        }, showForm ? '✕' : '＋')
       ),
       showForm ? createElement(
         'form',
-        { onSubmit: submit, className: 'p-4 space-y-4 bg-[#0d1520]' },
+        { onSubmit: submit, className: 'p-4 space-y-4 border-b-4 border-[#00ff88]' },
         createElement(
           'div',
           { className: 'flex gap-2' },
@@ -487,31 +847,52 @@
               key: t,
               type: 'button',
               onClick: function() { setTipo(t); },
-              className: 'flex-1 py-3 rounded-xl font-medium transition-colors min-h-[44px] ' + (tipo === t ? (t === 'despesa' ? 'bg-[#ef4444] text-white' : 'bg-[#10b981] text-white') : 'bg-[#1a2332] text-[#94a3b8] border-2 border-[#2d3a4a]')
-            }, t === 'despesa' ? '💸 Despesa' : '💰 Receita');
+              className: 'flex-1 py-3 font-medium transition-colors min-h-[44px] border-4 ' + (tipo === t ? (t === 'despesa' ? 'border-[#00ff88] text-[#00ff88]' : 'border-[#d4a847] text-[#d4a847]') : 'border-[#006644] text-[#006644]')
+            }, t === 'despesa' ? '💸 DESPESA' : '💰 RECEITA');
           })
         ),
-        createElement('input', { type: 'text', placeholder: 'Nome da categoria…', value: nome, onChange: function(e) { setNome(e.target.value); }, className: 'w-full px-4 py-3 bg-[#1a2332] border-2 border-[#2d3a4a] rounded-xl text-white min-h-[52px] placeholder:text-[#64748b]' }),
+        createElement('input', { 
+          type: 'text', 
+          placeholder: 'NOME DA CATEGORIA…', 
+          value: nome, 
+          onChange: function(e) { setNome(e.target.value); }, 
+          className: 'pixel-input',
+          required: true 
+        }),
+        createElement('input', { 
+          type: 'text', 
+          placeholder: 'OBSERVAÇÃO (OPCIONAL)', 
+          value: obs, 
+          onChange: function(e) { setObs(e.target.value); }, 
+          className: 'pixel-input pixel-input-gold'
+        }),
         createElement('div', { className: 'flex gap-2' },
-          createElement('button', { type: 'submit', className: 'flex-1 py-3 bg-gold text-[#0a0e1a] rounded-xl font-bold hover:bg-[#b8922f] min-h-[44px]' }, editando ? 'Atualizar' : 'Salvar'),
-          createElement('button', { type: 'button', onClick: reset, className: 'py-3 px-4 bg-[#1a2332] border border-[#2d3a4a] rounded-xl text-[#94a3b8] hover:bg-[#243044] min-h-[44px]' }, 'Cancelar')
+          createElement('button', { type: 'submit', className: 'pixel-btn flex-1' }, editando ? 'ATUALIZAR' : 'SALVAR'),
+          createElement('button', { type: 'button', onClick: reset, className: 'pixel-btn border-[#006644] text-[#006644] hover:bg-[#006644] hover:text-[#0a0e0a] flex-1' }, 'CANCELAR')
         )
       ) : null,
       createElement(
         'div',
         { className: 'p-4 space-y-2' },
-        loading ? createElement('p', { className: 'text-center py-8 text-[#64748b]' }, 'Carregando…') :
-        categorias.length === 0 ? createElement('div', { className: 'text-center py-8 text-[#64748b]' }, '📂 Nenhuma categoria cadastrada') :
+        loading ? createElement('p', { className: 'text-center py-8 pixel-text-muted' }, 'CARREGANDO…') :
+        categorias.length === 0 ? createElement(
+          'div', 
+          { className: 'text-center py-8 pixel-text-muted' },
+          createElement('p', { className: 'text-4xl mb-2' }, '📂'),
+          createElement('p', null, 'NENHUMA CATEGORIA CADASTRADA'),
+          createElement('p', { className: 'text-sm' }, 'CLIQUE NO + PARA CRIAR')
+        ) :
         categorias.map(function(cat) {
           return createElement(
             TouchableCard,
-            { key: cat.id, className: cat.tipo === 'despesa' ? 'border-l-4 border-[#ef4444]' : 'border-l-4 border-[#10b981]' },
+            { key: cat.id, className: cat.tipo === 'despesa' ? 'border-l-4 border-[#00ff88]' : 'border-l-4 border-[#d4a847]' },
             createElement('div', { className: 'flex-1' },
-              createElement('p', { className: 'font-medium text-white' }, cat.nome),
-              createElement('p', { className: 'text-xs text-[#94a3b8]' }, cat.tipo === 'despesa' ? '💸 Despesa' : '💰 Receita')
+              createElement('p', { className: 'font-medium pixel-text' }, cat.nome),
+              createElement('p', { className: 'text-xs pixel-text-muted' }, cat.tipo === 'despesa' ? '💸 DESPESA' : '💰 RECEITA'),
+              cat.obs ? createElement('p', { className: 'text-xs text-[#006644]' }, '📝 ' + cat.obs) : null
             ),
-            createElement('button', { onClick: function(e) { e.stopPropagation(); edit(cat); }, className: 'p-2 hover:bg-[#243044] rounded-lg' }, '✏️'),
-            createElement('button', { onClick: function(e) { e.stopPropagation(); del(cat.id); }, className: 'p-2 hover:bg-[#243044] rounded-lg' }, '🗑️')
+            createElement('button', { onClick: function(e) { e.stopPropagation(); edit(cat); }, className: 'p-2 hover:bg-[#1a2332] transition-colors' }, '✏️'),
+            createElement('button', { onClick: function(e) { e.stopPropagation(); del(cat.id); }, className: 'p-2 hover:bg-[#1a2332] transition-colors' }, '🗑️')
           );
         })
       )
@@ -519,42 +900,57 @@
   }
 
   // ============================================
-  // TRANSAÇÕES
+  // TRANSAÇÕES (COM OBS)
   // ============================================
   function Transacoes() {
-    var _useState23 = useState(false),
-        showForm = _useState23[0],
-        setShowForm = _useState23[1];
-    var _useState24 = useState('despesa'),
-        tipo = _useState24[0],
-        setTipo = _useState24[1];
-    var _useState25 = useState([]),
-        transactions = _useState25[0],
-        setTransactions = _useState25[1];
-    var _useState26 = useState(true),
-        loading = _useState26[0],
-        setLoading = _useState26[1];
+    var _useState25 = useState(false),
+        showForm = _useState25[0],
+        setShowForm = _useState25[1];
+    var _useState26 = useState('despesa'),
+        tipo = _useState26[0],
+        setTipo = _useState26[1];
     var _useState27 = useState([]),
-        categorias = _useState27[0],
-        setCategorias = _useState27[1];
-    var _useState28 = useState(''),
-        nome = _useState28[0],
-        setNome = _useState28[1];
-    var _useState29 = useState(''),
-        categoriaNome = _useState29[0],
-        setCategoriaNome = _useState29[1];
+        transactions = _useState27[0],
+        setTransactions = _useState27[1];
+    var _useState28 = useState(true),
+        loading = _useState28[0],
+        setLoading = _useState28[1];
+    var _useState29 = useState([]),
+        categorias = _useState29[0],
+        setCategorias = _useState29[1];
     var _useState30 = useState(''),
-        valor = _useState30[0],
-        setValor = _useState30[1];
+        nome = _useState30[0],
+        setNome = _useState30[1];
     var _useState31 = useState(''),
-        data = _useState31[0],
-        setData = _useState31[1];
+        categoriaNome = _useState31[0],
+        setCategoriaNome = _useState31[1];
+    var _useState32 = useState(''),
+        valor = _useState32[0],
+        setValor = _useState32[1];
+    var _useState33 = useState(''),
+        data = _useState33[0],
+        setData = _useState33[1];
+    var _useState34 = useState(''),
+        obs = _useState34[0],
+        setObs = _useState34[1];
+    var _useState35 = useState(null),
+        userId = _useState35[0],
+        setUserId = _useState35[1];
+
+    useEffect(function() {
+      supabase.auth.getUser().then(function(result) {
+        if (result.data && result.data.user) {
+          setUserId(result.data.user.id);
+        }
+      });
+    }, []);
 
     var load = function() {
+      if (!userId) return;
       setLoading(true);
       Promise.all([
-        supabase.from('categorias').select('*').order('nome'),
-        supabase.from('transacoes').select('*').order('data', { ascending: false }).limit(50)
+        supabase.from('categorias').select('*').eq('user_id', userId).order('nome'),
+        supabase.from('transacoes').select('*').eq('user_id', userId).order('data', { ascending: false }).limit(50)
       ]).then(function(results) {
         if (!results[0].error && results[0].data) setCategorias(results[0].data);
         if (!results[1].error && results[1].data) setTransactions(results[1].data);
@@ -562,20 +958,34 @@
       }).catch(function() { setLoading(false); });
     };
 
-    useEffect(function() { load(); }, []);
+    useEffect(function() {
+      if (userId) load();
+    }, [userId]);
 
     var submit = function(e) {
       e.preventDefault();
-      var trans = { nome: nome, categoria_nome: categoriaNome, valor: Number(valor), tipo: tipo, data: data || new Date().toISOString().split('T')[0] };
+      if (!userId) return;
+      var trans = { 
+        nome: nome, 
+        categoria_nome: categoriaNome, 
+        valor: Number(valor), 
+        tipo: tipo, 
+        data: data || new Date().toISOString().split('T')[0],
+        obs: obs,
+        user_id: userId
+      };
       supabase.from('transacoes').insert([trans]).then(function() {
         load();
         setShowForm(false);
-        setNome(''); setCategoriaNome(''); setValor(''); setData('');
+        setNome(''); setCategoriaNome(''); setValor(''); setData(''); setObs('');
+      }).catch(function(err) {
+        console.error('Erro ao salvar:', err);
+        alert('Erro ao salvar transação.');
       });
     };
 
     var del = function(id) {
-      if (window.confirm('Excluir esta transação?')) {
+      if (window.confirm('EXCLUIR ESTA TRANSAÇÃO?')) {
         supabase.from('transacoes').delete().eq('id', id).then(function() { load(); });
       }
     };
@@ -587,13 +997,16 @@
       { className: 'pb-24 max-w-md mx-auto' },
       createElement(
         'div',
-        { className: 'sticky top-0 z-40 bg-[#0a0e1a]/95 backdrop-blur border-b border-[#2d3a4a] p-4 flex items-center justify-between' },
-        createElement('h1', { className: 'text-xl font-bold text-white' }, 'Transações'),
-        createElement('button', { onClick: function() { setShowForm(!showForm); }, className: 'min-w-[48px] min-h-[48px] bg-gold text-[#0a0e1a] rounded-full flex items-center justify-center hover:bg-[#b8922f] text-2xl' }, showForm ? '✕' : '＋')
+        { className: 'sticky top-0 z-40 bg-[#0a0e0a] border-b-4 border-[#00ff88] p-4 flex items-center justify-between' },
+        createElement('h1', { className: 'pixel-text text-lg' }, 'TRANSAÇÕES'),
+        createElement('button', { 
+          onClick: function() { setShowForm(!showForm); }, 
+          className: 'min-w-[48px] min-h-[48px] bg-[#00ff88] text-[#0a0e0a] text-2xl font-bold flex items-center justify-center hover:bg-[#d4a847] transition-colors' 
+        }, showForm ? '✕' : '＋')
       ),
       showForm ? createElement(
         'form',
-        { onSubmit: submit, className: 'p-4 space-y-4 bg-[#0d1520]' },
+        { onSubmit: submit, className: 'p-4 space-y-4 border-b-4 border-[#00ff88]' },
         createElement(
           'div',
           { className: 'flex gap-2' },
@@ -602,37 +1015,76 @@
               key: t,
               type: 'button',
               onClick: function() { setTipo(t); },
-              className: 'flex-1 py-3 rounded-xl font-medium transition-colors min-h-[44px] ' + (tipo === t ? (t === 'despesa' ? 'bg-[#ef4444] text-white' : 'bg-[#10b981] text-white') : 'bg-[#1a2332] text-[#94a3b8] border-2 border-[#2d3a4a]')
-            }, t === 'despesa' ? '💸 Despesa' : '💰 Receita');
+              className: 'flex-1 py-3 font-medium transition-colors min-h-[44px] border-4 ' + (tipo === t ? (t === 'despesa' ? 'border-[#00ff88] text-[#00ff88]' : 'border-[#d4a847] text-[#d4a847]') : 'border-[#006644] text-[#006644]')
+            }, t === 'despesa' ? '💸 DESPESA' : '💰 RECEITA');
           })
         ),
-        createElement('input', { type: 'text', placeholder: 'Nome da transação…', value: nome, onChange: function(e) { setNome(e.target.value); }, className: 'w-full px-4 py-3 bg-[#1a2332] border-2 border-[#2d3a4a] rounded-xl text-white min-h-[52px] placeholder:text-[#64748b]' }),
+        createElement('input', { 
+          type: 'text', 
+          placeholder: 'NOME DA TRANSAÇÃO…', 
+          value: nome, 
+          onChange: function(e) { setNome(e.target.value); }, 
+          className: 'pixel-input',
+          required: true 
+        }),
         createElement(
           'select',
-          { value: categoriaNome, onChange: function(e) { setCategoriaNome(e.target.value); }, className: 'w-full px-4 py-3 bg-[#1a2332] border-2 border-[#2d3a4a] rounded-xl text-white min-h-[52px]' },
-          createElement('option', { value: '' }, 'Selecione uma categoria'),
-          filtradas.length === 0 ? createElement('option', { value: '', disabled: true }, '❗ Crie categorias primeiro') :
+          { 
+            value: categoriaNome, 
+            onChange: function(e) { setCategoriaNome(e.target.value); }, 
+            className: 'pixel-select',
+            required: true 
+          },
+          createElement('option', { value: '' }, 'SELECIONE UMA CATEGORIA'),
+          filtradas.length === 0 ? createElement('option', { value: '', disabled: true }, '❗ CRIE CATEGORIAS PRIMEIRO') :
           filtradas.map(function(c) { return createElement('option', { key: c.id, value: c.nome }, c.nome); })
         ),
-        createElement('input', { type: 'number', step: '0.01', placeholder: 'Valor', value: valor, onChange: function(e) { setValor(e.target.value); }, className: 'w-full px-4 py-3 bg-[#1a2332] border-2 border-[#2d3a4a] rounded-xl text-white min-h-[52px] placeholder:text-[#64748b]' }),
-        createElement('input', { type: 'date', value: data, onChange: function(e) { setData(e.target.value); }, className: 'w-full px-4 py-3 bg-[#1a2332] border-2 border-[#2d3a4a] rounded-xl text-white min-h-[52px]' }),
-        createElement('button', { type: 'submit', className: 'w-full py-4 bg-gold text-[#0a0e1a] rounded-xl font-bold text-lg min-h-[56px] hover:bg-[#b8922f]' }, 'Salvar')
+        createElement('input', { 
+          type: 'number', 
+          step: '0.01', 
+          placeholder: 'VALOR', 
+          value: valor, 
+          onChange: function(e) { setValor(e.target.value); }, 
+          className: 'pixel-input',
+          required: true 
+        }),
+        createElement('input', { 
+          type: 'date', 
+          value: data, 
+          onChange: function(e) { setData(e.target.value); }, 
+          className: 'pixel-input' 
+        }),
+        createElement('input', { 
+          type: 'text', 
+          placeholder: 'OBSERVAÇÃO (OPCIONAL)', 
+          value: obs, 
+          onChange: function(e) { setObs(e.target.value); }, 
+          className: 'pixel-input pixel-input-gold' 
+        }),
+        createElement('button', { type: 'submit', className: 'pixel-btn w-full' }, 'SALVAR')
       ) : null,
       createElement(
         'div',
         { className: 'p-4 space-y-2' },
-        loading ? createElement('p', { className: 'text-center py-8 text-[#64748b]' }, 'Carregando…') :
-        transactions.length === 0 ? createElement('div', { className: 'text-center py-8 text-[#64748b]' }, '📭 Nenhuma transação registrada') :
+        loading ? createElement('p', { className: 'text-center py-8 pixel-text-muted' }, 'CARREGANDO…') :
+        transactions.length === 0 ? createElement(
+          'div', 
+          { className: 'text-center py-8 pixel-text-muted' },
+          createElement('p', { className: 'text-4xl mb-2' }, '📭'),
+          createElement('p', null, 'NENHUMA TRANSAÇÃO REGISTRADA'),
+          createElement('p', { className: 'text-sm' }, 'CLIQUE NO + PARA ADICIONAR')
+        ) :
         transactions.map(function(t) {
           return createElement(
             TouchableCard,
-            { key: t.id, className: t.tipo === 'despesa' ? 'border-l-4 border-[#ef4444]' : 'border-l-4 border-[#10b981]', onClick: function() { del(t.id); } },
-            createElement('div', { className: 'flex-1 flex items-center justify-between' },
-              createElement('div', null,
-                createElement('p', { className: 'font-medium text-white' }, t.nome),
-                createElement('p', { className: 'text-xs text-[#94a3b8]' }, t.categoria_nome + ' • ' + new Date(t.data).toLocaleDateString('pt-BR'))
+            { key: t.id, className: t.tipo === 'despesa' ? 'border-l-4 border-[#00ff88]' : 'border-l-4 border-[#d4a847]', onClick: function() { del(t.id); } },
+            createElement('div', { className: 'flex-1' },
+              createElement('div', { className: 'flex items-center justify-between' },
+                createElement('p', { className: 'font-medium pixel-text' }, t.nome),
+                createElement('p', { className: 'font-bold ' + (t.tipo === 'despesa' ? 'text-[#00ff88]' : 'text-[#d4a847]') }, (t.tipo === 'despesa' ? '-' : '+') + ' ' + formatCurrency(t.valor))
               ),
-              createElement('p', { className: 'font-bold ' + (t.tipo === 'despesa' ? 'text-[#ef4444]' : 'text-[#10b981]') }, (t.tipo === 'despesa' ? '-' : '+') + ' ' + formatCurrency(t.valor))
+              createElement('p', { className: 'text-xs pixel-text-muted' }, t.categoria_nome + ' • ' + new Date(t.data).toLocaleDateString('pt-BR')),
+              t.obs ? createElement('p', { className: 'text-xs text-[#006644]' }, '📝 ' + t.obs) : null
             ),
             createElement('span', { className: 'text-[#64748b]' }, '🗑️')
           );
@@ -645,9 +1097,9 @@
   // PERFIL
   // ============================================
   function Perfil() {
-    var _useState32 = useState(null),
-        user = _useState32[0],
-        setUser = _useState32[1];
+    var _useState36 = useState(null),
+        user = _useState36[0],
+        setUser = _useState36[1];
 
     useEffect(function() {
       supabase.auth.getUser().then(function(result) {
@@ -662,17 +1114,17 @@
     return createElement(
       'div',
       { className: 'pb-24 max-w-md mx-auto' },
-      createElement(Header, { title: 'Perfil', showLogo: true }),
+      createElement(Header, { title: 'PERFIL' }),
       createElement(
         'div',
         { className: 'p-4 space-y-4' },
         createElement(
           TouchableCard,
-          { touchSize: 'medium' },
+          { gold: true, touchSize: 'medium' },
           createElement('span', { className: 'text-2xl' }, '👤'),
           createElement('div', { className: 'flex-1' },
-            createElement('p', { className: 'font-medium text-white' }, user ? user.email : 'Usuário'),
-            createElement('p', { className: 'text-xs text-[#94a3b8]' }, 'Logado com ' + (user && user.app_metadata ? (user.app_metadata.provider || 'email') : 'email'))
+            createElement('p', { className: 'font-medium pixel-text' }, user ? user.email : 'USUÁRIO'),
+            createElement('p', { className: 'text-xs pixel-text-muted' }, 'LOGADO COM ' + (user && user.app_metadata ? (user.app_metadata.provider || 'EMAIL').toUpperCase() : 'EMAIL'))
           )
         ),
         createElement(
@@ -680,11 +1132,14 @@
           { touchSize: 'medium' },
           createElement('span', { className: 'text-xl' }, '🎨'),
           createElement('div', { className: 'flex-1' },
-            createElement('p', { className: 'font-medium text-white' }, 'Tema escuro'),
-            createElement('p', { className: 'text-xs text-[#94a3b8]' }, 'Modo noturno ativado')
+            createElement('p', { className: 'font-medium pixel-text' }, 'TEMA RETRÔ 90s'),
+            createElement('p', { className: 'text-xs pixel-text-muted' }, 'PRETO + VERDE ESMERALDA + DOURADO')
           )
         ),
-        createElement('button', { onClick: logout, className: 'w-full py-3 bg-[#ef4444]/20 text-[#ef4444] rounded-xl font-medium border border-[#ef4444]/30 hover:bg-[#ef4444]/30 transition-colors min-h-[52px]' }, '🚪 Sair')
+        createElement('button', { 
+          onClick: logout, 
+          className: 'w-full py-3 border-4 border-[#ff4444] text-[#ff4444] font-medium hover:bg-[#ff4444] hover:text-[#0a0e0a] transition-colors min-h-[52px] pixel-text-muted text-sm' 
+        }, '🚪 SAIR')
       )
     );
   }
@@ -693,15 +1148,15 @@
   // APP
   // ============================================
   function App() {
-    var _useState33 = useState(null),
-        user = _useState33[0],
-        setUser = _useState33[1];
-    var _useState34 = useState(true),
-        loading = _useState34[0],
-        setLoading = _useState34[1];
-    var _useState35 = useState(window.location.pathname),
-        currentPath = _useState35[0],
-        setCurrentPath = _useState35[1];
+    var _useState37 = useState(null),
+        user = _useState37[0],
+        setUser = _useState37[1];
+    var _useState38 = useState(true),
+        loading = _useState38[0],
+        setLoading = _useState38[1];
+    var _useState39 = useState(window.location.pathname),
+        currentPath = _useState39[0],
+        setCurrentPath = _useState39[1];
 
     useEffect(function() {
       supabase.auth.getSession().then(function(_ref) {
@@ -726,7 +1181,7 @@
     }, []);
 
     if (loading) {
-      return createElement('div', { className: 'min-h-screen flex items-center justify-center text-[#94a3b8]' }, 'Carregando...');
+      return createElement('div', { className: 'min-h-screen flex items-center justify-center pixel-text-muted' }, 'CARREGANDO...');
     }
 
     if (!user) {
