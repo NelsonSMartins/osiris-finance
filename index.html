@@ -270,6 +270,35 @@
       font-family: var(--font-display);
     }
     
+    /* ===== BOTÃO DO GOOGLE REFEITO E ESTILIZADO ===== */
+    .login-google-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 12px;
+      border: 2px solid #d4af37; /* Borda dourada combinando com a logo */
+      background: transparent;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: var(--font-body);
+      margin-top: 10px;
+    }
+    .login-google-btn:hover {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: #10b981; /* Muda para o verde neon no hover */
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+      transform: scale(1.02);
+    }
+    .login-google-btn:active {
+      transform: scale(0.95);
+    }
+
     /* ===== ANIMAÇÕES GAMIFICADAS ===== */
     @keyframes pulse-glow {
       0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
@@ -516,7 +545,7 @@
     var items = [
       { id: 'dashboard', label: 'Painel', icon: 'fa-chart-pie' },
       { id: 'transacoes', label: 'Transações', icon: 'fa-exchange-alt' },
-      { id: 'economias', label: '💰 Economias', icon: 'fa-coins' }, // NOVA ABA
+      { id: 'economias', label: '💰 Economias', icon: 'fa-coins' },
       { id: 'metas', label: 'Metas', icon: 'fa-bullseye' },
       { id: 'perfil', label: 'Perfil', icon: 'fa-user' }
     ];
@@ -545,7 +574,7 @@
   }
 
   // ============================================
-  // LOGIN (APENAS GOOGLE)
+  // LOGIN (APENAS GOOGLE) - BOTÃO ESTILIZADO
   // ============================================
   function Login(props) {
     var onLogin = props.onLogin;
@@ -591,14 +620,14 @@
         createElement('h1', { className: 'login-title-custom' }, 'OSIRIS'),
         createElement('p', { className: 'text-[#94a3b8] text-sm mb-6 font-body' }, 'Controle Financeiro Inteligente'),
         
-        error ? createElement('p', { className: 'login-error-msg mb-4' }, createElement('i', { className: 'fas fa-exclamation-circle' }), ' ' + error) : null,
+        error ? createElement('p', { className: 'text-[#ef4444] text-sm text-center mb-4 font-bold font-body' }, createElement('i', { className: 'fas fa-exclamation-circle' }), ' ' + error) : null,
         
         createElement('button', {
           onClick: handleGoogle,
           disabled: loading,
           className: 'login-google-btn'
         },
-          createElement('img', { src: 'https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg', alt: 'Google', style: { width: '20px', height: '20px' } }),
+          createElement('img', { src: 'https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg', alt: 'Google', style: { width: '24px', height: '24px' } }),
           loading ? 'Entrando...' : 'Entrar com Google'
         )
       )
